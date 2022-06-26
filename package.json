@@ -1,0 +1,30 @@
+{
+  "name": "@admc.com/eslint-plugin-sn",
+  "version": "1.0.0",
+  "description": "ESLint plugin for ServiceNow scriptlets",
+  "main": "exports.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unsaved/eslint-plugin-sn.git"
+  },
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "servicenow"
+  ],
+  "author": "Blaine Simpson <blaine.simpson@admc.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/unsaved/eslint-plugin-sn/issues"
+  },
+  "homepage": "https://github.com/unsaved/eslint-plugin-sn#readme",
+  "peerDependencies": {
+    "eslint": "^8.18.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.0.0"
+  }
+}
