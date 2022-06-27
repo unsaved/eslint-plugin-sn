@@ -17,7 +17,7 @@ module.exports = {
         return { onCodePathStart: (codePath, node) => {
             if (beenCalled) return;
             beenCalled = true;
-            context.report({node, messageId: "INVALID_TABLE_ALTSCOPE_MSG"})
+            context.report({node, messageId: "INVALID_TABLE_ALTSCOPE_MSG"});
         } };
     },
 };

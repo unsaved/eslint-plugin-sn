@@ -1,14 +1,17 @@
+Cover other kinds of scripts:  transform, sp_widget, sys_cb_topic, sa_pattern
+
 The 'require-iife.js' rule is now just a stub.  Implement it.  There are implementation notes in
 the file as comments.
 
 Once require-iife rule is implemented, make nonanony-iife to prohibit useless naming of IIFEs.
 
-Enhance snLint.js to take any number of file/paths¸ and just loop through them.
+Enhance snLint.js to take any number of source file/paths¸ and just loop through them.
 
 Enhance snLint.js to take directory paths.  Just get the matching files recursively in the branch,
 to be consistent with 'eslint'.
 
-Implement an snLint.js switch -g to populate global list files
-
 Support table name specifications with dot, which are actually field specifications, for cases like
-angular scripts where the table has more than one script field.
+sp_widget scripts where the table has more than one script field.
+
+Re-run client capture scripts in resources/ from a client script on a list page, because I only
+captured form a form page and manually added g_list.

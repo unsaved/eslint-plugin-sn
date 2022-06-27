@@ -2,6 +2,7 @@
 
 "use srict";
 
+
 const { AppErr, conciseCatcher, conciseErrorHandler, getAppVersion } = require("@admc.com/apputil");
 const { validate } = require("@admc.com/bycontract-plus");
 
@@ -13,13 +14,19 @@ const yargs = require("yargs")(process.argv.slice(2)).
   usage(`SYNTAX: $0 [-dHqv] [-t sn_table] [-a scopealt] [-- -eslint-switches] file/path.js
   OR     $0 -h     OR
          $0 -s rc/directory
+         $0 -g snglobals/parent/dir
+
 It is critically important to have ServiceNow-specific .eslintrc* file(s) set
 up in the file/path.js directory and/or ancestor directories.
-Use -s switch to generate one.
+You can override any rules or globals in this file.
+Use -s switch to generate a new one.
+
 You can't pass any source file-related switches to eslint (after "--") because
 that would conflict with the file wrapping that we need to do.
+
 Set env variable SN_FORCE_COLOR to true to force ESLint to output colorized
 text (some terminal or shell setups cause ESLint to default to no-color).
+
 I will be enhancing this script to handle multiple input file paths and
 directories, but for now invoke $0 once for each source file.`).
   option("v", {
@@ -36,6 +43,10 @@ directories, but for now invoke $0 once for each source file.`).
       type: "string",
   }).
   option("d", { describe: "Debug logging", type: "boolean", }).
+  option("g", {
+      describe: "directory in which to create and populate 'snglobals' subdirectory",
+      type: "string",
+  }).
   option("q", {
       describe: "Quiet logging by logging only at level WARN and ERROR",
       type: "boolean",
@@ -52,7 +63,6 @@ directories, but for now invoke $0 once for each source file.`).
   version(getAppVersion(__dirname));
 const yargsDict = yargs.argv;
 const progName = yargsDict.$0.replace(/^.*[\\/]/, "");  // eslint-disable-line no-unused-vars
-let targRcFile;
 
 if (!yargsDict.d) console.debug = () => {};
 if (yargsDict.q) console.debug = console.log = console.info = () => {};
@@ -114,12 +124,26 @@ function lintFile(file, table, alt) {
 conciseCatcher(async function() {
     validate(arguments, []);
     if (yargsDict.s) {
-        targRcFile = path.join(yargsDict.s, ".eslintrc.json");
+        const targRcFile = path.join(yargsDict.s, ".eslintrc.json");
         if (fs.existsSync(targRcFile)) {
             console.error(`Refusing to overwrite existing '${targRcFile}'`);
             process.exit(8);
         }
         fs.copyFileSync(path.join(__dirname, "resources/eslintrc-example.json"), targRcFile);
+        console.info(`Created file '${targRcFile}'`);
+        process.exit(0);
+    }
+    if (yargsDict.g) {
+        const targGlobalsDir = path.join(yargsDict.g, "snglobals");
+        if (fs.existsSync(targGlobalsDir)) {
+            console.error(`Refusing to update existing '${targGlobalsDir}'`);
+            process.exit(8);
+        }
+        fs.cpSync(path.join(__dirname, "resources/snglobals"), targGlobalsDir, {
+            preserveTimestamps: true,
+            recursive: true,
+        });
+        console.info(`Populated new directory '${targGlobalsDir}'`);
         process.exit(0);
     }
     if (yargsDict._.length < 1) {
@@ -132,5 +156,6 @@ conciseCatcher(async function() {
     const t = yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath));
     if (!/^[a-z]\w*$/.test(t))
         throw new AppErr(`Target table from -t switch or source file directory is invalid: ${t}`);
+
     lintFile(srcFilePath, t, yargsDict.a);
 }, 10)().catch(e0=>conciseErrorHandler(e0, 1));

@@ -1,23 +1,31 @@
 const path = require("path");
 const fs = require("fs");
+const globalsDir = require("./lib/resolveGlobalsDir");
+console.debug(`Using globalsDir '${globalsDir}'`);
 
-const globalsFromFile = file => {
-    const fp = path.join("globals", file + ".txt");
-    if (!fs.existsSync(fp))
-        throw new Error(`globalsFromFile does not find file '${fp}'`);
+/**
+ * Output are just the 'gName: true' entries,not the "globals" keyword for the plain object
+ */
+function globalsFromFiles() {
+    const fName = "globalsFromFiles";
+    const params = Array.prototype.slice.call(arguments);
     const pObj = {};
-    let i = 0;
-    fs.readFileSync(fp, "utf8").replace(/\r/g, "").split("\n").forEach(line => {
-        i++;
-        const s = line.trim();
-        if (s === "") return;
-        if (s[0] === "#") return;
-        if (s.startsWith("//")) return;
-        if (/\s/.test(line)) throw new Error(`globalsFromFile gets malformatted line '${fp}':${i}`);
-        pObj[s] = true;
+    params.forEach(baseName => {
+        const fp = path.join(globalsDir, baseName + ".txt");
+        if (!fs.existsSync(fp))
+            throw new Error(`${fName} does not find file '${fp}'`);
+        let i = 0;
+        fs.readFileSync(fp, "utf8").replace(/\r/g, "").split("\n").forEach(line => {
+            i++;
+            const s = line.trim();
+            if (s === "" || s[0] === "#" || s.startsWith("//")) return;
+            if (/\s/.test(line))
+                throw new Error(`${fName} gets malformatted line '${fp}':${i}`);
+            pObj[s] = true;
+        });
     });
     return pObj;
-};
+}
 
 const allRules = require("requireindex")(path.join(__dirname, "rules"));
 // Due to hyphens in the names, there are hyphens in the object keys.
@@ -43,20 +51,25 @@ function ruleConfigs(mapVals, ruleNames) {
 
 const serverRules = ruleConfigs("warn", ["require-iife"]);
 const clientRules = ruleConfigs("error", ["no-console-info"]);
-const serverConsts = globalsFromFile("server");
-const clientConsts = globalsFromFile("client");
+const serverConstsCommon = globalsFromFiles("coreServerObjects", "ootbSIScopes");
+const clientConstsCommon = globalsFromFiles("client-common");
 
 module.exports = {
     rules: allRules,
     parserOptions: { ecmaFeatures: { impliedStrict: true } },
     environments: {
         /* eslint-disable camelcase */
-        sn_server: { serverConsts },
-        sn_mid: { globals: globalsFromFile("mid") },
-        sn_client: { globals: clientConsts },
-        sn_server_scoped: { globals: globalsFromFile("serverScopedOnly") },
-        sn_client_noiso: {
-          globals: { ...globalsFromFile("clientNonIsolatedOnly"), ...clientConsts } },
+        sn_server_global: { globals: {
+            ...serverConstsCommon, ...globalsFromFiles("ootbGlobalSIs", "globalAPIs"),
+        } },
+        sn_server_scoped: { globals: serverConstsCommon },
+        sn_mid: { globals: globalsFromFiles("ootbMidSIs") },
+        sn_client_iso: { globals: {
+            ...clientConstsCommon, ...globalsFromFiles("client-iso-only")
+        } },
+        sn_client_noniso: { globals: {
+            ...clientConstsCommon, ...globalsFromFiles("client-noniso-only")
+        } },
         /* eslint-enable camelcase */
     },
     configs: {
@@ -66,8 +79,8 @@ module.exports = {
 
             overrides: [
                 {
-                    files: ["**/@(sys_script_fix|sys_script|sys_script_include)/global/*.js"],
-                    env: {"@admc.com/sn/sn_server": true },
+                    files: ["**/sys_@(script_fix|script|script_include|auto_script)/global/*.js"],
+                    env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...serverRules,
@@ -75,12 +88,7 @@ module.exports = {
                     },
                 },
                 {
-                    files: ["**/ecc_agent_script_include/*.js"],
-                    env: {"@admc.com/sn/sn_mid": true },
-                    rules: { ...ruleConfigs("error", ["log-global-2-args"]), },
-                },
-                {
-                    files: ["**/@(sys_script_fix|sys_script|sys_script_include)/scoped/*.js"],
+                    files: ["**/sys_@(script_fix|script|script_include|auto_script)/scoped/*.js"],
                     env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
@@ -89,16 +97,25 @@ module.exports = {
                     },
                 },
                 {
-                    files: ["**/@(sys_script_client)/iso/*.js"],
-                    env: {"@admc.com/sn/sn_client": true },
+                    files: ["**/ecc_agent_script_include/*.js"],
+                    env: {"@admc.com/sn/sn_mid": true },
+                    rules: { ...ruleConfigs("error", ["log-global-2-args"]), },
+                },
+                {
+                    // I'm not sure about expert_script_client.  Never used them.
+                    files: ["**/@(sys|catalog|expert)_script_client/iso/*.js"],
+                    env: {"@admc.com/sn/sn_client_iso": true },
+                    parserOptions: { ecmaVersion: 6 },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...clientRules,
                     },
                 },
                 {
-                    files: ["**/@(sys_script_client)/noiso/*.js"],
-                    env: {"@admc.com/sn/sn_client_noiso": true },
+                    // I'm not sure about expert_script_client.  Never used them.
+                    files: ["**/@(sys|catalog|expert)_script_client/noniso/*.js"],
+                    env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
+                    parserOptions: { ecmaVersion: 6 },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...clientRules,
