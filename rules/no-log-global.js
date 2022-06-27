@@ -10,8 +10,8 @@ module.exports = {
         fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
-            NO_LOG_GLOBAL_MSG: 
-              "In a scoped script use gs.debug/info/warn/error to log rather than gs.log* or gs.print"
+            NO_LOG_GLOBAL_MSG: "In a scoped script use gs.debug/info/warn/error to " +
+              "log rather than gs.log* or gs.print"
         },
     },
 
@@ -23,6 +23,6 @@ module.exports = {
               && (/^log(Warning|Error)?$/.test(callee.property.name)
                 || callee.property.name === "print"))
                 context.report({node, messageId: "NO_LOG_GLOBAL_MSG"});
-        } }
+        } };
     }
 };

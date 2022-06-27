@@ -9,14 +9,16 @@
 module.exports = {
     meta: {
         docs: {
-            description: "Many ServiceNow scriptlet types need an IIFE to protect from variable scope leaks",
+            description:
+              "Many ServiceNow scriptlet types need an IIFE to protect from variable scope leaks",
             category: "ServiceNow workarounds",
             recommended: true
         },
         fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
-            REQUIRE_IIFE_MSG: "Consider wrapping your code body in an IIFE to protect against ServiceNow variable scope leak",
+            REQUIRE_IIFE_MSG: "Consider wrapping your code body in an IIFE to protect " +
+              "against ServiceNow variable scope leak",
         },
     },
 
@@ -37,6 +39,6 @@ module.exports = {
             }
             if (node.arguments.length > 2)
                 context.report({node, messageId: "REQUIRE_IIFE_MSG"});
-        } }
+        } };
     }
 };

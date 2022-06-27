@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "ESLint plugin for ServiceNow scriptlets",
   "main": "exports.js",
+  "bin": {
+    "snLint": "snLint.js"
+  },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
@@ -28,6 +32,7 @@
     "mocha": "^10.0.0"
   },
   "dependencies": {
+    "@admc.com/apputil": "^2.0.6",
     "requireindex": "^1.2.0"
   }
 }

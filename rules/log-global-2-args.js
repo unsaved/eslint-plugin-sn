@@ -29,6 +29,6 @@ module.exports = {
             }
             if (node.arguments.length < 2)
                 context.report({node, messageId: "LOG_GLOBAL_2_ARGS_MSG"});
-        } }
+        } };
     }
 };

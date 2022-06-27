@@ -10,7 +10,7 @@ module.exports = {
         fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
-            NO_CONSOLE_LOG_MSG: 
+            NO_CONSOLE_LOG_MSG:
               "Use a specific logging level (debug/info/warn/error) rather than console.log",
         },
     },
@@ -24,6 +24,6 @@ module.exports = {
               || (callee.object.objec !== undefined && callee.object.object.name === "window"
                 && callee.object.property.name === "console"))
                 context.report({node, messageId: "NO_CONSOLE_LOG_MSG"});
-        } }
+        } };
     }
 };
