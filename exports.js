@@ -74,7 +74,6 @@ const clientConstsCommon = globalsFromFiles("client-common");
 
 module.exports = {
     rules: allRules,
-    parserOptions: { ecmaFeatures: { impliedStrict: true } },
     environments: {
         /* eslint-disable camelcase */
         sn_server_global: { globals: {
@@ -93,24 +92,67 @@ module.exports = {
     configs: {
         servicenow: {
             extends: ["eslint:recommended"],
-            rules: { "@admc.com/sn/invalid-table-altscope": "error" },
+            rules: {
+                "operator-assignment": "error",
+                "no-useless-return": "error",
+                "prefer-regex-literals": ["error", {disallowRedundantWrapping: true}],
+                "no-useless-concat": "error",
+                "no-useless-computed-key": "error",
+                "no-useless-call": "error",
+                "no-unused-expressions": "error",
+                "no-undef-init": "error",
+                "no-proto": "error",
+                "no-new-wrappers": "error",
+                "no-new-object": "error",
+                "no-negated-condition": "error",
+                "no-loop-func": "error",
+                "no-lonely-if": "error",
+                "no-lone-blocks": "error",
+                "no-implied-eval": "warn",
+                "no-eval": "warn",
+                "no-extra-label": "error",
+                "no-extra-bind": "error",
+                "no-else-return": "error",
+                "no-array-constructor": "warn",
+                "new-cap": "error",
+                "max-depth": "warn",
+                "dot-notation": "warn",
+                "consistent-return": "error",
+                "class-methods-use-this": "error",
+                "camelcase": "warn",
+                "block-scoped-var": "error",
+                "no-use-before-define": ["error", { functions: false, classes: false }],
+                "no-unreachable-loop": "error",
+                "no-template-curly-in-string": "warn",
+                "no-self-compare": "error",
+                "no-constructor-return": "error",
+                "no-constant-binary-expression": "error",
+                "array-callback-return": ["error", { checkForEach: true }],
+                "eqeqeq": "warn",
+                "semi": "warn",
+                "no-extra-parens": "warn",
+
+                "@admc.com/sn/invalid-table-altscope": "error",
+            },
 
             overrides: [
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/global/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...serverRules,
+                    },
+                },
+                {
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/global/*.js"],  // eslint-disable-line max-len
+                    rules: {
                       ...ruleConfigs("error", ["log-global-2-args"]),
                     },
                 },
                 {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/scoped/*.js"],  // eslint-disable-line max-len
-                    env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
-                      "@admc.com/sn/invalid-table-altscope": "off",
-                      ...serverRules,
                       ...ruleConfigs("warn", ["no-log-global"])
                     },
                 },
@@ -121,23 +163,33 @@ module.exports = {
                 },
                 {
                     // I'm not sure about expert_script_client.  Never used them.
-                    files: ["**/@(sys|catalog|expert)_script_client/iso/*.js"],
-                    env: {"@admc.com/sn/sn_client_iso": true },
+                    files: ["**/@(sys|catalog|expert)_script_client/@(noniso|iso)/*.js"],
                     parserOptions: { ecmaVersion: 6 },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
+                      "strict": ["warn", "function"],
+                      "prefer-exponentiation-operator": "error",
+                      "prefer-const": "error",
+                      "prefer-arrow-callback": "warn",
+                      "object-shorthand": "warn",
+                      "no-useless-rename": "warn",
+                      "no-var": "warn",
+                      "no-useless-constructor": "error",
+                      "prefer-template": "warn",
+                      "no-iterator": "error",
+                      "require-atomic-updates": "error",
+                      "no-unused-private-class-members": "error",
+                      "no-promise-executor-return": "error",
                       ...clientRules,
                     },
                 },
                 {
-                    // I'm not sure about expert_script_client.  Never used them.
+                    files: ["**/@(sys|catalog|expert)_script_client/iso/*.js"],
+                    env: {"@admc.com/sn/sn_client_iso": true },
+                },
+                {
                     files: ["**/@(sys|catalog|expert)_script_client/noniso/*.js"],
                     env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
-                    parserOptions: { ecmaVersion: 6 },
-                    rules: {
-                      "@admc.com/sn/invalid-table-altscope": "off",
-                      ...clientRules,
-                    },
                 },
                 {
                     files: ["**/sa_pattern_prepost_script/*/*.js"],

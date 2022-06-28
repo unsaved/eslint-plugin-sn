@@ -1,3 +1,5 @@
+Add rule to test for no check of return of gr.insert, gr.update, gr.get
+
 Cover other kinds of scripts:
     transform
     sp_widget
