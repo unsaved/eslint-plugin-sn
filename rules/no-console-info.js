@@ -21,7 +21,7 @@ module.exports = {
             const callee = node.callee;
             if (callee.type !== "MemberExpression" || callee.property.name !== "log") return;
             if (callee.object.name === "console"
-              || (callee.object.objec !== undefined && callee.object.object.name === "window"
+              || (callee.object.object !== undefined && callee.object.object.name === "window"
                 && callee.object.property.name === "console"))
                 context.report({node, messageId: "NO_CONSOLE_LOG_MSG"});
         } };
