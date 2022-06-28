@@ -51,7 +51,7 @@
     "array-callback-return": ["error", { checkForEach: true }],
 
     // Post-ES6
-    "strict": ["warn", "function"],
+    "strict": ["error", "safe"],
     "prefer-exponentiation-operator": "error",
     "prefer-arrow-callback": "true",
     "object-shorthand": "true",

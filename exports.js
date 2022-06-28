@@ -167,7 +167,7 @@ module.exports = {
                     parserOptions: { ecmaVersion: 6 },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
-                      "strict": ["warn", "function"],
+                      "strict": ["warn", "safe"],
                       "prefer-exponentiation-operator": "error",
                       "prefer-const": "error",
                       "prefer-arrow-callback": "warn",
