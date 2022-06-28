@@ -57,7 +57,7 @@ function ruleConfigs(mapVals, ruleNames) {
 
 const serverRules = ruleConfigs("warn", ["require-iife"]);
 const clientRules = ruleConfigs("error", ["no-console-info"]);
-const serverConstsCommon = globalsFromFiles("coreServerObjects", "ootbSIScopes");
+const serverConstsCommon = globalsFromFiles("coreServerObjects", "SIScopes");
 const clientConstsCommon = globalsFromFiles("client-common");
 
 module.exports = {
@@ -66,10 +66,10 @@ module.exports = {
     environments: {
         /* eslint-disable camelcase */
         sn_server_global: { globals: {
-            ...serverConstsCommon, ...globalsFromFiles("ootbGlobalSIs", "globalAPIs"),
+            ...serverConstsCommon, ...globalsFromFiles("globalSIs", "globalAPIs"),
         } },
         sn_server_scoped: { globals: serverConstsCommon },
-        sn_mid: { globals: globalsFromFiles("ootbMidSIs") },
+        sn_mid: { globals: globalsFromFiles("midSIs") },
         sn_client_iso: { globals: {
             ...clientConstsCommon, ...globalsFromFiles("client-iso-only")
         } },

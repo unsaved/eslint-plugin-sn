@@ -1,0 +1,5 @@
+{
+  "root": true,
+  "plugins": ["@admc.com/sn"],
+  "extends": ["plugin:@admc.com/sn/servicenow"]
+}
