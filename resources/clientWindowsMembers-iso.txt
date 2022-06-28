@@ -120,7 +120,7 @@ popupCurrent
 refreshLabelTimer
 stackName
 
-1231 visibles:
+#1231 visibles:
 $A
 $H
 $LAB

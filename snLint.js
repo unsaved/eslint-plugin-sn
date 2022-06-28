@@ -96,9 +96,6 @@ function lintFile(file, table, alt) {
     console.debug(`pseudoPath: ${pseudoPath}`);
     if (isSI(table)) eslintArgs.splice(0, 0, "--rule",
         JSON.stringify({ "no-unused-vars": ["error", { varsIgnorePattern: `^${objName}$` }] }));
-    else if (table === "sys_script_client") eslintArgs.splice(0, 0, "--rule", JSON.stringify({
-        "no-unused-vars": ["error", { varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$" }]
-    }));
     eslintArgs.splice(0, 0,
         path.join(require.resolve("eslint"), "../../bin/eslint.js"),
         "--stdin",

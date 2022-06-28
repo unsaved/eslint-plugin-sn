@@ -20,12 +20,18 @@ function globalsFromFiles() {
             const s = line.trim();
             if (s === "" || s[0] === "#" || s.startsWith("//")) return;
             if (/\s/.test(line))
-                throw new Error(`${fName} gets malformatted line '${fp}':${i}`);
-            pObj[s] = true;
+                throw new Error(`${fName} gets malformatted line '${fp}':${i}  ${line}`);
+            pObj[s] = false;
         });
     });
     return pObj;
 }
+
+const fp = path.join(globalsDir, "tableSpecifics.json");
+if (!fs.existsSync(fp))
+    throw new Error(`SN Plugin does not find file 'tableSpecifics.json'`);
+const tableSpecificGlobals = JSON.parse(fs.readFileSync(fp, "utf8"));
+
 
 const allRules = require("requireindex")(path.join(__dirname, "rules"));
 // Due to hyphens in the names, there are hyphens in the object keys.
@@ -79,7 +85,7 @@ module.exports = {
 
             overrides: [
                 {
-                    files: ["**/sys_@(script_fix|script|script_include|auto_script)/global/*.js"],
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/global/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
@@ -88,7 +94,7 @@ module.exports = {
                     },
                 },
                 {
-                    files: ["**/sys_@(script_fix|script|script_include|auto_script)/scoped/*.js"],
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/scoped/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
@@ -119,6 +125,22 @@ module.exports = {
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...clientRules,
+                    },
+                },
+                {
+                    files: ["**/sa_pattern_prepost_script/*/*.js"],
+                    rules: {
+                        "no-unused-vars": ["error", {
+                            varsIgnorePattern: tableSpecificGlobals.sa_pattern_prepost_script
+                        }],
+                    },
+                },
+                {
+                    files: ["**/sys_script_client/*/*.js"],
+                    rules: {
+                        "no-unused-vars": ["error", {
+                            varsIgnorePattern: tableSpecificGlobals.sys_script_client
+                        }],
                     },
                 },
             ]

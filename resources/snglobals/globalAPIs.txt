@@ -106,11 +106,11 @@ GlideListProperties
 GlideQueryCondition
 GlideRecord
 GlideRecordUtil
-GlideSPSearchAnalytics - Global
+GlideSPSearchAnalytics
 GlideScopedEvaluator
 GlideSession
 GlideSystem
-GlideSystemRunLevel API
+#GlideSystemRunLevel API  has a space???
 GlideTimeline
 GlideTimelineItem
 GlideURI
@@ -146,11 +146,11 @@ MLSolutionUtil
 MobileDeepLinkGenerator
 MonitorMIDServer
 NameValuePairs
-NetwareHandler API
+#NetwareHandler API  has a space?
 Notify
 NotifyAction
 NotifyJsTelephonyDriver
-NotifyNow API (Legacy)
+#NotifyNow API (Legacy)  has a space?
 NotifyPhoneNumber
 NotifySMS
 NotifyUtil

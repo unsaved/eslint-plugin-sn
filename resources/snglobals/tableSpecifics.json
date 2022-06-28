@@ -1,0 +1,4 @@
+{
+  "sys_script_client": "^on(Load|Change|CellEdit|onSubmit)$",
+  "sa_pattern_prepost_script": "^(patternId|payload)$"
+}
