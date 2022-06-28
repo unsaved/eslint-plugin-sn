@@ -1,4 +1,10 @@
-Cover other kinds of scripts:  transform, sp_widget, sys_cb_topic, sa_pattern
+Cover other kinds of scripts:
+    transform
+    sp_widget
+    sys_cb_topic
+    sa_pattern
+    ui_action
+    ui_policy
 
 The 'require-iife.js' rule is now just a stub.  Implement it.  There are implementation notes in
 the file as comments.
