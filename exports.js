@@ -11,10 +11,22 @@ function globalsFromFiles() {
     const params = Array.prototype.slice.call(arguments);
     const pObj = {};
     params.forEach(baseName => {
-        const fp = path.join(globalsDir, baseName + ".txt");
+        let i, fp;
+        fp = path.join(globalsDir, baseName + ".txt");
         if (!fs.existsSync(fp))
             throw new Error(`${fName} does not find file '${fp}'`);
-        let i = 0;
+        i = 0;
+        fs.readFileSync(fp, "utf8").replace(/\r/g, "").split("\n").forEach(line => {
+            i++;
+            const s = line.trim();
+            if (s === "" || s[0] === "#" || s.startsWith("//")) return;
+            if (/\s/.test(line))
+                throw new Error(`${fName} gets malformatted line '${fp}':${i}  ${line}`);
+            pObj[s] = false;
+        });
+        fp = path.join(globalsDir, baseName + "-local.txt");
+        if (!fs.existsSync(fp)) return;
+        i = 0;
         fs.readFileSync(fp, "utf8").replace(/\r/g, "").split("\n").forEach(line => {
             i++;
             const s = line.trim();
