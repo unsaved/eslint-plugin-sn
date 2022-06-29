@@ -1,4 +1,4 @@
-// This is for checking js files in the sn-developer implementation itself.
+// This is for checking js files in the eslint-plugin-sn implementation itself.
 // Don't use this for checking ServiceNow scriptlets.
 {
   "env": { "es2022": true, "node": true },
@@ -11,7 +11,7 @@
     "prefer-const": "error",
     "semi": "error",
     "no-unreachable-loop": "error",
-    "no-use-before-define": ["error", { functions: false, classes: false }],
+    "no-use-before-define": ["error", { "functions": false, "classes": false }],
     "no-extra-parens": "warn",
 
     // Node-like-specific
@@ -19,7 +19,7 @@
 
     "operator-assignment": "error",
     "no-useless-return": "error",
-    "prefer-regex-literals": ["error", {disallowRedundantWrapping: true}],
+    "prefer-regex-literals": ["error", { "disallowRedundantWrapping": true}],
     "no-useless-concat": "error",
     "no-useless-computed-key": "error",
     "no-useless-call": "error",
@@ -48,14 +48,14 @@
     "no-self-compare": "error",
     "no-constructor-return": "error",
     "no-constant-binary-expression": "error",
-    "array-callback-return": ["error", { checkForEach: true }],
+    "array-callback-return": ["error", { "checkForEach": true }],
 
     // Post-ES6
     "strict": ["error", "safe"],
     "prefer-exponentiation-operator": "error",
-    "prefer-arrow-callback": "true",
-    "object-shorthand": "true",
-    "no-useless-rename": "true",
+    "prefer-arrow-callback": "error",
+    "object-shorthand": "error",
+    "no-useless-rename": "error",
     "no-useless-constructor": "error",
     "prefer-template": "error",
     "no-iterator": "error",
@@ -75,7 +75,7 @@
     "no-tabs": "error",
     "no-trailing-spaces": "error",
     "no-whitespace-before-property": "error",
-    "padded-blocks": "never",
+    "padded-blocks": ["error", "never"],
     "rest-spread-spacing": "error"
   }
 }

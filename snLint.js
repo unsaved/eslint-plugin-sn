@@ -16,16 +16,24 @@ const yargs = require("yargs")(process.argv.slice(2)).
          $0 -s rc/directory
          $0 -g snglobals/parent/dir
 
-It is critically important to have ServiceNow-specific .eslintrc* file(s) set
-up in the file/path.js directory and/or ancestor directories.
-You can override any rules or globals in this file.
-Use -s switch to generate a new one.
-
-You can't pass any source file-related switches to eslint (after "--") because
-that would conflict with the file wrapping that we need to do.
+The most important differences from invoking 'eslint' directly are:
+    1. Internally we use -c and --no-eslintrc, so that only config file
+       './eslintrc.json' is honored.  NOT '.eslintrc.*'!
+       You must have this file in place.
+       You can generate it with the -s switch.  No cascading RC files.
+    2. Internally we use --stdin and we generate a pseudo input file path,
+       so if you use overrides in './eslintrc.json', you must match against
+       these paths of format 'TABLENAME/BASENAME.js' or
+       'TABLENAME/ALTSCOPE/BASENAME.js'.  Example: \"sys_script/global/sane.js\"
+    3. Also since we pipe input, you can't use any fix or caching features.
 
 Set env variable SN_FORCE_COLOR to true to force ESLint to output colorized
 text (some terminal or shell setups cause ESLint to default to no-color).
+
+Most -eslint-switches related to config files, fixing, file selection or
+caching will probably break things.  Safe to use for things like config setting
+overrides, 'Handling warnings', 'Output', 'Inline...comments', 'Miscellaneous'
+(headings from 'eslint --help' description).
 
 I will be enhancing this script to handle multiple input file paths and
 directories, but for now invoke $0 once for each source file.`).
@@ -52,7 +60,7 @@ directories, but for now invoke $0 once for each source file.`).
       type: "boolean",
   }).
   option("s", {
-      describe: "directory to write template '.eslintrc.json' Sample file into",
+      describe: "directory to write template 'eslintrc.json' Sample file into",
       type: "string",
   }).
   option("t", {
@@ -98,6 +106,9 @@ function lintFile(file, table, alt) {
         JSON.stringify({ "no-unused-vars": ["error", { varsIgnorePattern: `^${objName}$` }] }));
     eslintArgs.splice(0, 0,
         path.join(require.resolve("eslint"), "../../bin/eslint.js"),
+        "-c",
+        "eslintrc.json",
+        "--no-eslintrc",
         "--stdin",
         "--stdin-filename",
         pseudoPath,
@@ -121,7 +132,7 @@ function lintFile(file, table, alt) {
 conciseCatcher(async function() {
     validate(arguments, []);
     if (yargsDict.s) {
-        const targRcFile = path.join(yargsDict.s, ".eslintrc.json");
+        const targRcFile = path.join(yargsDict.s, "eslintrc.json");
         if (fs.existsSync(targRcFile)) {
             console.error(`Refusing to overwrite existing '${targRcFile}'`);
             process.exit(8);
