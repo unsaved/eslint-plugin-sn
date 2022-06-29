@@ -25,6 +25,7 @@ The most important differences from invoking 'eslint' directly are:
        so if you use overrides in './eslintrc.json', you must match against
        these paths of format 'TABLENAME/BASENAME.js' or
        'TABLENAME/ALTSCOPE/BASENAME.js'.  Example: \"sys_script/global/sane.js\"
+       Use -d switch for ESLint to display the pseudo path that it uses.
     3. Also since we pipe input, you can't use any fix or caching features.
 
 Set env variable SN_FORCE_COLOR to true to force ESLint to output colorized
