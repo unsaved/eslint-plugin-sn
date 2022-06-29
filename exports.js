@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const globalsDir = require("./lib/resolveGlobalsDir");
-console.debug(`Using globalsDir '${globalsDir}'`);
+if (process.env.DEBUG) console.debug(`Using globalsDir '${globalsDir}'`);
 
 /**
  * Output are just the 'gName: true' entries,not the "globals" keyword for the plain object
@@ -77,10 +77,14 @@ module.exports = {
     environments: {
         /* eslint-disable camelcase */
         sn_server_global: { globals: {
-            ...serverConstsCommon, ...globalsFromFiles("globalSIs", "globalAPIs"),
+            SNC: false, ...serverConstsCommon, ...globalsFromFiles("globalSIs", "globalAPIs"),
         } },
-        sn_server_scoped: { globals: serverConstsCommon },
-        sn_mid: { globals: globalsFromFiles("midSIs") },
+        sn_server_scoped: { globals: {
+            ...serverConstsCommon, ...globalsFromFiles("scopedSIs"),
+        } },
+        sn_mid: { globals: {
+            Packages: false, ...globalsFromFiles("midSIs"),
+        } },
         sn_client_iso: { globals: {
             ...clientConstsCommon, ...globalsFromFiles("client-iso-only")
         } },
@@ -138,7 +142,6 @@ module.exports = {
             overrides: [
                 {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
-                    env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...serverRules,
@@ -146,20 +149,24 @@ module.exports = {
                 },
                 {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/global/*.js"],  // eslint-disable-line max-len
+                    env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       ...ruleConfigs("error", ["log-global-2-args"]),
                     },
                 },
                 {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/scoped/*.js"],  // eslint-disable-line max-len
+                    env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
                       ...ruleConfigs("warn", ["no-log-global"])
                     },
                 },
                 {
-                    files: ["**/ecc_agent_script_include/*.js"],
+                    files: ["**/ecc_agent_script@(|_include)/*.js"],
                     env: {"@admc.com/sn/sn_mid": true },
-                    rules: { ...ruleConfigs("error", ["log-global-2-args"]), },
+                    rules: {
+                      "@admc.com/sn/invalid-table-altscope": "off",
+                    },
                 },
                 {
                     // I'm not sure about expert_script_client.  Never used them.

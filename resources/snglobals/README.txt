@@ -12,3 +12,16 @@ your organization, use the following procedure.
 Make new files of same name as existing files here, but insert "-local" before
 the ".txt" suffix.  For example to add SI scope global objects, make a new
 file named "SIScopes-local.txt".
+
+For accessing scoped SIs you will need to add entries to your local
+"eslintrc.json" file.  Consider defining your own "altscope".  In
+"eslintrc.json" you would create an environment with the list of globals of your
+altscope SIs, update existing server overrides.files entries (depending whether
+your scripts have access of public vs. package_private), and add a new overrides
+object for intra-scope access.
+After that you would use youⅹ new altscope with snLint -a switch.
+
+If you only work with one or a few scopes, then a perfect and easy customization
+is to just empty the "scopedSIs.txt" file (leave it there empty or with a
+comment) and add a "scopedSIs-local.txt" file.  The allowed intra-scope SI
+accesses will then be only what you have in youour "scopedSIs-local.txt" file.

@@ -26,6 +26,7 @@ The most important differences from invoking 'eslint' directly are:
        these paths of format 'TABLENAME/BASENAME.js' or
        'TABLENAME/ALTSCOPE/BASENAME.js'.  Example: \"sys_script/global/sane.js\"
        Use -d switch for ESLint to display the pseudo path that it uses.
+       (It's also visible in Mocha's's label for each test run).
     3. Also since we pipe input, you can't use any fix or caching features.
 
 Set env variable SN_FORCE_COLOR to true to force ESLint to output colorized
@@ -78,7 +79,7 @@ if (yargsDict.q) console.debug = console.log = console.info = () => {};
 
 function isServerScript(tableName) {
     return (!tableName.includes("mid")
-      || !tableName.includes("ecc") || !tableName.includes("client"));
+      && !tableName.includes("ecc") && !tableName.includes("client"));
 }
 function isClientScript(tableName) {
     return tableName.includes("client");
@@ -121,10 +122,10 @@ function lintFile(file, table, alt) {
     const childProcess = require("child_process").spawn(process.execPath, eslintArgs, {
         stdio: ["pipe", "inherit", "inherit"],
     });
-    if (isServerScript(table)) {
-        childProcess.stdin.write(content.replace(/(\s)const(\s)/g, "$1var$2"));
-        childProcess.stdin.end();
-    }
+    childProcess.stdin.write(isServerScript(table)
+        ? content.replace(/(\s)const(\s)/g, "$1var$2")
+        : content);
+    childProcess.stdin.end();
     childProcess.on("exit", ()=> {
         if (childProcess.exitCode !== 0) process.exit(childProcess.exitCode);
     });
