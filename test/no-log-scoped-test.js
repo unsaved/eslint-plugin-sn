@@ -2,36 +2,36 @@
 
 const baseName = require("path").basename(__filename).replace(/-test[.]js/, "");
 new (require("eslint").RuleTester)().run(baseName, require("../rules/" + baseName), {
-    valid: [
+    invalid: [
         {
             code: "gs.debug('a msg');",
+            errors: [{messageId: "NO_LOG_SCOPED_MSG"}],
         },
         {
             code: "gs.info('a msg');",
+            errors: [{messageId: "NO_LOG_SCOPED_MSG"}],
         },
         {
             code: "gs.warn('a msg');",
+            errors: [{messageId: "NO_LOG_SCOPED_MSG"}],
         },
         {
             code: "gs.error('a msg');",
+            errors: [{messageId: "NO_LOG_SCOPED_MSG"}],
         },
     ],
-    invalid: [
-        {
-            code: "gs.print('a msg');",
-            errors: [{messageId: "NO_LOG_GLOBAL_MSG"}],
-        },
+    valid: [
         {
             code: "gs.log('a msg', 'src');",
-            errors: [{messageId: "NO_LOG_GLOBAL_MSG"}],
         },
         {
             code: "gs.logWarning('a msg', 'src');",
-            errors: [{messageId: "NO_LOG_GLOBAL_MSG"}],
         },
         {
             code: "gs.logError('a msg', 'src');",
-            errors: [{messageId: "NO_LOG_GLOBAL_MSG"}],
-        }
+        },
+        {
+            code: "gs.print('a msg');",
+        },
     ]
 });

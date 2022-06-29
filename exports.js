@@ -83,7 +83,7 @@ module.exports = {
             ...serverConstsCommon, ...globalsFromFiles("scopedSIs"),
         } },
         sn_mid: { globals: {
-            Packages: false, ...globalsFromFiles("midSIs"),
+            Packages: false, ctx: false, CTX: false, ...globalsFromFiles("midSIs"),
         } },
         sn_client_iso: { globals: {
             ...clientConstsCommon, ...globalsFromFiles("client-iso-only")
@@ -151,14 +151,14 @@ module.exports = {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/global/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
-                      ...ruleConfigs("error", ["log-global-2-args"]),
+                      ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
                     },
                 },
                 {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/scoped/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
-                      ...ruleConfigs("warn", ["no-log-global"])
+                      ...ruleConfigs("error", ["no-log-global"])
                     },
                 },
                 {
