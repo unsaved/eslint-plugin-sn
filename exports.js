@@ -1,3 +1,4 @@
+"use strict";
 const path = require("path");
 const fs = require("fs");
 const globalsDir = require("./lib/resolveGlobalsDir");
@@ -12,7 +13,7 @@ function globalsFromFiles() {
     const pObj = {};
     params.forEach(baseName => {
         let i, fp;
-        fp = path.join(globalsDir, baseName + ".txt");
+        fp = path.join(globalsDir, `${baseName}.txt`);
         if (!fs.existsSync(fp))
             throw new Error(`${fName} does not find file '${fp}'`);
         i = 0;
@@ -24,7 +25,7 @@ function globalsFromFiles() {
                 throw new Error(`${fName} gets malformatted line '${fp}':${i}  ${line}`);
             pObj[s] = false;
         });
-        fp = path.join(globalsDir, baseName + "-local.txt");
+        fp = path.join(globalsDir, `${baseName}-local.txt`);
         if (!fs.existsSync(fp)) return;
         i = 0;
         fs.readFileSync(fp, "utf8").replace(/\r/g, "").split("\n").forEach(line => {
@@ -62,7 +63,7 @@ function ruleConfigs(mapVals, ruleNames) {
     ruleNames.forEach(k => {
         if (!(k in allRules))
             throw new Error(`Bad rule name given to 'ruleConfigs' function: ${k}`);
-        newRuleObj["@admc.com/sn/" + k] = mapVals;
+        newRuleObj[`@admc.com/sn/${k}`] = mapVals;
     });
     return newRuleObj;
 }

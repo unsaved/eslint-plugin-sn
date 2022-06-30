@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-"use srict";
-
+"use strict";
 
 const { AppErr, conciseCatcher, conciseErrorHandler, getAppVersion } = require("@admc.com/apputil");
 const { validate } = require("@admc.com/bycontract-plus");
@@ -24,7 +23,7 @@ The most important differences from invoking 'eslint' directly are:
     2. Internally we use --stdin and we generate a pseudo input file path,
        so if you use overrides in './eslintrc.json', you must match against
        these paths of format 'TABLENAME/BASENAME.js' or
-       'TABLENAME/ALTSCOPE/BASENAME.js'.  Example: \"sys_script/global/sane.js\"
+       'TABLENAME/ALTSCOPE/BASENAME.js'.  Example: "sys_script/global/sane.js"
        Use -d switch for ESLint to display the pseudo path that it uses.
        (It's also visible in Mocha's's label for each test run).
     3. Also since we pipe input, you can't use any fix or caching features.
@@ -78,8 +77,8 @@ if (!yargsDict.d) console.debug = () => {};
 if (yargsDict.q) console.debug = console.log = console.info = () => {};
 
 function isServerScript(tableName) {
-    return (!tableName.includes("mid")
-      && !tableName.includes("ecc") && !tableName.includes("client"));
+    return !tableName.includes("mid") &&
+      !tableName.includes("ecc") && !tableName.includes("client");
 }
 function isClientScript(tableName) {
     return tableName.includes("client");

@@ -1,4 +1,5 @@
 //120 are null with iso off and I've verified (with samples) that can set them successfully with non
+"use strict";
 const goodNulls = [
     "_frameChangedTimer",
     "columns",
@@ -1516,12 +1517,13 @@ function onLoad() {  // eslint-disable-line no-unused-vars
         if (goodNulls.includes(k)) return false;
         let t;
         try {
-            t = eval(`${k} === null ? "<null>" : typeof(${k});`);
+            t = eval(`${k} === null ? "<null>" : typeof(${k});`);  // eslint-disable-line no-eval
         } catch (ef) {
             console.error(`FAILED on: ${k}`);
             return false;
         }
         return t !== "undefined" && t !== "<null>";
     });
+    // eslint-disable-next-line prefer-template
     console.warn(`${visibles.length} visibles:\n` + visibles.join("\n"));
 }

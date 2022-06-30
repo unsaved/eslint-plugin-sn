@@ -1,7 +1,7 @@
 "use strict";
 
 const baseName = require("path").basename(__filename).replace(/-test[.]js/, "");
-new (require("eslint").RuleTester)().run(baseName, require("../rules/" + baseName), {
+new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}`), {
     valid: [
         {
             code: "console.info('a msg');",

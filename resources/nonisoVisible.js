@@ -1,3 +1,4 @@
+"use strict";
 const kNames = [
     "$",
     "$$",
@@ -1391,12 +1392,13 @@ function onLoad() {  // eslint-disable-line no-unused-vars
     const visibles = kNames.filter(k => {
         let t;
         try {
-            t = eval(`${k} === null ? "<null>" : typeof(${k});`);
+            t = eval(`${k} === null ? "<null>" : typeof(${k});`);  // eslint-disable-line no-eval
         } catch (ef) {
             console.error(`FAILED on: ${k}`);
             return false;
         }
         return t !== "undefined" && t !== "<null>";
     });
+    // eslint-disable-next-line prefer-template
     console.warn(`${visibles.length} visibles:\n` + visibles.join("\n"));
 }
