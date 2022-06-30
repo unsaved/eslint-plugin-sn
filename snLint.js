@@ -12,7 +12,7 @@ const yargs = require("yargs")(process.argv.slice(2)).
   strictOptions().
   usage(`SYNTAX: $0 [-dHqv] [-t sn_table] [-a scopealt] [-- -eslint-switches] file/path.js
   OR     $0 -h     OR
-         $0 -s rc/directory
+         $0 -s
          $0 -g snglobals/parent/dir
 
 The most important differences from invoking 'eslint' directly are:
@@ -61,8 +61,8 @@ directories, but for now invoke $0 once for each source file.`).
       type: "boolean",
   }).
   option("s", {
-      describe: "directory to write template 'eslintrc.json' Sample file into",
-      type: "string",
+      describe: "write template 'eslintrc.json' Sample file into current directory",
+      type: "boolean",
   }).
   option("t", {
       describe: "target Table.  If not set then we use the directory name of the specified file",
@@ -133,7 +133,7 @@ function lintFile(file, table, alt) {
 conciseCatcher(async function() {
     validate(arguments, []);
     if (yargsDict.s) {
-        const targRcFile = path.join(yargsDict.s, "eslintrc.json");
+        const targRcFile = "eslintrc.json";
         if (fs.existsSync(targRcFile)) {
             console.error(`Refusing to overwrite existing '${targRcFile}'`);
             process.exit(8);
