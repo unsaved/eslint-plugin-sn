@@ -1,17 +1,23 @@
-Add rule to test for no check of return of gr.insert, gr.update, gr.get
-
 Cover other kinds of scripts:
+For raw, and perhaps sys_ui_script, will need to capture full global-visible list from list page
+like I did for form form sys_script_client scripts.
     transform
-    sp_widget
+    sp_widget, script and client_script
     sys_cb_topic
     sa_pattern
     ui_action
     ui_policy
+    sys_ui_script, global and non-global
+    raw (like global sys_script and custom that load into browser)
 
-The 'require-iife.js' rule is now just a stub.  Implement it.  There are implementation notes in
-the file as comments.
+Rules to add
 
-Once require-iife rule is implemented, make nonanony-iife to prohibit useless naming of IIFEs.
+    Add rule to test for no check of return of gr.insert, gr.update, gr.get
+
+    The 'require-iife.js' rule is now just a stub.  Implement it.  There are implementation notes
+    in the file as comments.
+
+    Once require-iife rule is implemented, make nonanony-iife to prohibit useless naming of IIFEs.
 
 Enhance snLint.js to take any number of source file/paths¸ and just loop through them.
 
@@ -20,6 +26,3 @@ to be consistent with 'eslint'.
 
 Support table name specifications with dot, which are actually field specifications, for cases like
 sp_widget scripts where the table has more than one script field.
-
-Re-run client capture scripts in resources/ from a client script on a list page, because I only
-captured form a form page and manually added g_list.
