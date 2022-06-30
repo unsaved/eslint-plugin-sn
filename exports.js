@@ -40,10 +40,22 @@ function globalsFromFiles() {
     return pObj;
 }
 
+let tableSpecificGlobalMap;
 const fp = path.join(globalsDir, "tableSpecifics.json");
 if (!fs.existsSync(fp))
     throw new Error(`SN Plugin does not find file 'tableSpecifics.json'`);
-const tableSpecificGlobals = JSON.parse(fs.readFileSync(fp, "utf8"));
+try {
+    tableSpecificGlobalMap = JSON.parse(fs.readFileSync(fp, "utf8"));
+} catch (parseE) {
+    throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
+}
+const tableSpecificGlobals = (table, val="readonly") => {
+    if (!(table in tableSpecificGlobalMap))
+        throw new Error(`'tableSpecifics.json' file has no entry for '${table}'`);
+    const newGlobals = {};
+    tableSpecificGlobalMap[table].forEach(g => { newGlobals[g] = val; });
+    return newGlobals;
+};
 
 
 const allRules = require("requireindex")(path.join(__dirname, "rules"));
@@ -143,21 +155,21 @@ module.exports = {
 
             overrides: [
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script|sys_ws_operation|sys_web_service)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...serverRules,
                     },
                 },
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/global/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script|sys_ws_operation|sys_web_service)/global/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
                     },
                 },
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script)/scoped/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script|sys_ws_operation|sys_web_service)/scoped/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
                       ...ruleConfigs("error", ["no-log-global"])
@@ -193,6 +205,18 @@ module.exports = {
                     },
                 },
                 {
+                    files: ["**/sa_pattern_prepost_script/*/*.js"],
+                    globals: tableSpecificGlobals("sa_pattern_prepost_script"),
+                },
+                {
+                    files: ["**/sys_ws_operation/@(global|scoped)/*.js"],
+                    globals: tableSpecificGlobals("sys_ws_operation"),
+                },
+                {
+                    files: ["**/sys_web_service/@(global|scoped)/*.js"],
+                    globals: tableSpecificGlobals("sys_web_service"),
+                },
+                {
                     files: ["**/@(sys|catalog|expert)_script_client/iso/*.js"],
                     env: {"@admc.com/sn/sn_client_iso": true },
                 },
@@ -201,18 +225,10 @@ module.exports = {
                     env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
                 },
                 {
-                    files: ["**/sa_pattern_prepost_script/*/*.js"],
-                    rules: {
-                        "no-unused-vars": ["error", {
-                            varsIgnorePattern: tableSpecificGlobals.sa_pattern_prepost_script
-                        }],
-                    },
-                },
-                {
                     files: ["**/sys_script_client/*/*.js"],
                     rules: {
                         "no-unused-vars": ["error", {
-                            varsIgnorePattern: tableSpecificGlobals.sys_script_client
+                            varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
                         }],
                     },
                 },
