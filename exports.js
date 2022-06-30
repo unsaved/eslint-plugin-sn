@@ -86,7 +86,8 @@ module.exports = {
             Packages: false, ctx: false, CTX: false, ...globalsFromFiles("midSIs"),
         } },
         sn_client_iso: { globals: {
-            ...clientConstsCommon, ...globalsFromFiles("client-iso-only")
+            URL: false,
+            ...clientConstsCommon, ...globalsFromFiles("client-iso-only", "windowMembers")
         } },
         sn_client_noniso: { globals: {
             ...clientConstsCommon, ...globalsFromFiles("client-noniso-only")
