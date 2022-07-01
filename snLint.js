@@ -76,6 +76,9 @@ const progName = yargsDict.$0.replace(/^.*[\\/]/, "");  // eslint-disable-line n
 if (!yargsDict.d) console.debug = () => {};
 if (yargsDict.q) console.debug = console.log = console.info = () => {};
 
+/* Luckly only need to decide between JavaScript script tables
+ * (because there are non-JS tables like *ecc* and *mid*).
+ */
 function isServerScript(tableName) {
     return !tableName.includes("mid") &&
       !tableName.includes("ecc") && !tableName.includes("client");
@@ -89,7 +92,7 @@ function isSI(tableName) {
 
 function lintFile(file, table, alt) {
     validate(arguments, ["string", "string", "string="]);
-    console.debug(`file (${file}) table (${table}) alt(${alt})`);
+    console.debug(`file (${file}) table (${table}) alt (${alt})`);
     const baseName = path.basename(file);
     const objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = yargsDict._.slice();
@@ -121,9 +124,9 @@ function lintFile(file, table, alt) {
     const childProcess = require("child_process").spawn(process.execPath, eslintArgs, {
         stdio: ["pipe", "inherit", "inherit"],
     });
-    childProcess.stdin.write(isServerScript(table)
-        ? content.replace(/(\s)const(\s)/g, "$1var$2")
-        : content);
+    childProcess.stdin.write(isClientScript(table)
+        ? content
+        : content.replace(/(\s)const(\s)/g, "$1var$2"));
     childProcess.stdin.end();
     childProcess.on("exit", ()=> {
         if (childProcess.exitCode !== 0) process.exit(childProcess.exitCode);

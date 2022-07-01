@@ -16,7 +16,7 @@ module.exports = {
     },
 
     create: context => {  // Called once for the source file
-        return { "CallExpression": node => {  // Called for every function call expression
+        return { CallExpression: node => {  // Called for every function call expression
             const callee = node.callee;
             if (callee.type !== "MemberExpression" || callee.object.name !== "gs") return;
             switch (callee.property.name) {

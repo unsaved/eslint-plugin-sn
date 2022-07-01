@@ -16,7 +16,7 @@ module.exports = {
     },
 
     create: context => {  // Called once for the source file
-        return { "CallExpression": node => {  // Called for every function call expression
+        return { CallExpression: node => {  // Called for every function call expression
             //console.warn("Executing RULE.create.CallExpression()");
             const callee = node.callee;
             if (callee.type !== "MemberExpression" || callee.property.name !== "log") return;
