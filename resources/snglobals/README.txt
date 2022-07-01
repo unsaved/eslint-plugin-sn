@@ -14,8 +14,8 @@ the ".txt" suffix.  For example to add SI scope global objects, make a new
 file named "SIScopes-local.txt".
 
 For accessing scoped SIs you will need to add entries to your local
-"eslintrc.json" file.  Consider defining your own "altscope".  In
-"eslintrc.json" you would create an environment with the list of globals of your
+"sneslintrc.json" file.  Consider defining your own "altscope".  In
+"sneslintrc.json" you would create an environment with the list of globals of your
 altscope SIs, update existing server overrides.files entries (depending whether
 your scripts have access of public vs. package_private), and add a new overrides
 object for intra-scope access.

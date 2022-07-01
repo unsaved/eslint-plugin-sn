@@ -17,11 +17,11 @@ const yargs = require("yargs")(process.argv.slice(2)).
 
 The most important differences from invoking 'eslint' directly are:
     1. Internally we use -c and --no-eslintrc, so that only config file
-       './eslintrc.json' is honored.  NOT '.eslintrc.*'!
+       './sneslintrc.json' is honored.  NOT '.eslintrc.*'!
        You must have this file in place.
        You can generate it with the -s switch.  No cascading RC files.
     2. Internally we use --stdin and we generate a pseudo input file path,
-       so if you use overrides in './eslintrc.json', you must match against
+       so if you use overrides in './sneslintrc.json', you must match against
        these paths of format 'TABLENAME/BASENAME.js' or
        'TABLENAME/ALTSCOPE/BASENAME.js'.  Example: "sys_script/global/sane.js"
        Use -d switch for ESLint to display the pseudo path that it uses.
@@ -61,7 +61,7 @@ directories, but for now invoke $0 once for each source file.`).
       type: "boolean",
   }).
   option("s", {
-      describe: "write template 'eslintrc.json' Sample file into current directory",
+      describe: "write template 'sneslintrc.json' Sample file into current directory",
       type: "boolean",
   }).
   option("t", {
@@ -111,7 +111,7 @@ function lintFile(file, table, alt) {
     eslintArgs.splice(0, 0,
         path.join(require.resolve("eslint"), "../../bin/eslint.js"),
         "-c",
-        "eslintrc.json",
+        "sneslintrc.json",
         "--no-eslintrc",
         "--resolve-plugins-relative-to",  path.join(__dirname, ".."),  // reqd for global installs
         "--stdin",
@@ -135,12 +135,12 @@ function lintFile(file, table, alt) {
 conciseCatcher(async function() {
     validate(arguments, []);
     if (yargsDict.s) {
-        const targRcFile = "eslintrc.json";
+        const targRcFile = "sneslintrc.json";
         if (fs.existsSync(targRcFile)) {
             console.error(`Refusing to overwrite existing '${targRcFile}'`);
             process.exit(8);
         }
-        fs.copyFileSync(path.join(__dirname, "resources/eslintrc-example.json"), targRcFile);
+        fs.copyFileSync(path.join(__dirname, "resources/sneslintrc.json"), targRcFile);
         console.info(`Created file '${targRcFile}'`);
         process.exit(0);
     }

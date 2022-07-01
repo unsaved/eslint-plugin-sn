@@ -66,7 +66,7 @@ But for non-global intra-scope accesses we only check that any scope has the SI 
 To restrict accurately we would have to maintain a separate list for every non-global scope, and
 that's just not practical.
 If you want to narrow down intra-scope SI accesses for specific scopes, you're welcome to define
-new altscopes for this purpose, defining "eslintrc.json" environments, override elements.
+new altscopes for this purpose, defining "sneslintrc.json" environments, override elements.
 If you only edit scripts in one or a few scopes, then a much easier customizaton procedure is
 documented in the "snglobals/README.txt" file, to replace the list of all scopedSIs with just those
 that you should be accessing.
