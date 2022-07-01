@@ -159,6 +159,7 @@ module.exports = {
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       ...serverRules,
+                      ...ruleConfigs("error", ["no-sysid"]),
                     },
                 },
                 {
