@@ -113,7 +113,7 @@ function lintFile(file, table, alt) {
         "-c",
         "sneslintrc.json",
         "--no-eslintrc",
-        "--resolve-plugins-relative-to",  path.join(__dirname, ".."),  // reqd for global installs
+        "--resolve-plugins-relative-to", path.join(__dirname, ".."),  // reqd for global installs
         "--stdin",
         "--stdin-filename",
         pseudoPath,
