@@ -92,7 +92,8 @@ module.exports = {
             SNC: false, ...serverConstsCommon, ...globalsFromFiles("globalSIs", "globalAPIs"),
         } },
         sn_server_scoped: { globals: {
-            ...serverConstsCommon, ...globalsFromFiles("scopedSIs"),
+            ...serverConstsCommon,
+            ...globalsFromFiles("scopedSIs"), ...globalsFromFiles("scopedAPIs"),
         } },
         sn_mid: { globals: {
             Packages: false, ctx: false, CTX: false, ...globalsFromFiles("midSIs"),
