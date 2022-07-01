@@ -1,4 +1,8 @@
 // This captured from https://developer.servicenow.com/dev.do#!/reference/api/sandiego/server
+
+# Addition for undocumented item
+GlideEmailAction
+
 action
 CertificateEncryption
 FlowScriptAPI

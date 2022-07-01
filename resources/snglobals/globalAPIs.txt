@@ -1,5 +1,9 @@
 # Captured from https://developer.servicenow.com/dev.do#!/reference/api/sandiego/server_legacy 2022-06-27
 # Source instance very close to OOTB but has discovery module
+
+# Addition for undocumented item
+GlideEmailAction
+
 APCHandler
 AbstractDBObject
 AbstractReconciler
