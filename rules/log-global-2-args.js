@@ -11,7 +11,7 @@ module.exports = {
         schema: [ ],
         messages: {
             LOG_GLOBAL_2_ARGS_MSG: "Specify a 2nd parameter, " +
-              "'source' to clearly identify your source scriptingobject and function",
+              "'source' to clearly identify your source scripting object and function",
         },
     },
 
