@@ -17,7 +17,7 @@ module.exports = {
 
     create: context => {  // Called once for the source file
         return { Literal(node) {
-            if (/^[\da-z]{32}$/i.test(node.value))
+            if (/^[\da-f]{32}$/i.test(node.value))
                 context.report({node, messageId: "NO_SYSID_MSG"});
         } };
     }
