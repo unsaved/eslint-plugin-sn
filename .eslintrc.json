@@ -5,7 +5,7 @@
   "extends": "eslint:recommended",
   "parserOptions": { "ecmaVersion": "latest" },
   "rules": {
-    "camelcase": "warn",
+    "camelcase": ["warn", { "properties": "never" }],
     "eqeqeq": "error",
     "no-var": "error",
     "prefer-const": "error",

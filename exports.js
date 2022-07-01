@@ -88,7 +88,6 @@ const clientConstsCommon = globalsFromFiles("client-common");
 module.exports = {
     rules: allRules,
     environments: {
-        /* eslint-disable camelcase */
         sn_server_global: { globals: {
             SNC: false, ...serverConstsCommon, ...globalsFromFiles("globalSIs", "globalAPIs"),
         } },
@@ -105,7 +104,6 @@ module.exports = {
         sn_client_noniso: { globals: {
             ...clientConstsCommon, ...globalsFromFiles("client-noniso-only")
         } },
-        /* eslint-enable camelcase */
     },
     configs: {
         servicenow: {
@@ -137,7 +135,7 @@ module.exports = {
                 "dot-notation": "warn",
                 "consistent-return": "error",
                 "class-methods-use-this": "error",
-                "camelcase": "warn",
+                "camelcase": ["warn", { properties: "never" }],
                 "block-scoped-var": "error",
                 "no-use-before-define": ["error", { functions: false, classes: false }],
                 "no-unreachable-loop": "error",
@@ -158,6 +156,7 @@ module.exports = {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script|sys_ws_operation|sys_web_service)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
+                      "camelcase": ["warn", { properties: "never", ignoreGlobals: true }],
                       ...serverRules,
                       ...ruleConfigs("error", ["no-sysid"]),
                     },
