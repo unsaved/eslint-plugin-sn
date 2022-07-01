@@ -113,11 +113,10 @@ function lintFile(file, table, alt) {
         "-c",
         "eslintrc.json",
         "--no-eslintrc",
+        "--resolve-plugins-relative-to",  path.join(__dirname, ".."),  // reqd for global installs
         "--stdin",
         "--stdin-filename",
         pseudoPath,
-        // TODO:  Test if necessary now that design completed
-        //"--resolve-plugins-relative-to",  __dirname),
     );
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     console.debug('eslint invocation args', eslintArgs);

@@ -20,17 +20,35 @@ table and altscope (using -t and -a switches); and it transforms ES5 'const' sta
 satisfy ESLint.
 
 ## Installation
+To install globally (accessible to all npm projects):
 ```
-    [sudo] npm i -g @admc.com/sn
+    npm i -g @admc.com/eslint-plugin-sn
 ```
-(If you omit -g and do a local project installation, snLint commands will need to specify the
-path to node_modules/.bin/snLint).
+UNIX users will need root privileges, so run this as root or under sudo.
+
+To use just with your own project, install locally:
+```
+    npm i @admc.com/eslint-plugin-sn
+```
 
 ## Setup
-To use snLint, run
+With global installation
 ```
-    snLint -s .  # Populates a "esnlinrc.json" file
-    snLint -g .  # Populates a "snglobals" directory
+    snLint -s
+    snLint -g .
+```
+With local project installation
+```
+    npm exec snLint -- -s
+    npm exec snLint -- -g .
+```
+
+## Usage
+To get invocation syntax help:
+```
+    snLint -h                # with global installation
+    npm exec snLint -- -h    # with local project installation
+```
 
 ## Customization
 See file "snglobals/README.txt" for instructions on how to customize the global JavaScript object
