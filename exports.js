@@ -147,7 +147,7 @@ module.exports = {
                 "array-callback-return": ["error", { checkForEach: true }],
                 "eqeqeq": "warn",
                 "semi": "warn",
-                "no-extra-parens": "warn",
+                //"no-extra-parens": "warn",  In practice, too stringent
 
                 "@admc.com/sn/invalid-table-altscope": "error",
             },

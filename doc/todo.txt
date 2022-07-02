@@ -1,16 +1,19 @@
 Cover other kinds of scripts:
 For raw, and perhaps sys_ui_script, will need to capture full global-visible list from list page
 like I did for form form sys_script_client scripts.
-    transform
-    sp_widget, script and client_script
-    sys_cb_topic
-    sa_pattern
-    ui_action
+    ui_action   See if this and next can be handled same as client scripts with custom globals.
     ui_policy
     sys_ui_script, global and non-global
-    raw (like global sys_script and custom that load into browser)
+    raw (like global sys_script and custom that load into browser).  Same as previous?
+    transform
+    sp_widget, .script and .client_script
+    sys_cb_topic
+    sa_pattern
 
 Rules to add
+
+    Function declared at root level and then invoked once at root level.
+    At least for non-SIs.
 
     Add rule to test for no check of return of gr.insert, gr.update, gr.get
 
