@@ -2,12 +2,12 @@
 
 module.exports = {
     meta: {
+        type: "problem",
         docs: {
             description: "Only ServiceNow server global scripts may use gs.log* or gs.print",
-            category: "API violaton",
+            category: "Possible Problems",
             recommended: true
         },
-        fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
             NO_LOG_GLOBAL_MSG: "In a scoped script use gs.debug/info/warn/error to " +

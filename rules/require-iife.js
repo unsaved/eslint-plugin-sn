@@ -8,13 +8,13 @@
 
 module.exports = {
     meta: {
+        type: "problem",
         docs: {
             description:
               "Many ServiceNow scriptlet types need an IIFE to protect from variable scope leaks",
-            category: "ServiceNow workarounds",
+            category: "Possible Problems",
             recommended: true
         },
-        fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
             REQUIRE_IIFE_MSG: "Consider wrapping your code body in an IIFE to protect " +

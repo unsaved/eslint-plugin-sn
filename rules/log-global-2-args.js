@@ -2,12 +2,12 @@
 
 module.exports = {
     meta: {
+        type: "problem",
         docs: {
             description: "gs.log* calls should always specify the 'source' parameter",
-            category: "better JavaScript coding",
+            category: "Possible Problems",
             recommended: true
         },
-        fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
             LOG_GLOBAL_2_ARGS_MSG: "Specify a 2nd parameter, " +

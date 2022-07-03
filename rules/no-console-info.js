@@ -2,12 +2,12 @@
 
 module.exports = {
     meta: {
+        type: "suggestion",
         docs: {
             description: "console.log calls do not clearly imply a logging level",
-            category: "better JavaScript coding",
+            category: "Possible Problems",
             recommended: true
         },
-        fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
             NO_CONSOLE_LOG_MSG:

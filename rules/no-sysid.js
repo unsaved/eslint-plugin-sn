@@ -2,12 +2,12 @@
 
 module.exports = {
     meta: {
+        type: "suggestion",
         docs: {
             description: "Don't hard-code sys_ids",
-            category: "better ServiceNow coding",
+            category: "Suggestions",
             recommended: true
         },
-        fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: {
             NO_SYSID_MSG: "Use an association to a field value "

@@ -17,17 +17,22 @@ Rules to add
     [update] bad table/esscope:  attempt to remove all other issues when add this issue
 
     [update] require-iife.js
+    change num-params options to paramNames
     constraints to add:  if any variable assigment within
     IIFE only at root level
 
     forEach instead of 'for (x ='
     Check again for an existing rule for this
     warn level
+    test code:
+const m = ['alpha', 'beta', 'gamma'];
+let y;
+for (y = 1; y < m.length; y++) console.info(m[y]);
 
     Function declared at root level and then invoked once at root level.
     At least for non-SIs.
 
-    Add rule to test for no check of return of gr.insert, gr.update, gr.get
+    No check of return of gr.insert, gr.update, gr.get
 
     Once require-iife rule is implemented, make nonanony-iife to prohibit useless naming of IIFEs.
 

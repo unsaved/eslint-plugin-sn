@@ -3,12 +3,12 @@
 let beenCalled = false;
 module.exports = {
     meta: {
+        type: "problem",
         docs: {
             description: "This is to always fail for invalid table/altscope combinations",
-            category: "@admc.com/sn system",
+            category: "Fatal",
             recommended: true
         },
-        fixable: null,  // or "code" or "whitespace"
         schema: [ ],
         messages: { INVALID_TABLE_ALTSCOPE_MSG: "Invalid table/scope combo" },
     },
