@@ -1,6 +1,7 @@
 "use strict";
 
-const baseName = require("path").basename(__filename).replace(/-test[.]js/, "");
+const baseName = require("path").basename(__filename).replace(/-test[.]js$/, "");
+const msgKey = (baseName + "_msg").toUpperCase();  // eslint-disable-line prefer-template
 new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}`), {
     valid: [
         {
@@ -16,15 +17,15 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
     invalid: [
         {
             code: "gs.log('a msg');",
-            errors: [{messageId: "LOG_GLOBAL_2_ARGS_MSG"}],
+            errors: [{messageId: msgKey}],
         },
         {
             code: "gs.logWarning('a msg');",
-            errors: [{messageId: "LOG_GLOBAL_2_ARGS_MSG"}],
+            errors: [{messageId: msgKey}],
         },
         {
             code: "gs.logError('a msg');",
-            errors: [{messageId: "LOG_GLOBAL_2_ARGS_MSG"}],
+            errors: [{messageId: msgKey}],
         }
     ]
 });

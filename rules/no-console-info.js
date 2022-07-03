@@ -1,6 +1,10 @@
 "use strict";
 
-module.exports = {
+const message =
+  "Use a specific logging level (debug/info/warn/error) rather than console.log";
+// eslint-disable-next-line prefer-template
+const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const esLintObj = {
     meta: {
         type: "suggestion",
         docs: {
@@ -9,10 +13,7 @@ module.exports = {
             recommended: true
         },
         schema: [ ],
-        messages: {
-            NO_CONSOLE_LOG_MSG:
-              "Use a specific logging level (debug/info/warn/error) rather than console.log",
-        },
+        messages: { },
     },
 
     create: context => {  // Called once for the source file
@@ -23,7 +24,9 @@ module.exports = {
             if (callee.object.name === "console"
               || callee.object.object !== undefined && callee.object.object.name === "window"
                 && callee.object.property.name === "console")
-                context.report({node, messageId: "NO_CONSOLE_LOG_MSG"});
+                context.report({node, messageId: msgKey});
         } };
     }
 };
+esLintObj.meta.messages[msgKey] = message;
+module.exports = esLintObj;

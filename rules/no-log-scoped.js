@@ -1,6 +1,9 @@
 "use strict";
 
-module.exports = {
+const message = "log rather than gs.debug/info/warn/error";
+// eslint-disable-next-line prefer-template
+const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const esLintObj = {
     meta: {
         type: "problem",
         docs: {
@@ -9,10 +12,7 @@ module.exports = {
             recommended: true
         },
         schema: [ ],
-        messages: {
-            NO_LOG_SCOPED_MSG: "In a global script use gs.log* to " +
-              "log rather than gs.debug/info/warn/error"
-        },
+        messages: { },
     },
 
     create: context => {  // Called once for the source file
@@ -21,7 +21,9 @@ module.exports = {
             const callee = node.callee;
             if (callee.type === "MemberExpression" && callee.object.name === "gs"
               && /^(debug|info|warn|error)?$/.test(callee.property.name))
-                context.report({node, messageId: "NO_LOG_SCOPED_MSG"});
+                context.report({node, messageId: msgKey});
         } };
     }
 };
+esLintObj.meta.messages[msgKey] = message;
+module.exports = esLintObj;

@@ -1,6 +1,10 @@
 "use strict";
 
-module.exports = {
+const message =
+  "Specify a 2nd parameter, 'source' to clearly identify your source scripting object and function";
+// eslint-disable-next-line prefer-template
+const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const esLintObj = {
     meta: {
         type: "problem",
         docs: {
@@ -9,10 +13,7 @@ module.exports = {
             recommended: true
         },
         schema: [ ],
-        messages: {
-            LOG_GLOBAL_2_ARGS_MSG: "Specify a 2nd parameter, " +
-              "'source' to clearly identify your source scripting object and function",
-        },
+        messages: { },
     },
 
     create: context => {  // Called once for the source file
@@ -28,7 +29,9 @@ module.exports = {
                     return;
             }
             if (node.arguments.length < 2)
-                context.report({node, messageId: "LOG_GLOBAL_2_ARGS_MSG"});
+                context.report({node, messageId: msgKey});
         } };
     }
 };
+esLintObj.meta.messages[msgKey] = message;
+module.exports = esLintObj;

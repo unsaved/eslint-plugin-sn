@@ -6,7 +6,11 @@
  * all dependency modules for that, from "node_modules/eslint/lib/rules/wrap-iife.js".
  */
 
-module.exports = {
+const message =
+  "Consider wrapping your code body in an IIFE to protect against ServiceNow variable scope leak";
+// eslint-disable-next-line prefer-template
+const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const esLintObj = {
     meta: {
         type: "problem",
         docs: {
@@ -16,10 +20,7 @@ module.exports = {
             recommended: true
         },
         schema: [ ],
-        messages: {
-            REQUIRE_IIFE_MSG: "Consider wrapping your code body in an IIFE to protect " +
-              "against ServiceNow variable scope leak",
-        },
+        messages: { },
     },
 
     /**
@@ -37,8 +38,9 @@ module.exports = {
                 default:
                     return;
             }
-            if (node.arguments.length > 2)
-                context.report({node, messageId: "REQUIRE_IIFE_MSG"});
+            if (node.arguments.length > 2) context.report({node, messageId: msgKey});
         } };
     }
 };
+esLintObj.meta.messages[msgKey] = message;
+module.exports = esLintObj;
