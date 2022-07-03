@@ -1,6 +1,7 @@
 Cover other kinds of scripts:
 For raw, and perhaps sys_ui_script, will need to capture full global-visible list from list page
 like I did for form form sys_script_client scripts.
+    sysauto_script
     ui_action   See if this and next can be handled same as client scripts with custom globals.
     ui_policy
     sys_ui_script, global and non-global
@@ -11,14 +12,24 @@ like I did for form form sys_script_client scripts.
     sa_pattern
 
 Rules to add
+    [update] sysid.  Give a.b.name as example
+
+    [update] ALL.  Add es5 vs. es6 constraints.
+
+    [update] bad table/esscope:  attempt to remove all other issues when add this issue
+
+    [update] require-iife.js
+    constraints to add:  if any variable assigment within
+    IIFE only at root level
+
+    forEach instead of 'for (x ='
+    Check again for an existing rule for this
+    warn level
 
     Function declared at root level and then invoked once at root level.
     At least for non-SIs.
 
     Add rule to test for no check of return of gr.insert, gr.update, gr.get
-
-    The 'require-iife.js' rule is now just a stub.  Implement it.  There are implementation notes
-    in the file as comments.
 
     Once require-iife rule is implemented, make nonanony-iife to prohibit useless naming of IIFEs.
 
@@ -29,3 +40,5 @@ to be consistent with 'eslint'.
 
 Support table name specifications with dot, which are actually field specifications, for cases like
 sp_widget scripts where the table has more than one script field.
+
+Add fix capabilities
