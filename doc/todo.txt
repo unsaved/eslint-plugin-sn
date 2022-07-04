@@ -12,14 +12,9 @@ like I did for form form sys_script_client scripts.
     sa_pattern
 
 Rules to add
-    [update] sysid.  Give a.b.name as example
-
     [update] bad table/esscope:  attempt to remove all other issues when add this issue
 
-    [update] require-iife.js
-    change num-params options to paramNames
-    constraints to add:  if any variable assigment within
-    IIFE only at root level
+    no-nonanon-iife.  Make nonanony-iife to prohibit useless naming of IIFEs.
 
     forEach instead of 'for (x ='
     Check again for an existing rule for this
@@ -33,8 +28,6 @@ for (y = 1; y < m.length; y++) console.info(m[y]);
     At least for non-SIs.
 
     No check of return of gr.insert, gr.update, gr.get
-
-    Once require-iife rule is implemented, make nonanony-iife to prohibit useless naming of IIFEs.
 
 Enhance snLint.js to take any number of source file/paths¸ and just loop through them.
 

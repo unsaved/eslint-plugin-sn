@@ -1,7 +1,7 @@
 "use strict";
 
 const message =
-  "Use an association to a field value meaningful to humans rather than hardcoded sys_id";
+  "Use dot-walking instead of har-coded sysids.  E.g.: if (task.assignment_group_name.name ===...";
 // eslint-disable-next-line prefer-template
 const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
