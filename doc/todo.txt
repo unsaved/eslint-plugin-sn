@@ -1,3 +1,5 @@
+remove 'recommended' setting from all rule defs
+
 Cover other kinds of scripts:
 For raw, and perhaps sys_ui_script, will need to capture full global-visible list from list page
 like I did for form form sys_script_client scripts.
