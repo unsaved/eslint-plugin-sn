@@ -2,8 +2,8 @@
 
 const message =
   "In a scoped script use gs.debug/info/warn/error to log rather than gs.log* or gs.print";
-// eslint-disable-next-line prefer-template
-const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const messageId =  // eslint-disable-next-line prefer-template
+  (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
     meta: {
         type: "problem",
@@ -22,9 +22,9 @@ const esLintObj = {
             if (callee.type === "MemberExpression" && callee.object.name === "gs"
               && (/^log(Warning|Error)?$/.test(callee.property.name)
                 || callee.property.name === "print"))
-                context.report({node, messageId: msgKey});
+                context.report({node, messageId});
         } };
     }
 };
-esLintObj.meta.messages[msgKey] = message;
+esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

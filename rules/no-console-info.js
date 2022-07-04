@@ -2,8 +2,8 @@
 
 const message =
   "Use a specific logging level (debug/info/warn/error) rather than console.log";
-// eslint-disable-next-line prefer-template
-const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const messageId =  // eslint-disable-next-line prefer-template
+  (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
     meta: {
         type: "suggestion",
@@ -23,9 +23,9 @@ const esLintObj = {
             if (callee.object.name === "console"
               || callee.object.object !== undefined && callee.object.object.name === "window"
                 && callee.object.property.name === "console")
-                context.report({node, messageId: msgKey});
+                context.report({node, messageId});
         } };
     }
 };
-esLintObj.meta.messages[msgKey] = message;
+esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

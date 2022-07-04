@@ -2,8 +2,8 @@
 
 const message =
   "Specify a 2nd parameter, 'source' to clearly identify your source scripting object and function";
-// eslint-disable-next-line prefer-template
-const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const messageId =  // eslint-disable-next-line prefer-template
+  (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
     meta: {
         type: "problem",
@@ -28,9 +28,9 @@ const esLintObj = {
                     return;
             }
             if (node.arguments.length < 2)
-                context.report({node, messageId: msgKey});
+                context.report({node, messageId});
         } };
     }
 };
-esLintObj.meta.messages[msgKey] = message;
+esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

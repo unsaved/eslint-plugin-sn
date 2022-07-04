@@ -1,8 +1,8 @@
 "use strict";
 
 const message = "log rather than gs.debug/info/warn/error";
-// eslint-disable-next-line prefer-template
-const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const messageId =  // eslint-disable-next-line prefer-template
+  (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
     meta: {
         type: "problem",
@@ -20,9 +20,9 @@ const esLintObj = {
             const callee = node.callee;
             if (callee.type === "MemberExpression" && callee.object.name === "gs"
               && /^(debug|info|warn|error)?$/.test(callee.property.name))
-                context.report({node, messageId: msgKey});
+                context.report({node, messageId});
         } };
     }
 };
-esLintObj.meta.messages[msgKey] = message;
+esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

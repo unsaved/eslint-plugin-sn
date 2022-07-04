@@ -14,13 +14,6 @@ like I did for form form sys_script_client scripts.
     sa_pattern
 
 Rules to add
-    [update] bad table/esscope:  attempt to remove all other issues when add this issue
-
-    no-nonanon-iife.  Make nonanony-iife to prohibit useless naming of IIFEs.
-
-    Function declared at root level and then invoked once at root level.
-    At least for non-SIs.
-
     forEach instead of 'for (x ='
     Check again for an existing rule for this
     warn level

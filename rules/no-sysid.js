@@ -2,8 +2,8 @@
 
 const message =
   "Use dot-walking instead of har-coded sysids.  E.g.: if (task.assignment_group_name.name ===...";
-// eslint-disable-next-line prefer-template
-const msgKey = (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+const messageId =  // eslint-disable-next-line prefer-template
+  (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
     meta: {
         type: "suggestion",
@@ -18,9 +18,9 @@ const esLintObj = {
     create: context => {  // Called once for the source file
         return { Literal(node) {
             if (/^[\da-f]{32}$/i.test(node.value))
-                context.report({node, messageId: msgKey});
+                context.report({node, messageId});
         } };
     }
 };
-esLintObj.meta.messages[msgKey] = message;
+esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;
