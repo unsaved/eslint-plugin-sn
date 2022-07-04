@@ -1,3 +1,5 @@
+Use variable name messageId instead of msgKey so that can leverage destructuring.
+
 Cover other kinds of scripts:
 For raw, and perhaps sys_ui_script, will need to capture full global-visible list from list page
 like I did for form form sys_script_client scripts.
@@ -16,6 +18,9 @@ Rules to add
 
     no-nonanon-iife.  Make nonanony-iife to prohibit useless naming of IIFEs.
 
+    Function declared at root level and then invoked once at root level.
+    At least for non-SIs.
+
     forEach instead of 'for (x ='
     Check again for an existing rule for this
     warn level
@@ -23,9 +28,6 @@ Rules to add
 const m = ['alpha', 'beta', 'gamma'];
 let y;
 for (y = 1; y < m.length; y++) console.info(m[y]);
-
-    Function declared at root level and then invoked once at root level.
-    At least for non-SIs.
 
     No check of return of gr.insert, gr.update, gr.get
 
