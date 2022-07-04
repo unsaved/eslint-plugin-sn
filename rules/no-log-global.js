@@ -10,7 +10,6 @@ const esLintObj = {
         docs: {
             description: "Only ServiceNow server global scripts may use gs.log* or gs.print",
             category: "Possible Problems",
-            recommended: true
         },
         schema: [ ],
         messages: { },

@@ -10,7 +10,6 @@ const esLintObj = {
         docs: {
             description: "console.log calls do not clearly imply a logging level",
             category: "Possible Problems",
-            recommended: true
         },
         schema: [ ],
         messages: { },

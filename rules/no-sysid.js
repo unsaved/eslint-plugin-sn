@@ -10,7 +10,6 @@ const esLintObj = {
         docs: {
             description: "Don't hard-code sys_ids",
             category: "Suggestions",
-            recommended: true
         },
         schema: [ ],
         messages: { },

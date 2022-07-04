@@ -17,7 +17,6 @@ const esLintObj = {
             description:
               "Many ServiceNow scriptlet types need an IIFE to protect from variable scope leaks",
             category: "Possible Problems",
-            recommended: true
         },
         schema: [ ],
         messages: { },
