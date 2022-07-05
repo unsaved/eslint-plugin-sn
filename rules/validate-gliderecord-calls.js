@@ -54,7 +54,7 @@ const esLintObj = {
               || !GR_CHECK_FNS.includes(node.callee.property.name)) return;
             // Good if CallExpression parent is IfStatement or SwitchStatement
             if (node.parent.type !== "ExpressionStatement") return;
-            switch(node.parent.parent.type) {
+            switch (node.parent.parent.type) {
                 case "Program":
                 case "BlockStatement":
                     context.report({node, messageId});

@@ -14,7 +14,7 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => return {
+    create: context => { return {
         CallExpression: node => {
             const callee = node.callee;
             if (callee.type !== "MemberExpression" || callee.object.name !== "gs") return;
