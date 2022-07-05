@@ -13,16 +13,7 @@ like I did for form form sys_script_client scripts.
     sys_cb_topic
     sa_pattern
 
-Rules to add
-    forEach instead of 'for (x ='
-    Check again for an existing rule for this
-    warn level
-    test code:
-const m = ['alpha', 'beta', 'gamma'];
-let y;
-for (y = 1; y < m.length; y++) console.info(m[y]);
-
-    No check of return of gr.insert, gr.update, gr.get
+Rule to add: No check of return of gr.insert, gr.update, gr.get
 
 Enhance snLint.js to take any number of source file/paths¸ and just loop through them.
 
