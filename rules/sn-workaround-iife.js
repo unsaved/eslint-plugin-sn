@@ -64,7 +64,8 @@ const esLintObj = {
 
     create: context => {
         iifeCount = 0;
-        assignmentCount = 0; return {
+        assignmentCount = 0;
+        return {
             CallExpression: node => {
                 const callee = node.callee;
                 if (callee.type !== "FunctionExpression") return;

@@ -11,7 +11,7 @@ const message = `Non-anonymous IIFE '{{name}}'.  To not pollute namespace, code 
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
-const varMap = {};  // Map from candidate variables to that variable's scope
+let varMap;  // Map from candidate variables to that variable's scope
 
 const checkBody= (body, context) => {
     body.some((n, i) => {
@@ -45,21 +45,24 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => { return {
-        BlockStatement: node => {
-            checkBody(node.body, context);
-        }, onCodePathEnd: (codePath, node) => {
-            if (node.type !== "Program") return;
-            checkBody(node.body, context);
-            Object.keys(varMap).forEach(me => {
-                const entry = varMap[me];
-                const astVar = entry.scope.variables.find(en=>en.name===me);
-                //console.debug(astVar.defs.length);
-                const loc = astVar.defs[0].node.loc;
-                context.report({messageId, loc, data: {name: me}});
-            });
-        },
-    }; }
+    create: context => {
+        varMap = {};
+        return {
+            BlockStatement: node => {
+                checkBody(node.body, context);
+            }, onCodePathEnd: (codePath, node) => {
+                if (node.type !== "Program") return;
+                checkBody(node.body, context);
+                Object.keys(varMap).forEach(me => {
+                    const entry = varMap[me];
+                    const astVar = entry.scope.variables.find(en=>en.name===me);
+                    //console.debug(astVar.defs.length);
+                    const loc = astVar.defs[0].node.loc;
+                    context.report({messageId, loc, data: {name: me}});
+                });
+            },
+        };
+    }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;
