@@ -14,6 +14,13 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
             options: [{tables: ["sys_script_include"], paramNames: ["p1", "p2"]}],
             errors: [{messageId}],
         },
+        {  // SN-provided sys_script script template
+            code: '(function executeRule(current, previous /*null when async*/) {'
+              + '\t // Add your code here\n    gs.info("All is well", "scp");\n\n'
+              + '})(current, previous);',
+            options: [{tables: ["sys_script_include"], paramNames: ["previous", "current"]}],
+            errors: [{messageId}],
+        },
     ],
     invalid: [
         {

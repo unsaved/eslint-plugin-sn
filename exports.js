@@ -149,6 +149,10 @@ module.exports = {
                 "semi": "warn",
                 //"no-extra-parens": "warn",  In practice, too stringent
 
+                "@admc.com/sn/no-nonanon-iife": "error",
+                "@admc.com/sn/prefer-array-iterator": "error",
+
+                // This purposefully fails tests that aren't for a supported override subset:
                 "@admc.com/sn/invalid-table-altscope": "error",
             },
 
@@ -157,6 +161,7 @@ module.exports = {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script|sys_ws_operation|sys_web_service)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
+                      "@admc.com/sn/validate-gliderecord-calls": "error",
                       "camelcase": ["warn", { properties: "never", ignoreGlobals: true }],
                       ...serverRules,
                       ...ruleConfigs("error", ["no-sysid"]),
@@ -203,6 +208,14 @@ module.exports = {
                       "no-unused-private-class-members": "error",
                       "no-promise-executor-return": "error",
                       ...clientRules,
+                    },
+                },
+                {
+                    files: ["**/sys_script/*/*.js"],
+                    rules: {
+                        "@admc.com/sn/sn-workaround-iife": ["error", {
+                            paramNames: ["current", "previous"],
+                        }],
                     },
                 },
                 {
