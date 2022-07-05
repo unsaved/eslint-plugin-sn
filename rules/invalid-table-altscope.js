@@ -15,13 +15,13 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => {  // Called once for the source file
-        return { onCodePathStart: (codePath, node) => {
+    create: context => { return {
+        onCodePathStart: (codePath, node) => {
             if (beenCalled) return;
             beenCalled = true;
             context.report({node, messageId});
-        } };
-    },
+        }
+    }; }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

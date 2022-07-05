@@ -14,12 +14,12 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => {  // Called once for the source file
-        return { Literal(node) {
+    create: context => { return {
+        Literal(node) {
             if (/^[\da-f]{32}$/i.test(node.value))
                 context.report({node, messageId});
-        } };
-    }
+        }
+    }; }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

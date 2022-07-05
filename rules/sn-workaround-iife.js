@@ -39,7 +39,6 @@ const esLintObj = {
               "Many ServiceNow scriptlet types need an IIFE to protect from variable scope leaks",
             category: "Possible Problems",
         },
-
         schema: [{
             type: "object",
             properties: {
@@ -63,35 +62,33 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => {  // Called once for the source file
+    create: context => {
         iifeCount = 0;
-        assignmentCount = 0;
-        //console.debug("Configged options", context.options[0]);
-        return {
-          CallExpression: node => {
-            const callee = node.callee;
-            if (callee.type !== "FunctionExpression") return;
-            const rtParams = node.arguments.map(p=>p.name);
-            //console.debug(context.getSourceCode().getText(node.callee.body));
-            if (node.parent.parent.type !== "Program") return;  // not at block level 0/root
-            if (context.getScope().type !== "global") return;  // inside an internal function
-            //console.debug("actual", rtParams, "vs.",
-              //["p1", "p2"], "=", arraysEq(["p1","p2"], rtParams, false));
-            if (arraysEq(["p1", "p2"], rtParams, false)) iifeCount++;
-          }, AssigmentExpression: node => {
-            if (context.getScope().type === "global" && node.id.type === "Identifer")
-              assignmentCount++;
-          }, VariableDeclarator: () => {
-            if (context.getScope().type === "global") assignmentCount++;
-          }, onCodePathEnd: (codePath, node) => {
-            if (node.type !== "Program") return;
-            if (assignmentCount > 0 && iifeCount === 0)
-                  context.report({node, messageId, data: {
-                      scriptType: context.options[0].tables,
-                      argCount: context.options[0].paramNames,
-                  }});
-            //else console.debug('GOOD');
-          },
+        assignmentCount = 0; return {
+            CallExpression: node => {
+                const callee = node.callee;
+                if (callee.type !== "FunctionExpression") return;
+                const rtParams = node.arguments.map(p=>p.name);
+                //console.debug(context.getSourceCode().getText(node.callee.body));
+                if (node.parent.parent.type !== "Program") return;  // not at block level 0/root
+                if (context.getScope().type !== "global") return;  // inside an internal function
+                //console.debug("actual", rtParams, "vs.",
+                  //["p1", "p2"], "=", arraysEq(["p1","p2"], rtParams, false));
+                if (arraysEq(["p1", "p2"], rtParams, false)) iifeCount++;
+            }, AssigmentExpression: node => {
+                if (context.getScope().type === "global" && node.id.type === "Identifer")
+                    assignmentCount++;
+            }, VariableDeclarator: () => {
+                if (context.getScope().type === "global") assignmentCount++;
+            }, onCodePathEnd: (codePath, node) => {
+                if (node.type !== "Program") return;
+                if (assignmentCount > 0 && iifeCount === 0)
+                      context.report({node, messageId, data: {
+                          scriptType: context.options[0].tables,
+                          argCount: context.options[0].paramNames,
+                      }});
+                //else console.debug('GOOD');
+            },
         };
     }
 };

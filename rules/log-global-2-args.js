@@ -14,8 +14,8 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => {  // Called once for the source file
-        return { CallExpression: node => {  // Called for every function call expression
+    create: context => return {
+        CallExpression: node => {
             const callee = node.callee;
             if (callee.type !== "MemberExpression" || callee.object.name !== "gs") return;
             switch (callee.property.name) {
@@ -28,8 +28,8 @@ const esLintObj = {
             }
             if (node.arguments.length < 2)
                 context.report({node, messageId});
-        } };
-    }
+        }
+    }; }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

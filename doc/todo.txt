@@ -13,7 +13,8 @@ like I did for form form sys_script_client scripts.
     sys_cb_topic
     sa_pattern
 
-Rule to add: No check of return of gr.insert, gr.update, gr.get
+Rule enhancement.  Finish implementing validate-gliderecord-calls option grFactoryFunctions.
+Look up variables set by these function calls.  Then check all of the checked GR functions on them.
 
 Enhance snLint.js to take any number of source file/paths¸ and just loop through them.
 

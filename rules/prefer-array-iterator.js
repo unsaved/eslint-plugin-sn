@@ -28,9 +28,8 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => {
-        return { ForStatement: node => {
-            //console.info(node.test);
+    create: context => { return {
+        ForStatement: node => {
             if (node.init.type === undefined) return;
             /* LHS harder to use than the other segments, because it may be a VariableDeclaration
              * or an AssigmentExpression.
@@ -54,8 +53,8 @@ const esLintObj = {
               && node.test.left.property.name === "length"
               && node.test.operator === ">")
                 context.report({node, messageId});
-        } };
-    }
+        }
+    }; }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

@@ -45,24 +45,21 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => {  // Called once for the source file
-        //console.debug("Configged options", context.options[0]);
-        return {
-          BlockStatement: node => {
-              checkBody(node.body, context);
-          }, onCodePathEnd: (codePath, node) => {
-              if (node.type !== "Program") return;
-              checkBody(node.body, context);
-              Object.keys(varMap).forEach(me => {
-                  const entry = varMap[me];
-                  const astVar = entry.scope.variables.find(en=>en.name===me);
-                  //console.debug(astVar.defs.length);
-                  const loc = astVar.defs[0].node.loc;
-                  context.report({messageId, loc, data: {name: me}});
-              });
-          },
-        };
-    }
+    create: context => { return {
+        BlockStatement: node => {
+            checkBody(node.body, context);
+        }, onCodePathEnd: (codePath, node) => {
+            if (node.type !== "Program") return;
+            checkBody(node.body, context);
+            Object.keys(varMap).forEach(me => {
+                const entry = varMap[me];
+                const astVar = entry.scope.variables.find(en=>en.name===me);
+                //console.debug(astVar.defs.length);
+                const loc = astVar.defs[0].node.loc;
+                context.report({messageId, loc, data: {name: me}});
+            });
+        },
+    }; }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

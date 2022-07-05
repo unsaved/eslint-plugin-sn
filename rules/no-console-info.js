@@ -14,17 +14,16 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => {  // Called once for the source file
-        return { CallExpression: node => {  // Called for every function call expression
-            //console.warn("Executing RULE.create.CallExpression()");
+    create: context => { return {
+        CallExpression: node => {
             const callee = node.callee;
             if (callee.type !== "MemberExpression" || callee.property.name !== "log") return;
             if (callee.object.name === "console"
               || callee.object.object !== undefined && callee.object.object.name === "window"
                 && callee.object.property.name === "console")
                 context.report({node, messageId});
-        } };
-    }
+        }
+    }; }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;
