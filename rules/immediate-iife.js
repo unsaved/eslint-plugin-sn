@@ -6,8 +6,8 @@
  * Very unlikely to happen in a realistic situation.
  */
 
-const message = `Non-anonymous IIFE '{{name}}'.  To not pollute namespace, code like:
-  (function x(a,b){...}).(a,b);";`;
+const message = `Non-immediate IIFE '{{name}}'.  To not pollute namespace, code like:
+  (function(x,y){...}).(a,b);";   OR if platform honors fn names: function x(x,y) {...}).(a,b);`;
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -39,7 +39,7 @@ const esLintObj = {
         docs: {
             description:
     "This looks for a function definition followed immediately at same level with an invocation.\n"
-              + "This indicates of an incorrectly coded non-anonymous IIFE",
+              + "This indicates of an attempt at IIFE but the function is persisted to the scope.",
             category: "Possible Problems",
         },
         messages: { },
