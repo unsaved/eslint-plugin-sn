@@ -4,6 +4,8 @@
  * It may be possible to define a function in an Script Include (server or mid), invoke it,
  * then make it available to callers by include mechanism.
  * Very unlikely to happen in a realistic situation.
+ *
+ * I think this suffers from not handling same var/fn name at different scope levels.
  */
 
 const message = `Non-immediate IIFE '{{name}}'.  To not pollute namespace, code like:
@@ -12,26 +14,6 @@ const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
 let varMap;  // Map from candidate variables to that variable's scope
-
-const checkBody= (body, context) => {
-    body.some((n, i) => {
-        if (i === 0) return false;
-        if (n.type !== "ExpressionStatement" || body[i-1].type !== "VariableDeclaration")
-            return false;
-        const es = n;
-        // LAST VariableDeclarator:
-        const vdDeclarations = body[i-1].declarations;
-        const lastVD = vdDeclarations[vdDeclarations.length-1];
-        if (lastVD.id.type !== "Identifier") return false;
-        const exprCaller = es.expression.callee;
-        if (exprCaller === undefined) return false;
-        if (exprCaller.name === lastVD.id.name) {
-            varMap[exprCaller.name] = {scope: context.getScope()};
-            return true;
-        }
-        return false;
-    });
-};
 
 const esLintObj = {
     meta: {
@@ -48,18 +30,26 @@ const esLintObj = {
     create: context => {
         varMap = {};
         return {
-            BlockStatement: node => {
-                checkBody(node.body, context);
-            }, onCodePathEnd: (codePath, node) => {
-                if (node.type !== "Program") return;
-                checkBody(node.body, context);
-                Object.keys(varMap).forEach(me => {
-                    const entry = varMap[me];
-                    const astVar = entry.scope.variables.find(en=>en.name===me);
-                    //console.debug(astVar.defs.length);
-                    const loc = astVar.defs[0].node.loc;
-                    context.report({messageId, loc, data: {name: me}});
-                });
+            CallExpression: node => {
+                if (!node.callee || node.callee.type !== "Identifier") return;
+                const esAst = node.parent;
+                if (esAst.type !== "ExpressionStatement") return;
+                const prevBodIndex =
+                  node.parent.parent.body.findIndex(bodElAst => bodElAst === esAst) - 1;
+                if (prevBodIndex < 0) return;
+                const prevAst = node.parent.parent.body[prevBodIndex];
+                switch (prevAst.type) {
+                    case "FunctionDeclaration":
+                        if (prevAst.id.name === node.callee.name) context.report({node, messageId});
+                        break;
+                    case "VariableDeclaration":
+                        if (prevAst.declarations && prevAst.declarations.length == 1
+                          && prevAst.declarations[0].id
+                          && prevAst.declarations[0].id.name === node.callee.name)
+                            context.report({node, messageId});
+                        break;
+                    // purposefully no default
+                }
             },
         };
     }
