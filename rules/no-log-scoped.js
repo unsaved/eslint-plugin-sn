@@ -10,7 +10,6 @@ const esLintObj = {
             description: "Only ServiceNow server scoped scripts may use gs.debug/warn/info/error",
             category: "Possible Problems",
         },
-        schema: [ ],
         messages: { },
     },
 

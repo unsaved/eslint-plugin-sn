@@ -11,7 +11,6 @@ const esLintObj = {
             description: "gs.log* calls should always specify the 'source' parameter",
             category: "Possible Problems",
         },
-        schema: [ ],
         messages: { },
     },
 

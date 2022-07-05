@@ -4,18 +4,10 @@ const baseName = require("path").basename(__filename).replace(/-test[.]js$/, "")
 const messageId = (baseName + "_msg").toUpperCase();  // eslint-disable-line prefer-template
 new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}`), {
     valid: [
-        {
-            code: "gs.debug('a msg');",
-        },
-        {
-            code: "gs.info('a msg');",
-        },
-        {
-            code: "gs.warn('a msg');",
-        },
-        {
-            code: "gs.error('a msg');",
-        },
+        "gs.debug('a msg');",
+        "gs.info('a msg');",
+        "gs.warn('a msg');",
+        "gs.error('a msg');",
     ],
     invalid: [
         {

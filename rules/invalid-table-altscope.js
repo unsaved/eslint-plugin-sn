@@ -12,7 +12,6 @@ const esLintObj = {
             description: "This is to always fail for invalid table/altscope combinations",
             category: "Fatal",
         },
-        schema: [ ],
         messages: { },
     },
 

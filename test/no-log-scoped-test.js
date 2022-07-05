@@ -22,17 +22,9 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
         },
     ],
     valid: [
-        {
-            code: "gs.log('a msg', 'src');",
-        },
-        {
-            code: "gs.logWarning('a msg', 'src');",
-        },
-        {
-            code: "gs.logError('a msg', 'src');",
-        },
-        {
-            code: "gs.print('a msg');",
-        },
+        "gs.log('a msg', 'src');",
+        "gs.logWarning('a msg', 'src');",
+        "gs.logError('a msg', 'src');",
+        "gs.print('a msg');",
     ]
 });

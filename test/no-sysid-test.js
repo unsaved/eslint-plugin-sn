@@ -3,8 +3,7 @@
 const baseName = require("path").basename(__filename).replace(/-test[.]js$/, "");
 const messageId = (baseName + "_msg").toUpperCase();  // eslint-disable-line prefer-template
 new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}`), {
-    valid: [
-    ],
+    valid: [ ],
     invalid: [
         {
             code: 'x = "123456789012345678901234567890ab";',
