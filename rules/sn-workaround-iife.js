@@ -84,8 +84,8 @@ const esLintObj = {
                 if (node.type !== "Program") return;
                 if (assignmentCount > 0 && iifeCount === 0)
                       context.report({node, messageId, data: {
-                          scriptType: context.options[0].tables,
-                          argCount: context.options[0].paramNames,
+                          tables: context.options[0].tables,
+                          paramNames: context.options[0].paramNames,
                       }});
                 //else console.debug('GOOD');
             },

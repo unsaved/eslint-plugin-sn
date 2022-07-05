@@ -208,6 +208,7 @@ module.exports = {
                 },
                 {
                     files: ["**/sys_script/*/*.js"],
+                    globals: tableSpecificGlobals("sys_script"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             paramNames: ["current", "previous"],
