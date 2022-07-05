@@ -80,7 +80,6 @@ function ruleConfigs(mapVals, ruleNames) {
     return newRuleObj;
 }
 
-const serverRules = ruleConfigs("warn", ["require-iife"]);
 const clientRules = ruleConfigs("error", ["no-console-info"]);
 const serverConstsCommon = globalsFromFiles("coreServerObjects", "SIScopes");
 const clientConstsCommon = globalsFromFiles("client-common");
@@ -149,8 +148,7 @@ module.exports = {
                 "semi": "warn",
                 //"no-extra-parens": "warn",  In practice, too stringent
 
-                "@admc.com/sn/no-nonanon-iife": "error",
-                "@admc.com/sn/prefer-array-iterator": "error",
+                 ...ruleConfigs("error", ["no-nonanon-iife", "prefer-array-iterator"]),
 
                 // This purposefully fails tests that aren't for a supported override subset:
                 "@admc.com/sn/invalid-table-altscope": "error",
@@ -161,10 +159,8 @@ module.exports = {
                     files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sys_auto_script|sys_ws_operation|sys_web_service)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
-                      "@admc.com/sn/validate-gliderecord-calls": "error",
                       "camelcase": ["warn", { properties: "never", ignoreGlobals: true }],
-                      ...serverRules,
-                      ...ruleConfigs("error", ["no-sysid"]),
+                      ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
                     },
                 },
                 {
