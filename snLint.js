@@ -125,7 +125,7 @@ function lintFile(file, table, alt) {
     });
     childProcess.stdin.write(isClientScript(table)
         ? content
-        : content.replace(/(\s)const(\s)/g, "$1var$2"));
+        : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"));
     childProcess.stdin.end();
     childProcess.on("exit", ()=> {
         if (childProcess.exitCode !== 0) process.exit(childProcess.exitCode);
