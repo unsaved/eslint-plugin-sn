@@ -16,11 +16,6 @@ like I did for form form sys_script_client scripts.
 Rule enhancement.  Finish implementing validate-gliderecord-calls option grFactoryFunctions.
 Look up variables set by these function calls.  Then check all of the checked GR functions on them.
 
-Enhance snLint.js to take any number of source file/paths¸ and just loop through them.
-
-Enhance snLint.js to take directory paths.  Just get the matching files recursively in the branch,
-to be consistent with 'eslint'.
-
 Support table name specifications with dot, which are actually field specifications, for cases like
 sp_widget scripts where the table has more than one script field.
 

@@ -2,22 +2,30 @@
 
 ## Motivation, Goals, and Concepts
 ServiceNow supports many different scriptlet types that have drastically different linting
-requirements.  All server and MID scripts are evaluated with ES5.  Only scripts have access to the
-'gs' object.  Client scripts run on the SN-compliant ES6+ browsers and have access to 'g_form' and
-other objects.  MID scripts have access MID SIs.  Client scripts have isolated and non-isolated
+requirements.  All server and MID scripts are evaluated with ES5, and only these scripts
+scripts have access to the 'gs' object.
+Client scripts run on the SN-compliant ES6+ browsers and have access to 'g_form' and
+other objects.  MID scripts have access to MID SIs.  Client scripts have isolated and non-isolated
 variants which determines accessibilty to 'window', jQuery, etc. al.  Besides that, ServiceNow
 global scripts can use const statements despite being ES5.  ESLint OOTB can't handle these
 complexities.
 
 This plugin handles the global-object and rule variants by switching ESLint environments and rules
 based on the ServiceNow table and an optional "altscope".  The provided config generator uses
-altscopes in overrides/files entries, and you can add or customize with overrides/file entries in
-your own "snlintrc.json" file.
+'altscopes' in overrides/files entries, and you can add or customize with overrides/file entries in
+your own "snlintrc.json" file, and you can add to the available global variable lists by adding
+local list files.
 
 The snLint snlint-wrapper script decouples eslint from filepaths on your system, passing
-pseudo paths TO ESLint so you can use whatever directory structure you wish and specify the target
-table and altscope (using -t and -a switches); and it transforms ES5 'const' statements to 'var' to
-satisfy ESLint.
+pseudo paths TO ESLint.  This allows you to
+1. Code const statements in server and MID scripts.  We transform these ES5 'const' statements
+   to var to satisfy ESLint.
+1. Specify altscope with -a switch, such as 'scoped' vs. 'global' for ServiceNow app scope;
+   or 'iso' vs. 'noniso' for Client Script isolation mode.
+   (From script perspective app scope doesn't matter for client scripts).
+1. Indicate target ServiceNow table (so we know which rules to apply) with -t switch, OR
+1. If you do not specify -t (which overrides) then target table is determined by the directory
+   name in which each script resides.
 
 ## Installation
 To install globally (accessible to all npm projects):
@@ -35,12 +43,12 @@ To use just with your own project, install locally:
 With global installation
 ```
     snLint -s
-    snLint -g .
+    snLint -g
 ```
 With local project installation
 ```
     npm exec snLint -- -s
-    npm exec snLint -- -g .
+    npm exec snLint -- -g
 ```
 
 ## Usage
@@ -49,6 +57,8 @@ To get invocation syntax help:
     snLint -h                # with global installation
     npm exec snLint -- -h    # with local project installation
 ```
+Do read the brief output from this command for essential information about specifying files,
+target tables, and altscopes.
 
 ## Customization
 See file "snglobals/README.txt" for instructions on how to customize the global JavaScript object
@@ -57,6 +67,14 @@ eslint-disable directives.
 
 The provided globals were generated from a fresh San Diego instance with default plugins plus
 the Discovery plugin.
+
+To support a new target table and/or scopealt, add new override elements to your 'sneslitrc.json'
+file, with your files values including the table and scopealt.
+To mark the new table/altscope as supported, you must add the following special rule to one
+overrides element.
+```
+    "@admc.com/sn/invalid-table-altscope": "off"
+```
 
 Our globals list for intra-scoped-SI accesses is purposefully over-liberal.
 There is no difficulty restricting intra-scope access (including to or from global) because the
