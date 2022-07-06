@@ -13,8 +13,6 @@ const message = `Non-immediate IIFE '{{name}}'.  To not pollute namespace, code 
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
-let varMap;  // Map from candidate variables to that variable's scope
-
 const esLintObj = {
     meta: {
         type: "problem",
@@ -28,7 +26,6 @@ const esLintObj = {
     },
 
     create: context => {
-        varMap = {};
         return {
             CallExpression: node => {
                 if (!node.callee || node.callee.type !== "Identifier") return;
@@ -44,7 +41,7 @@ const esLintObj = {
                         if (prevAst.id.name === node.callee.name) context.report({node, messageId});
                         break;
                     case "VariableDeclaration":
-                        if (prevAst.declarations && prevAst.declarations.length == 1
+                        if (prevAst.declarations && prevAst.declarations.length === 1
                           && prevAst.declarations[0].id
                           && prevAst.declarations[0].id.name === node.callee.name)
                             context.report({node, messageId});

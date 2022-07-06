@@ -35,7 +35,7 @@ const esLintObj = {
              * or an AssigmentExpression.
             if (node.init.type !== "AssignmentExpression" || node.init.operator !== "=") return; */
             if (node.init.right.type !== "Literal" || node.init.right.value !== 0) return;
-            if (!node.test.left || !node.test.operator || !node.test.right === undefined) return;
+            if (!node.test.left || !node.test.operator || !node.test.right) return;
             if (node.test.left.type === "Identifier"  // i < arr.length case
               && node.test.right.type === "MemberExpression"
               && node.test.right.object !== undefined
