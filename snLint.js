@@ -38,7 +38,10 @@ overrides, 'Handling warnings', 'Output', 'Inline...comments', 'Miscellaneous'
 Since you can specify at most one scopealt with -a switch, all input files must
 have the same scopealt (or none).  Similarly for target table with -t switch
 except that if you specify no -t then each file's table name will derive from
-that file's directory.`).
+that file's directory.
+
+Directories are searched recursively for *.js files, with exclusions, like
+'eslint', but we don't yet support .eslintignore files or --ext switch.`).
   option("v", {
       describe: "Verbose.  N.b. may display passwords!",
       type: "boolean",
