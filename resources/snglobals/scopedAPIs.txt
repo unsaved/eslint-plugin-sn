@@ -1,6 +1,7 @@
 // This captured from https://developer.servicenow.com/dev.do#!/reference/api/sandiego/server
 
-# Addition for undocumented item
+# Additions for undocumented APIs
+GlideChoiceList
 GlideEmailAction
 
 action

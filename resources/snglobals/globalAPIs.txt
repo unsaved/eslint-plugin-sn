@@ -2,6 +2,7 @@
 # Source instance very close to OOTB but has discovery module
 
 # Additions for undocumented APIs
+GlideChoiceList
 GlideEmailAction
 XMLDocument2
 
