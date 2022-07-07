@@ -1,6 +1,6 @@
 "use strict";
 
-const message = "log rather than gs.debug/info/warn/error";
+const message = "gs.debug/info/warn/error are only for scoped contexts.  Use gs.log* or gs.print.";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
