@@ -1,8 +1,9 @@
 # Captured from https://developer.servicenow.com/dev.do#!/reference/api/sandiego/server_legacy 2022-06-27
 # Source instance very close to OOTB but has discovery module
 
-# Addition for undocumented item
+# Additions for undocumented APIs
 GlideEmailAction
+XMLDocument2
 
 APCHandler
 AbstractDBObject
@@ -97,28 +98,37 @@ GenericUPSBypassReconciler
 GenericUPSInputsReconciler
 GenericUPSOutputsReconciler
 GlideAggregate
+GlideApplicationProperty
 GlideCertificateEncryption
 GlideConversation
 GlideDate
 GlideDateTime
+GlideDBFunctionBuilder
 GlideElement
 GlideEncrypter
 GlideHTTPRequest
 GlideHTTPResponse
 GlideImpersonate
+GlideImportLog
+GlideImportSetRun
+GlideImportSetTransformer
 GlideListProperties
 GlideQueryCondition
 GlideRecord
 GlideRecordUtil
 GlideSPSearchAnalytics
 GlideScopedEvaluator
+GlideSecurityUtils
+GlideStringUtil
 GlideSession
 GlideSystem
 #GlideSystemRunLevel API  has a space???
 GlideTimeline
 GlideTimelineItem
+GlideTransformLog
 GlideURI
 GlideUser
+GlideXMLUtil
 GlideappCalculationHelper
 HostnameJS
 ICalUtil
@@ -153,6 +163,7 @@ NameValuePairs
 #NetwareHandler API  has a space?
 Notify
 NotifyAction
+NotifyConferenceUtil
 NotifyJsTelephonyDriver
 #NotifyNow API (Legacy)  has a space?
 NotifyPhoneNumber
@@ -219,3 +230,5 @@ WorkflowModelManagerAjax
 WorkflowScheduler
 WorkflowTimeline
 XMLUtilJS
+v_query
+v_table
