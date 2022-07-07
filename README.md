@@ -88,3 +88,11 @@ new altscopes for this purpose, defining "sneslintrc.json" environments, overrid
 If you only edit scripts in one or a few scopes, then a much easier customizaton procedure is
 documented in the "snglobals/README.txt" file, to replace the list of all scopedSIs with just those
 that you should be accessing.
+
+## Development
+Though you can test the individual rules from this project, due to eslint-plugin system design,
+you can't test usage of the plugin from here.  To test the plugin you need to be outside of this
+project and load this plugin.  Since this module's 'snLint.js' loads this plugin, it also can't
+be tested from here.  This is the reason for existence of peer module
+@admc.com/eslintplugin-sn-test.
+
