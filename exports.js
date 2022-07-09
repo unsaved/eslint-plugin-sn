@@ -165,14 +165,14 @@ module.exports = {
                     },
                 },
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service)/global/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor)/global/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
                     },
                 },
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service)/scoped/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor)/scoped/*.js"],  // eslint-disable-line max-len
                     env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
                       ...ruleConfigs("error", ["no-log-global"])

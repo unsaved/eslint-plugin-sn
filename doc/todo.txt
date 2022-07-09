@@ -3,15 +3,19 @@ Use variable name messageId instead of msgKey so that can leverage destructuring
 Cover other kinds of scripts:
 For raw, and perhaps sys_ui_script, will need to capture full global-visible list from list page
 like I did for form form sys_script_client scripts.
-    ui_action   See if this and next can be handled same as client scripts with custom globals.
-    ui_policy
+    sys_ui_action, sys_ui_ng_action
+        See if this and next can be handled same as client scripts with custom globals.
+    sys_ui_policy .script_true, .script_false, 
     sys_ui_script, global and non-global
     raw (like global sys_script and custom that load into browser).  Same as previous?
-    transform_map  These need IIFE
+    sys_transform_map, sys_transform_script  These both need IIFE
     sp_widget, .script and .client_script
     sys_cb_topic.  I think some need IIFE.
     sa_pattern
     sysevent_script_action.  Gets 'event' in addition to 'current'
+    sys_security_acl
+    sc_cat_item_producer
+    sys_script_email.  need IIFE
 
 Rule enhancement.  Finish implementing validate-gliderecord-calls option grFactoryFunctions.
 Look up variables set by these function calls.  Then check all of the checked GR functions on them.
