@@ -38,7 +38,7 @@ overrides, 'Handling warnings', 'Output', 'Inline...comments', 'Miscellaneous'
 Since you can specify at most one scopealt with -a switch, all input files must
 have the same scopealt (or none).  Similarly for target table with -t switch
 except that if you specify no -t then each file's table name will derive from
-that file's directory.
+that file's directory.  Input file of - means to read code from stdin.
 
 Directories are searched recursively for *.js files, with exclusions, like
 'eslint', but we don't yet support .eslintignore files or --ext switch.`).
@@ -104,7 +104,7 @@ async function lintFile(file, table, alt) {
     const objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = yargsDict._.slice();
     if (process.env.SN_FORCE_COLOR) eslintArgs.unshift("--color");
-    const content = fs.readFileSync(file, "utf8");
+    const content = fs.readFileSync(file === "-" ? 0 : file, "utf8");
     let pseudoDir = table;
     if (alt === undefined) {
         if (isServerScript(table)) alt = "global";
@@ -203,6 +203,10 @@ conciseCatcher(async function() {
         throw new AppErr(`Target table from -t switch is invalid: ${yargsDict.t}`);
     const files = [];
     yargsDict._.forEach(inputNode => {
+        if (inputNode === "-") {
+            files.push(inputNode);
+            return;
+        }
         if (!fs.existsSync(inputNode)) throw new AppErr(`'${inputNode}' does not exists`);
         if (fs.statSync(inputNode).isDirectory(inputNode)) {
             Array.prototype.push.apply(files, jsFilesInBranch(fs.opendirSync(inputNode)));
@@ -212,13 +216,21 @@ conciseCatcher(async function() {
     });
     // eslint-disable-next-line prefer-template
     console.debug(files.length + " source file matches:\n" + files.join("\n"));
+    let haveStdin = false;
     // First validate input files
     files.forEach(srcFilePath => {
+        if (srcFilePath === "-") {
+            haveStdin = true;
+            return;
+        }
         const t = yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath));
         if (!/^[a-z]\w*$/.test(t))
             throw new AppErr(`Target table from source file directory is invalid: ${t}`);
     });
-    // Process input files.  I just can't this to process multiple strictly synchronously
+    if (haveStdin && !yargsDict.t)
+        throw new AppErr("You must specify target table with -t if providing code through stdin");
+    // Process input files.  I just can't get this to process multiple strictly synchronously
+    // Can't use child_process.*Sync because we want to read/write pipes as it is executing.
     files.forEach(srcFilePath => {
         lintFile(srcFilePath,
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath)), yargsDict.a);
