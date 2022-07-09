@@ -100,8 +100,9 @@ let errorCount = 0, activeJobs = 0;
 async function lintFile(file, table, alt) {
     validate(arguments, ["string", "string", "string="]);
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
-    const baseName = path.basename(file);
-    const objName = baseName.replace(/[.][^.]+$/, "");
+    let objName;
+    const baseName = file === "-" ? "-.js" : path.basename(file);
+    if (file !== "-") objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = yargsDict._.slice();
     if (process.env.SN_FORCE_COLOR) eslintArgs.unshift("--color");
     const content = fs.readFileSync(file === "-" ? 0 : file, "utf8");
@@ -113,7 +114,7 @@ async function lintFile(file, table, alt) {
     if (alt !== undefined) pseudoDir = path.join(pseudoDir, alt);
     const pseudoPath = path.join(pseudoDir, baseName);
     console.debug(`pseudoPath: ${pseudoPath}`);
-    if (isSI(table)) eslintArgs.splice(0, 0, "--rule",
+    if (objName && isSI(table)) eslintArgs.splice(0, 0, "--rule",
         JSON.stringify({ "no-unused-vars": ["error", { varsIgnorePattern: `^${objName}$` }] }));
     eslintArgs.splice(0, 0,
         path.join(require.resolve("eslint"), "../../bin/eslint.js"),
