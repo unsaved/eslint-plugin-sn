@@ -148,8 +148,8 @@ module.exports = {
                 "semi": "warn",
                 //"no-extra-parens": "warn",  In practice, too stringent
 
-                 ...ruleConfigs("error", ["immediate-iife"]),
-                 ...ruleConfigs("warn", ["prefer-array-iterator"]),
+                 ...ruleConfigs("error", ["immediate-iife", "log-scoped-varargs"]),
+                 ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
 
                 // This purposefully fails tests that aren't for a supported override subset:
                 "@admc.com/sn/invalid-table-altscope": "error",

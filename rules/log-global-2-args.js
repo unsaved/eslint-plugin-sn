@@ -17,7 +17,8 @@ const esLintObj = {
     create: context => { return {
         CallExpression: node => {
             const callee = node.callee;
-            if (callee.type !== "MemberExpression" || callee.object.name !== "gs") return;
+            if (callee.type !== "MemberExpression" || callee.object.name !== "gs"
+              || node.arguments.length > 1) return;
             switch (callee.property.name) {
                 case "log":
                 case "logWarning":
@@ -26,8 +27,7 @@ const esLintObj = {
                 default:
                     return;
             }
-            if (node.arguments.length < 2)
-                context.report({node, messageId});
+            context.report({node, messageId});
         }
     }; }
 };
