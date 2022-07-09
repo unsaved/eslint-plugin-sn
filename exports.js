@@ -157,7 +157,7 @@ module.exports = {
 
             overrides: [
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       "camelcase": ["warn", { properties: "never", ignoreGlobals: true }],
