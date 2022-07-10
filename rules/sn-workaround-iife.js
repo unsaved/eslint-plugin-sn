@@ -50,6 +50,10 @@ const esLintObj = {
                     uniqueItems: true
                 },
                 paramNames: {
+                    /* IMPORTANT!  If set paramNames then these variables must be accessible to
+                     * pass to the function.  Since table-specific this would normally be done
+                     * through snglobals "tableSpecifics.json" list.
+                     * For end user customization, just add globals items to the sneslintrc.json. */
                     type: "array",
                     items: {
                         type: "string"
