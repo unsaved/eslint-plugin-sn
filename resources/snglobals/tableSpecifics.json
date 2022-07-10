@@ -1,6 +1,3 @@
 {
-  "sa_pattern_prepost_script": ["patternId", "payload"],
-  "sys_ws_operation": ["request", "response"],
-  "sys_web_service": ["request", "response"],
-  "sys_script": ["previous"]
+  "sa_pattern_prepost_script": ["patternId", "payload"]
 }

@@ -187,7 +187,6 @@ module.exports = {
                     },
                 },
                 {
-                    // I'm not sure about expert_script_client.  Never used them.
                     files: ["**/@(sys|catalog|expert)_script_client/@(noniso|iso)/*.js"],
                     parserOptions: { ecmaVersion: 6 },
                     rules: {
@@ -210,7 +209,6 @@ module.exports = {
                 },
                 {
                     files: ["**/sys_script/*/*.js"],
-                    globals: tableSpecificGlobals("sys_script"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             paramNames: ["current", "previous"],
@@ -230,12 +228,12 @@ module.exports = {
                     globals: tableSpecificGlobals("sa_pattern_prepost_script"),
                 },
                 {
-                    files: ["**/sys_ws_operation/@(global|scoped)/*.js"],
-                    globals: tableSpecificGlobals("sys_ws_operation"),
-                },
-                {
-                    files: ["**/sys_web_service/@(global|scoped)/*.js"],
-                    globals: tableSpecificGlobals("sys_web_service"),
+                    files: ["**/sys_@(ws_operation|web_service)/@(global|scoped)/*.js"],
+                    rules: {
+                        "@admc.com/sn/sn-workaround-iife": ["error", {
+                            paramNames: ["request", "response"],
+                        }],
+                    },
                 },
                 {
                     files: ["**/@(sys|catalog|expert)_script_client/iso/*.js"],
