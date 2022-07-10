@@ -218,6 +218,14 @@ module.exports = {
                     },
                 },
                 {
+                    files: ["**/sys_processor/*/*.js"],
+                    rules: {
+                        "@admc.com/sn/sn-workaround-iife": ["error", {
+                            paramNames: ["g_request", "g_response", "g_processor"],
+                        }],
+                    },
+                },
+                {
                     files: ["**/sa_pattern_prepost_script/*/*.js"],
                     globals: tableSpecificGlobals("sa_pattern_prepost_script"),
                 },
