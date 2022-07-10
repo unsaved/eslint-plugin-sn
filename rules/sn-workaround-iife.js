@@ -81,7 +81,6 @@ const esLintObj = {
                 //console.debug("actual", rtParams, "vs.",
                   //["p1", "p2"], "=", arraysEq(["p1","p2"], rtParams, false));
                 iifeCount++;
-console.warn(`Comparison to ${reqParams} gives: ${arraysEq(reqParams, rtParams, false)}`);
                 if (arraysEq(reqParams, rtParams, false)) goodParams = true;
             }, AssigmentExpression: node => {
                 if (context.getScope().type === "global" && node.id.type === "Identifer")
@@ -90,7 +89,6 @@ console.warn(`Comparison to ${reqParams} gives: ${arraysEq(reqParams, rtParams, 
                 if (context.getScope().type === "global") assignmentCount++;
             }, onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;
-console.warn(`asscnt ${assignmentCount} and iifect ${iifeCount}`);
                 if (assignmentCount > 0 && iifeCount === 0
                   || iifeCount > 0 && !goodParams)
                     context.report({node, messageId, data: {
