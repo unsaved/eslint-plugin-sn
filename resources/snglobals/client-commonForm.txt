@@ -1,3 +1,4 @@
+# See "windowsMembers.txt˝ also.  It also contains common client variables.
 $A
 $H
 $LAB
@@ -315,7 +316,6 @@ addfieldBackgroundText
 adjustAttachmentsVisibility
 adjustEmailHeight
 ajaxRequest
-alert
 alertError
 allowConditionsForJournal
 allowInPlaceEditModification
@@ -330,10 +330,7 @@ assignLabel
 assignLabelActionViaLookupModal
 assignLabelToCheckedSysIds
 assignLabelViaLookup
-atob
 autosize
-blur
-btoa
 buildFieldsPerType
 buildMap
 buildQueryClause
@@ -369,17 +366,14 @@ clearCacheDone
 clearCacheSniperly
 clearDependents
 clearDropdownOptions
-clearInterval
 clearLabelRefresh
 clearMenus
 clearNodes
 clearRelated
-clearTimeout
 clearValueThenResetDerivedWaiting
 clearWatchField
 clientInformation
 clientScriptOnChange
-close
 closeDialogForm
 cmViews
 collapseAnimationEffect
@@ -391,7 +385,6 @@ columnsGet
 columnsGetWithFilter
 compareDates
 computeAttachmentWidth
-confirm
 confirmAndDeleteFromForm
 confirmDeletion
 containsOnlyChars
@@ -515,7 +508,6 @@ fireSetValueEvent
 fireTinymceLoadEvent
 firstTable
 fixSelectLabel
-focus
 focusFirstElement
 focusTrap
 forceHide
@@ -614,6 +606,8 @@ g_tiny_url
 g_tz_offset
 g_tz_user_offset
 g_ui_policy
+# Following not accessible to me from Quebec or San Diego, but is documented
+g_ui_scripts
 g_user
 g_user_date_format
 g_user_date_time_format
@@ -638,7 +632,6 @@ getBrowserWindowWidth
 getCascadeDelTablesDoneForm
 getChecked
 getClientScriptContextName
-getComputedStyle
 getConditionTextFromFilterRow
 getControlForm
 getCurrentAttachmentNumber
@@ -703,7 +696,6 @@ getScrollOffset
 getScrollX
 getScrollY
 getSelectedOption
-getSelection
 getSrcElement
 getTableColumns
 getTableColumnsResponse
@@ -854,14 +846,11 @@ mExport
 mHistory
 mModify
 mailTo
-matchMedia
 maximumCharacterLimit
 menuIsEmpty
 menubar
 messages
 mousePositionSave
-moveBy
-moveTo
 mswDisabledValue
 multiKeyDown
 multiModified
@@ -998,7 +987,6 @@ onwebkitanimationiteration
 onwebkitanimationstart
 onwebkittransitionend
 onwheel
-open
 openDatabase
 openInNewWindow
 operators
@@ -1044,10 +1032,8 @@ popupOpenEmailClient
 popupOpenFocus
 popupOpenStandard
 postMessage
-print
 printList
 processReqChange
-prompt
 pushNotAvailableMessage
 queryNumber
 queueColumns
@@ -1094,14 +1080,11 @@ renderSaveChangesDialog
 replaceAll
 replaceRegEx
 reportError
-requestAnimationFrame
 requestIdleCallback
 resetDerivedWaitingThenclearValue
 resetFilters
-resizeBy
 resizeTextAreaIframe
 resizeTinymce
-resizeTo
 resolveDependentValue
 restoreSelection
 retrieveStorage
@@ -1126,9 +1109,6 @@ saveFileAttachment
 saveFilterRadioChange
 saveUserImage
 scheduler
-scroll
-scrollBy
-scrollTo
 scrollbars
 scroller
 searchForData
@@ -1157,7 +1137,6 @@ setDropDownSizes
 setElementStyle
 setEmailBody
 setImage
-setInterval
 setKbSortOrder
 setLightWeightLink
 setLightWeightLinkDisplay
@@ -1178,7 +1157,6 @@ setStyle
 setTextField
 setTextValue
 setTimeGraph
-setTimeout
 setWatchField
 setup
 shortcuts
@@ -1215,7 +1193,6 @@ speechSynthesis
 stackName
 startRefresh
 statusbar
-stop
 stopSelection
 storeResults
 storeZeroString

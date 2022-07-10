@@ -82,7 +82,8 @@ function ruleConfigs(mapVals, ruleNames) {
 
 const clientRules = ruleConfigs("error", ["no-console-info"]);
 const serverConstsCommon = globalsFromFiles("coreServerObjects", "SIScopes");
-const clientConstsCommon = globalsFromFiles("client-common");
+const clientConstsCommon =
+  globalsFromFiles("client-commonForm", "client-commonList-only", "windowMembers");
 
 module.exports = {
     rules: allRules,
@@ -99,7 +100,7 @@ module.exports = {
         } },
         sn_client_iso: { globals: {
             URL: false,
-            ...clientConstsCommon, ...globalsFromFiles("client-iso-only", "windowMembers")
+            ...clientConstsCommon, ...globalsFromFiles("client-iso-only")
         } },
         sn_client_noniso: { globals: {
             ...clientConstsCommon, ...globalsFromFiles("client-noniso-only")

@@ -3,9 +3,8 @@ $$
 $F
 $j
 __core-js_shared__
-g_event_handlers_onLoad
+document
 gel
 jQuery
 listQuery
-ui_policy_onLoad
 window
