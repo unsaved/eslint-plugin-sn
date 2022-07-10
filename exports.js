@@ -209,6 +209,7 @@ module.exports = {
                 },
                 {
                     files: ["**/sys_script/*/*.js"],
+                    globals: tableSpecificGlobals("sys_script"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             paramNames: ["current", "previous"],
@@ -217,6 +218,7 @@ module.exports = {
                 },
                 {
                     files: ["**/sys_processor/*/*.js"],
+                    globals: tableSpecificGlobals("sys_processor"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             paramNames: ["g_request", "g_response", "g_processor"],
@@ -229,6 +231,7 @@ module.exports = {
                 },
                 {
                     files: ["**/sys_@(ws_operation|web_service)/@(global|scoped)/*.js"],
+                    globals: tableSpecificGlobals("sys_web_service,sys_ws_operation"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             paramNames: ["request", "response"],
