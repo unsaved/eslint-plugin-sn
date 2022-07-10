@@ -212,7 +212,7 @@ module.exports = {
                     globals: tableSpecificGlobals("sys_script"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tableNames: ["sys_script"],
+                            tables: ["sys_script"],
                             paramNames: ["current", "previous"],
                         }],
                     },
@@ -222,7 +222,7 @@ module.exports = {
                     globals: tableSpecificGlobals("sys_processor"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tableNames: ["sys_processor"],
+                            tables: ["sys_processor"],
                             paramNames: ["g_request", "g_response", "g_processor"],
                         }],
                     },
@@ -236,7 +236,7 @@ module.exports = {
                     globals: tableSpecificGlobals("sys_web_service,sys_ws_operation"),
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tableNames: ["sys_ws_operation", "sys_web_service"],
+                            tables: ["sys_ws_operation", "sys_web_service"],
                             paramNames: ["request", "response"],
                         }],
                     },
