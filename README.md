@@ -89,6 +89,36 @@ If you only edit scripts in one or a few scopes, then a much easier customizaton
 documented in the "snglobals/README.txt" file, to replace the list of all scopedSIs with just those
 that you should be accessing.
 
+## Supported ServiceNow scriptlet types
+### Supported Now
+  * sa_pattern_prepost_script
+  * sys_script_fix
+  * sys_script
+  * sys_script_include
+  * sysauto_script
+  * sys_ws_operation
+  * sys_web_service
+  * sys_processor
+  * ecc_agent_script_include
+  * ecc_agent_script
+  * sys_script_client
+  * catalog_script_client
+  * expert_script_client
+### Planned
+  * sys_ui_action
+  * sys_ui_policy
+  * sys_ui_script
+  * custom fields
+  * sys_transform_map
+  * sys_transform_script
+  * sp_widget, .script and .client_script
+  * sys_cb_topic
+  * sa_pattern
+  * sysevent_script_action
+  * sys_security_acl
+  * sc_cat_item_producer
+  * sys_script_email
+
 ## Development
 Though you can test the individual rules from this project, due to eslint-plugin system design,
 you can't test usage of the plugin from here.  To test the plugin you need to be outside of this

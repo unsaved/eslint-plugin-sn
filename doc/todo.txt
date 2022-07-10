@@ -3,19 +3,24 @@ Use variable name messageId instead of msgKey so that can leverage destructuring
 Cover other kinds of scripts:
 For raw, and perhaps sys_ui_script, will need to capture full global-visible list from list page
 like I did for form form sys_script_client scripts.
-    sys_ui_action, sys_ui_ng_action
-        See if this and next can be handled same as client scripts with custom globals.
-    sys_ui_policy .script_true, .script_false, 
+    sys_ui_action.  Must be very liberal to allow for both client-side and server-side scripts.
+    sys_ui_policy .script_true, .script_false.  Both need a varsIgnorePattern for ^onCondition$
     sys_ui_script, global and non-global
     raw (like global sys_script and custom that load into browser).  Same as previous?
-    sys_transform_map, sys_transform_script  These both need IIFE
-    sp_widget, .script and .client_script
-    sys_cb_topic.  I think some need IIFE.
-    sa_pattern
+    sys_transform_map, sys_transform_script.  first IIFE with source,target,map,log.isUpdate
+                       second IIFE source, map, log, target
+    sp_widget, .script needs IIFE and has access to $sp, data, input, options
+               and .client_script must define a function (at top?) and it may be an IIFE.
+    sys_cb_topic.
+        Must extract scripts from .graph JSON 'script' values and 'value' values that are strings.
+    sa_pattern.
+        Must extract scripts from .ndl custom language 'eval' values.
     sysevent_script_action.  Gets 'event' in addition to 'current'
     sys_security_acl
-    sc_cat_item_producer
-    sys_script_email.  need IIFE
+    sc_cat_item_producer.  Gets 'producer' in addition to 'current'
+    sys_script_email.  need IIFE with current, template, email, email_action, event
+    [not going to attempt sys_ui_ng_action, which runs on mobile.  Would need entirely different
+     globals list and maybe parseroptions for mobile]
 
 Rule enhancement.  Finish implementing validate-gliderecord-calls option grFactoryFunctions.
 Look up variables set by these function calls.  Then check all of the checked GR functions on them.
