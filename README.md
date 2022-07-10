@@ -91,19 +91,22 @@ that you should be accessing.
 
 ## Supported ServiceNow scriptlet types
 ### Supported Now
-  * sa_pattern_prepost_script
-  * sys_script_fix
-  * sys_script
-  * sys_script_include
-  * sysauto_script
-  * sys_ws_operation
-  * sys_web_service
-  * sys_processor
-  * ecc_agent_script_include
-  * ecc_agent_script
-  * sys_script_client
-  * catalog_script_client
-  * expert_script_client
+|Table                        |Altscopes alternatives
+|---                          |---
+|sa_pattern_prepost_script    |global, scoped
+|sys_script_fix               |global, scoped
+|sys_script                   |global, scoped
+|sys_script_include           |global, scoped
+|sysauto_script               |global, scoped
+|sys_ws_operation             |global, scoped
+|sys_web_service              |global, scoped
+|sys_processor                |global, scoped
+|ecc_agent_script_include     |(can't specify any altscope)
+|ecc_agent_script             |(can't specify any altscope)
+|sys_script_client            |iso, noniso
+|catalog_script_client        |iso, noniso
+|expert_script_client         |iso, noniso
+
 ### Planned
   * sys_ui_action
   * sys_ui_policy
