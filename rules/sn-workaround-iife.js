@@ -27,10 +27,9 @@ const arraysEq = (a1, a2, ordered=true) => {
 };
 
 const message =
-  "For table(s) of type {{tables}} you must have an IIFE that passes {{paramNames}} param(s)";
+  "For {{tables}} table scriptlets you must pass {{paramNames}} to IIFE param(s)";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
-let iifeCount, assignmentCount; // Only counting non-function-scoped
 const esLintObj = {
     meta: {
         type: "problem",
@@ -67,8 +66,10 @@ const esLintObj = {
     },
 
     create: context => {
-        iifeCount = 0;
-        assignmentCount = 0;
+        let iifeCount = 0;
+        let assignmentCount = 0;
+        let goodParams = false;
+        const reqParams = context.options[0].paramNames;
         return {
             CallExpression: node => {
                 const callee = node.callee;
@@ -79,7 +80,9 @@ const esLintObj = {
                 if (context.getScope().type !== "global") return;  // inside an internal function
                 //console.debug("actual", rtParams, "vs.",
                   //["p1", "p2"], "=", arraysEq(["p1","p2"], rtParams, false));
-                if (arraysEq(["p1", "p2"], rtParams, false)) iifeCount++;
+                iifeCount++;
+console.warn(`Comparison to ${reqParams} gives: ${arraysEq(reqParams, rtParams, false)}`);
+                if (arraysEq(reqParams, rtParams, false)) goodParams = true;
             }, AssigmentExpression: node => {
                 if (context.getScope().type === "global" && node.id.type === "Identifer")
                     assignmentCount++;
@@ -87,12 +90,13 @@ const esLintObj = {
                 if (context.getScope().type === "global") assignmentCount++;
             }, onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;
-                if (assignmentCount > 0 && iifeCount === 0)
-                      context.report({node, messageId, data: {
-                          tables: context.options[0].tables,
-                          paramNames: context.options[0].paramNames,
-                      }});
-                //else console.debug('GOOD');
+console.warn(`asscnt ${assignmentCount} and iifect ${iifeCount}`);
+                if (assignmentCount > 0 && iifeCount === 0
+                  || iifeCount > 0 && !goodParams)
+                    context.report({node, messageId, data: {
+                        tables: context.options[0].tables,
+                        paramNames: context.options[0].paramNames,
+                    }});
             },
         };
     }

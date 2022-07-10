@@ -4,7 +4,6 @@ const message =
   "Invalid table/scope combo";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
-let beenCalled;
 const esLintObj = {
     meta: {
         type: "problem",
@@ -16,7 +15,7 @@ const esLintObj = {
     },
 
     create: context => {
-        beenCalled = false;
+        let beenCalled = false;
         return {
             onCodePathStart: (codePath, node) => {
                 if (beenCalled) return;
