@@ -80,16 +80,6 @@ const progName = yargsDict.$0.replace(/^.*[\\/]/, "");  // eslint-disable-line n
 if (!yargsDict.d) console.debug = () => {};
 if (yargsDict.q) console.debug = console.log = console.info = () => {};
 
-/* Luckly only need to decide between JavaScript script tables
- * (because there are non-JS tables like *ecc* and *mid*).
- */
-function isServerScript(tableName) {
-    return !tableName.includes("mid") &&
-      !tableName.includes("ecc") && !tableName.includes("client");
-}
-function isClientScript(tableName) {
-    return tableName.includes("client");
-}
 function isSI(tableName) {
     return tableName.includes("_script_include");
 }
@@ -108,8 +98,12 @@ async function lintFile(file, table, alt) {
     const content = fs.readFileSync(file === "-" ? 0 : file, "utf8");
     let pseudoDir = table;
     if (alt === undefined) {
-        if (isServerScript(table)) alt = "global";
-        if (isClientScript(table)) alt = "iso";
+        // Goal here is to set the default alt to match simplest created record
+        if (!tableName.includes("mid_") && !tableName.includes("ecc")
+          && !tableName.includes("_client") && tableName !== "sys_ui_script
+          && !tableName.startsWith("sys_ui_policy") && !tableName.startsWith("sa_")) alt = "global";
+        else if (tableName.includes("_client") || tableName === "sys_ui_script"
+          || tableName.startsWith("sys_ui_policy")) alt = "iso";
     }
     if (alt !== undefined) pseudoDir = path.join(pseudoDir, alt);
     const pseudoPath = path.join(pseudoDir, baseName);
@@ -132,7 +126,7 @@ async function lintFile(file, table, alt) {
         stdio: ["pipe", "inherit", "inherit"],
     });
     activeJobs++;
-    childProcess.stdin.write(isClientScript(table)
+    childProcess.stdin.write(alt === "noniso" || alt === "iso"
         ? content
         : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"));
     childProcess.stdin.end();

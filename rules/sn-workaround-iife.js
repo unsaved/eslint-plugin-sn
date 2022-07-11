@@ -1,8 +1,9 @@
 "use strict";
 
 /**
- * If current design doesn't work then copy relevant parts, like function 'getFunctionNodeFromIIFE'
- * and all dependency modules for that, from OOTB "node_modules/eslint/lib/rules/wrap-iife.js".
+ * IF an IIFE exists, we need to check that its params are good, but there is no reason to
+ * explicitly check for existence of IIFE since ultimate goal is to prevent root-level assignments
+ * and declarations.
  */
 
 /*
@@ -26,10 +27,19 @@ const arraysEq = (a1, a2, ordered=true) => {
     return JSON.stringify(a1) === JSON.stringify(a2);
 };
 
+/**
+ * @returns boolean if ancestry has a FunctionDeclaration before any FunctionExpression
+ */
+const hasFnAncestor = ctx =>
+    ctx.getAncestors().some(node => {
+        return node.type === "FunctionExpression" || node.type === "FunctionDeclaration";
+    })
+
 const message =
-  "For {{tables}} table scriptlets you must pass {{paramNames}} to IIFE param(s)";
+  "For {{tables}} table scriptlets you must pass {{paramCallVars}} to IIFE param(s)";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
+
 const esLintObj = {
     meta: {
         type: "problem",
@@ -48,8 +58,8 @@ const esLintObj = {
                     },
                     uniqueItems: true
                 },
-                paramNames: {
-                    /* IMPORTANT!  If set paramNames then these variables must be accessible to
+                paramCallVars: {
+                    /* IMPORTANT!  If set paramCallVars then these variables must be accessible to
                      * pass to the function.  Since table-specific this would normally be done
                      * through snglobals "tableSpecifics.json" list.
                      * For end user customization, just add globals items to the sneslintrc.json. */
@@ -67,9 +77,9 @@ const esLintObj = {
 
     create: context => {
         let iifeCount = 0;
-        let assignmentCount = 0;
+        let assignAndDeclCount = 0;
         let goodParams = false;
-        const reqParams = context.options[0].paramNames;
+        const reqParams = context.options[0].paramCallVars;
         return {
             CallExpression: node => {
                 const callee = node.callee;
@@ -82,18 +92,21 @@ const esLintObj = {
                   //["p1", "p2"], "=", arraysEq(["p1","p2"], rtParams, false));
                 iifeCount++;
                 if (arraysEq(reqParams, rtParams, false)) goodParams = true;
-            }, AssigmentExpression: node => {
-                if (context.getScope().type === "global" && node.id.type === "Identifer")
-                    assignmentCount++;
+            }, AssignmentExpression: () => {
+                if (!hasFnAncestor(context)) assignAndDeclCount++;
             }, VariableDeclarator: () => {
-                if (context.getScope().type === "global") assignmentCount++;
+                if (!hasFnAncestor(context)) assignAndDeclCount++;
+            }, FunctionDeclaration: (node) => {
+                if (!hasFnAncestor(context)) assignAndDeclCount++;
             }, onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;
-                if (assignmentCount > 0 && iifeCount === 0
-                  || iifeCount > 0 && !goodParams)
+                console.debug('IIFE check counts.  '
+                  + `assg ${assignAndDeclCount}, iife ${iifeCount}, goodPs ${goodParams}`);
+                if (assignAndDeclCount === 0 && iifeCount === 0) return;  // No IIFE ok
+                if (assignAndDeclCount > 0 || !goodParams)
                     context.report({node, messageId, data: {
                         tables: context.options[0].tables,
-                        paramNames: context.options[0].paramNames,
+                        paramCallVars: context.options[0].paramCallVars,
                     }});
             },
         };

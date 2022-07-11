@@ -168,19 +168,13 @@ module.exports = {
                       ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
                     },
                 }, {
-                    files: [
-                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script)/global/*.js",  // eslint-disable-line max-len
-                        "**/sys_ui_action/@(iso|noniso)_globalaction/*.js",
-                    ],
+                    files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
                     env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
                     },
                 }, {
-                    files: [
-                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script)/scoped/*.js",  // eslint-disable-line max-len
-                        "**/sys_ui_action/@(iso|noniso)_scopedaction/*.js",
-                    ],
+                    files: [ "**/@(scoped|iso_scopedaction|noniso_scopedaction)/*.js" ],
                     env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
                       ...ruleConfigs("error", ["no-log-global"])
@@ -217,7 +211,7 @@ module.exports = {
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             tables: ["sys_script"],
-                            paramNames: ["current", "previous"],
+                            paramCallVars: ["current", "previous"],
                         }],
                     },
                 }, {
@@ -226,7 +220,7 @@ module.exports = {
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             tables: ["sys_processor"],
-                            paramNames: ["g_request", "g_response", "g_processor"],
+                            paramCallVars: ["g_request", "g_response", "g_processor"],
                         }],
                     },
                 }, {
@@ -235,7 +229,8 @@ module.exports = {
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             tables: ["sys_script_email"],
-                            paramNames: ["current", "template", "email", "email_action", "event"],
+                            paramCallVars:
+                              ["current", "template", "email", "email_action", "event"],
                         }],
                     },
                 }, {
@@ -244,7 +239,7 @@ module.exports = {
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             tables: ["sys_transform_map"],
-                            paramNames: ["source", "target", "map", "log", "isUpdate"],
+                            paramCallVars: ["source", "target", "map", "log", "isUpdate"],
                         }],
                     },
                 }, {
@@ -253,7 +248,7 @@ module.exports = {
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             tables: ["sys_transform_script"],
-                            paramNames: ["source", "map", "log", "target"],
+                            paramCallVars: ["source", "map", "log", "target"],
                         }],
                     },
                 }, {
@@ -271,20 +266,14 @@ module.exports = {
                     rules: {
                         "@admc.com/sn/sn-workaround-iife": ["error", {
                             tables: ["sys_ws_operation", "sys_web_service"],
-                            paramNames: ["request", "response"],
+                            paramCallVars: ["request", "response"],
                         }],
                     },
                 }, {
-                    files: [
-                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/iso/*.js",  // eslint-disable-line max-len
-                        "**/sys_ui_action/iso_@(global|scoped)action/*.js",
-                    ],
+                    files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
                     env: {"@admc.com/sn/sn_client_iso": true },
                 }, {
-                    files: [
-                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/noniso/*.js",  // eslint-disable-line max-len
-                        "**/sys_ui_action/noniso_@(global|scoped)action/*.js",
-                    ],
+                    files: [ "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js" ],
                     env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
                 }, {
                     files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],

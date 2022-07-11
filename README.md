@@ -129,6 +129,7 @@ In very rough order of priority
 |sp_widget.client_script      |TBD
 |sys_cb_topic                 |TBD
 |sa_pattern                   |probably none
+|mid_limited_resource_script  |none
 
 ## Development
 Though you can test the individual rules from this project, due to eslint-plugin system design,
