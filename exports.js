@@ -159,7 +159,7 @@ module.exports = {
             overrides: [
                 {
                     files: [
-                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script)/@(global|scoped)/*.js",  // eslint-disable-line max-len
                         "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
                     ],
                     rules: {
@@ -169,7 +169,7 @@ module.exports = {
                     },
                 }, {
                     files: [
-                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action)/global/*.js",  // eslint-disable-line max-len
+                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script)/global/*.js",  // eslint-disable-line max-len
                         "**/sys_ui_action/@(iso|noniso)_globalaction/*.js",
                     ],
                     env: {"@admc.com/sn/sn_server_global": true },
@@ -178,7 +178,7 @@ module.exports = {
                     },
                 }, {
                     files: [
-                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action)/scoped/*.js",  // eslint-disable-line max-len
+                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script)/scoped/*.js",  // eslint-disable-line max-len
                         "**/sys_ui_action/@(iso|noniso)_scopedaction/*.js",
                     ],
                     env: {"@admc.com/sn/sn_server_scoped": true },
@@ -192,7 +192,7 @@ module.exports = {
                       "@admc.com/sn/invalid-table-altscope": "off",
                     },
                 }, {
-                    files: ["**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action)/@(noniso|iso)/*.js"],  // eslint-disable-line max-len
+                    files: ["**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js"],  // eslint-disable-line max-len
                     parserOptions: { ecmaVersion: 6 },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
@@ -230,6 +230,39 @@ module.exports = {
                         }],
                     },
                 }, {
+                    files: ["**/sys_script_email/*/*.js"],
+                    globals: tableSpecificGlobals("sys_script_email"),
+                    rules: {
+                        "@admc.com/sn/sn-workaround-iife": ["error", {
+                            tables: ["sys_script_email"],
+                            paramNames: ["current", "template", "email", "email_action", "event"],
+                        }],
+                    },
+                }, {
+                    files: ["**/sys_transform_map/*/*.js"],
+                    globals: tableSpecificGlobals("sys_transform_map"),
+                    rules: {
+                        "@admc.com/sn/sn-workaround-iife": ["error", {
+                            tables: ["sys_transform_map"],
+                            paramNames: ["source", "target", "map", "log", "isUpdate"],
+                        }],
+                    },
+                }, {
+                    files: ["**/sys_transform_script/*/*.js"],
+                    globals: tableSpecificGlobals("sys_transform_script"),
+                    rules: {
+                        "@admc.com/sn/sn-workaround-iife": ["error", {
+                            tables: ["sys_transform_script"],
+                            paramNames: ["source", "map", "log", "target"],
+                        }],
+                    },
+                }, {
+                    files: ["**/sc_cat_item_producer/*/*.js"],
+                    globals: tableSpecificGlobals("sc_cat_item_producer"),
+                }, {
+                    files: ["**/sysevent_script_action/*/*.js"],
+                    globals: tableSpecificGlobals("sysevent_script_action"),
+                }, {
                     files: ["**/sa_pattern_prepost_script/*/*.js"],
                     globals: tableSpecificGlobals("sa_pattern_prepost_script"),
                 }, {
@@ -243,13 +276,13 @@ module.exports = {
                     },
                 }, {
                     files: [
-                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action)/iso/*.js",  // eslint-disable-line max-len
+                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/iso/*.js",  // eslint-disable-line max-len
                         "**/sys_ui_action/iso_@(global|scoped)action/*.js",
                     ],
                     env: {"@admc.com/sn/sn_client_iso": true },
                 }, {
                     files: [
-                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action)/noniso/*.js",  // eslint-disable-line max-len
+                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/noniso/*.js",  // eslint-disable-line max-len
                         "**/sys_ui_action/noniso_@(global|scoped)action/*.js",
                     ],
                     env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
@@ -263,6 +296,9 @@ module.exports = {
                             varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
                         }],
                     },
+                }, {
+                    files: ["**/sys_ui_policy.script_@(true|false)/*/*.js"],
+                    rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
                 },
             ]
         }

@@ -2,5 +2,10 @@
   "sa_pattern_prepost_script": ["patternId", "payload"],
   "sys_web_service,sys_ws_operation": ["request", "response"],
   "sys_script": ["current", "previous"],
-  "sys_processor": ["g_request", "g_response", "g_processor"]
+  "sys_processor": ["g_request", "g_response", "g_processor"],
+  "sysevent_script_action": ["event"],
+  "sc_cat_item_producer": ["producer"],
+  "sys_script_email": ["current", "template", "email", "email_action", "event"],
+  "sys_transform_map": ["source", "target", "map", "log", "isUpdate"],
+  "sys_transform_script": ["source", "map", "log", "target"]
 }

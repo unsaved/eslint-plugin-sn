@@ -200,7 +200,7 @@ conciseCatcher(async function() {
         yargs.showHelp();
         process.exit(9);
     }
-    if (yargsDict.t && !/^[a-z]\w*$/.test(yargsDict.t))
+    if (yargsDict.t && !/^[a-z][\w.]*$/.test(yargsDict.t))
         throw new AppErr(`Target table from -t switch is invalid: ${yargsDict.t}`);
     const files = [];
     yargsDict._.forEach(inputNode => {
@@ -225,7 +225,7 @@ conciseCatcher(async function() {
             return;
         }
         const t = yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath));
-        if (!/^[a-z]\w*$/.test(t))
+        if (!/^[a-z][\w.]*$/.test(t))
             throw new AppErr(`Target table from source file directory is invalid: ${t}`);
     });
     if (haveStdin && !yargsDict.t)

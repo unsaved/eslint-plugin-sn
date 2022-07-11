@@ -6,7 +6,7 @@ like I did for form form sys_script_client scripts.
     sys_ui_policy .script_true, .script_false.  Both need a varsIgnorePattern for ^onCondition$
     sys_ui_script, global and non-global
     raw (like global sys_script and custom that load into browser).  Same as previous?
-    sys_transform_map, sys_transform_script.  first IIFE with source,target,map,log.isUpdate
+    sys_transform_map, sys_transform_script.  first IIFE with source,target,map,log,isUpdate
                        second IIFE source, map, log, target
     sp_widget, .script needs IIFE and has access to $sp, data, input, options
                and .client_script must define a function (at top?) and it may be an IIFE.

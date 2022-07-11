@@ -99,15 +99,23 @@ Alphabetically
 |ecc_agent_script_include     |(can't specify any altscope)
 |expert_script_client         |iso, noniso
 |sa_pattern_prepost_script    |global, scoped
+|sc_cat_item_producer         |global, scoped
 |sysauto_script               |global, scoped
+|sysevent_script_action       |global, scoped
 |sys_processor                |global, scoped
 |sys_script                   |global, scoped
 |sys_script_client            |iso, noniso
+|sys_script_email             |global, scoped
 |sys_script_fix               |global, scoped
 |sys_script_include           |global, scoped
+|sys_security_acl             |global, scoped
+|sys_transform_map            |global, scoped
+|sys_transform_script         |global, scoped
 |sys_web_service              |global, scoped
 |sys_ws_operation             |global, scoped
 |sys_ui_action                |global, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
+|sys_ui_policy.script_true    |iso, noniso
+|sys_ui_policy.script_false   |iso, noniso
 
 The 8 altscope variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client
 
@@ -115,14 +123,6 @@ The 8 altscope variants for the sys_ui_action script are necessary to support th
 In very rough order of priority
 |Table                        |Altscopes alternatives
 |---                          |---
-|sys_ui_policy.script_true    |iso, noniso
-|sys_ui_policy.script_false   |iso, noniso
-|sysevent_script_action       |global, scoped
-|sys_security_acl             |global, scoped
-|sc_cat_item_producer         |global, scoped
-|sys_script_email             |global, scoped
-|sys_transform_map            |global, scoped
-|sys_transform_script         |global, scoped
 |sys_ui_script                |TBD
 |custom fields                |TBD
 |sp_widget.script             |global, scoped
