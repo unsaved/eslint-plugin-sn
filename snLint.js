@@ -99,11 +99,11 @@ async function lintFile(file, table, alt) {
     let pseudoDir = table;
     if (alt === undefined) {
         // Goal here is to set the default alt to match simplest created record
-        if (!tableName.includes("mid_") && !tableName.includes("ecc")
-          && !tableName.includes("_client") && tableName !== "sys_ui_script
-          && !tableName.startsWith("sys_ui_policy") && !tableName.startsWith("sa_")) alt = "global";
-        else if (tableName.includes("_client") || tableName === "sys_ui_script"
-          || tableName.startsWith("sys_ui_policy")) alt = "iso";
+        if (!table.includes("mid_") && !table.includes("ecc")
+          && !table.includes("_client") && table !== "sys_ui_script"
+          && !table.startsWith("sys_ui_policy") && !table.startsWith("sa_")) alt = "global";
+        else if (table.includes("_client") || table === "sys_ui_script"
+          || table.startsWith("sys_ui_policy")) alt = "iso";
     }
     if (alt !== undefined) pseudoDir = path.join(pseudoDir, alt);
     const pseudoPath = path.join(pseudoDir, baseName);
