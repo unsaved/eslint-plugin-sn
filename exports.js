@@ -158,36 +158,41 @@ module.exports = {
 
             overrides: [
                 {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor)/@(global|scoped)/*.js"],  // eslint-disable-line max-len
+                    files: [
+                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+                        "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
+                    ],
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                       "camelcase": ["warn", { properties: "never", ignoreGlobals: true }],
                       ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
                     },
-                },
-                {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor)/global/*.js"],  // eslint-disable-line max-len
+                }, {
+                    files: [
+                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action)/global/*.js",  // eslint-disable-line max-len
+                        "**/sys_ui_action/@(iso|noniso)_globalaction/*.js",
+                    ],
                     env: {"@admc.com/sn/sn_server_global": true },
                     rules: {
                       ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
                     },
-                },
-                {
-                    files: ["**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor)/scoped/*.js"],  // eslint-disable-line max-len
+                }, {
+                    files: [
+                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action)/scoped/*.js",  // eslint-disable-line max-len
+                        "**/sys_ui_action/@(iso|noniso)_scopedaction/*.js",
+                    ],
                     env: {"@admc.com/sn/sn_server_scoped": true },
                     rules: {
                       ...ruleConfigs("error", ["no-log-global"])
                     },
-                },
-                {
+                }, {
                     files: ["**/ecc_agent_script@(|_include)/*.js"],
                     env: {"@admc.com/sn/sn_mid": true },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
                     },
-                },
-                {
-                    files: ["**/@(sys|catalog|expert)_script_client/@(noniso|iso)/*.js"],
+                }, {
+                    files: ["**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action)/@(noniso|iso)/*.js"],  // eslint-disable-line max-len
                     parserOptions: { ecmaVersion: 6 },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
@@ -206,8 +211,7 @@ module.exports = {
                       "no-promise-executor-return": "error",
                       ...clientRules,
                     },
-                },
-                {
+                }, {
                     files: ["**/sys_script/*/*.js"],
                     globals: tableSpecificGlobals("sys_script"),
                     rules: {
@@ -216,8 +220,7 @@ module.exports = {
                             paramNames: ["current", "previous"],
                         }],
                     },
-                },
-                {
+                }, {
                     files: ["**/sys_processor/*/*.js"],
                     globals: tableSpecificGlobals("sys_processor"),
                     rules: {
@@ -226,12 +229,10 @@ module.exports = {
                             paramNames: ["g_request", "g_response", "g_processor"],
                         }],
                     },
-                },
-                {
+                }, {
                     files: ["**/sa_pattern_prepost_script/*/*.js"],
                     globals: tableSpecificGlobals("sa_pattern_prepost_script"),
-                },
-                {
+                }, {
                     files: ["**/sys_@(ws_operation|web_service)/@(global|scoped)/*.js"],
                     globals: tableSpecificGlobals("sys_web_service,sys_ws_operation"),
                     rules: {
@@ -240,16 +241,22 @@ module.exports = {
                             paramNames: ["request", "response"],
                         }],
                     },
-                },
-                {
-                    files: ["**/@(sys|catalog|expert)_script_client/iso/*.js"],
+                }, {
+                    files: [
+                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action)/iso/*.js",  // eslint-disable-line max-len
+                        "**/sys_ui_action/iso_@(global|scoped)action/*.js",
+                    ],
                     env: {"@admc.com/sn/sn_client_iso": true },
-                },
-                {
-                    files: ["**/@(sys|catalog|expert)_script_client/noniso/*.js"],
+                }, {
+                    files: [
+                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action)/noniso/*.js",  // eslint-disable-line max-len
+                        "**/sys_ui_action/noniso_@(global|scoped)action/*.js",
+                    ],
                     env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
-                },
-                {
+                }, {
+                    files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],
+                    rules: clientRules,
+                }, {
                     files: ["**/sys_script_client/*/*.js"],
                     rules: {
                         "no-unused-vars": ["error", {
