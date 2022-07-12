@@ -209,6 +209,9 @@ module.exports = {
                       ...clientRules,
                     },
                 }, {
+                    files: ["**/sys_ui_script/*.js"],
+                    rules: { "prefer-template": "off", },
+                }, {
                     files: ["**/sys_script/*/*.js"],
                     globals: tableSpecificGlobals("sys_script"),
                     rules: {
