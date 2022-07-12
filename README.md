@@ -11,10 +11,14 @@ global scripts can use const statements despite being ES5.  ESLint OOTB can't ha
 complexities.
 
 This plugin handles the global-object and rule variants by switching ESLint environments and rules
-based on the ServiceNow table and an optional "altscope".  The provided config generator uses
-'altscopes' in overrides/files entries, and you can add or customize with overrides/file entries in
+based on the ServiceNow table and an optional "altscope".
+
+The provided config generator uses
+'altscopes' in overrides/files entries, !!and you can add or customize with overrides/file entries in
 your own "snlintrc.json" file, and you can add to the available global variable lists by adding
-local list files.
+local list files.~~
+As of today, you can only used the predefined tables and altscopes.
+My highest priority TODO is to support options customTables and customScopes.
 
 The snLint snlint-wrapper script decouples eslint from filepaths on your system, passing
 pseudo paths TO ESLint.  This allows you to

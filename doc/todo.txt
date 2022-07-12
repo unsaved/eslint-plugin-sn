@@ -1,1 +1,3 @@
+Add customTables and customScopes to the invalid-table-altscope rule.
+
 Add fix capabilities
