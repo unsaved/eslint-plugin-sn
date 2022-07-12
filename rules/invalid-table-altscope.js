@@ -5,8 +5,8 @@
  */
 const ALTSCOPES = ["global", "scoped", "iso", "noniso",
   "iso_globalaction", "noniso_globalaction", "iso_scopedaction", "noniso_scopedaction"];
-const message =
-`Invalid table/scopealt combo '{{table}}/{{scopealt}}'.  Scopealt possibilities: ${ALTSCOPES}`;
+const message = `Invalid table/scopealt combo '{{table}}/{{scopealt}}'.
+Scopealt alternatives are none/unset and: ${ALTSCOPES}`;
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {

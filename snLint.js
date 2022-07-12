@@ -102,8 +102,7 @@ async function lintFile(file, table, alt) {
         if (!table.includes("mid_") && !table.includes("ecc")
           && !table.includes("_client") && table !== "sys_ui_script"
           && !table.startsWith("sys_ui_policy") && !table.startsWith("sa_")) alt = "global";
-        else if (table.includes("_client") || table === "sys_ui_script"
-          || table.startsWith("sys_ui_policy")) alt = "iso";
+        else if (table.includes("_client") || table.startsWith("sys_ui_policy")) alt = "iso";
     }
     if (alt !== undefined) pseudoDir = path.join(pseudoDir, alt);
     const pseudoPath = path.join(pseudoDir, baseName);

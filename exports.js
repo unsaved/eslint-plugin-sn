@@ -186,7 +186,10 @@ module.exports = {
                       "@admc.com/sn/invalid-table-altscope": "off",
                     },
                 }, {
-                    files: ["**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js"],  // eslint-disable-line max-len
+                    files: [
+                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
+                        "**/sys_ui_script/*.js",
+                    ],
                     parserOptions: { ecmaVersion: 6 },
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
@@ -273,7 +276,10 @@ module.exports = {
                     files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
                     env: {"@admc.com/sn/sn_client_iso": true },
                 }, {
-                    files: [ "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js" ],
+                    files: [
+                        "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
+                        "**/sys_ui_script/*.js",
+                    ],
                     env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
                 }, {
                     files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],
