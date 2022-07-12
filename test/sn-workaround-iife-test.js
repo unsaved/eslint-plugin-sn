@@ -47,17 +47,17 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
             errors: [{messageId}],
         },
         {
-            code: 'v1 = "two"; gs.log("a msg", "2");\n//I1',
+            code: 'v1 = "two"; gs.log("a msg", "2");\n//I2',
             options: [{tables: ["table_for_msg"], paramCallVars: ["p1", "p2"]}],
             errors: [{messageId}],
         },
         {
-            code: 'if (true) { var v1 = "one"; }\n gs.log("a msg", "2");\n//I1',
+            code: 'if (true) { var v1 = "one"; }\n gs.log("a msg", "2");\n//I3',
             options: [{tables: ["table_for_msg"], paramCallVars: ["p1", "p2"]}],
             errors: [{messageId}],
         },
         {
-            code: 'if (true) { v1 = "two"; }\ngs.log("a msg", "2");\n//I1',
+            code: 'if (true) { v1 = "two"; }\ngs.log("a msg", "2");\n//I4',
             options: [{tables: ["table_for_msg"], paramCallVars: ["p1", "p2"]}],
             errors: [{messageId}],
         },
