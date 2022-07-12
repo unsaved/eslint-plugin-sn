@@ -125,7 +125,7 @@ async function lintFile(file, table, alt) {
         stdio: ["pipe", "inherit", "inherit"],
     });
     activeJobs++;
-    childProcess.stdin.write(alt === "noniso" || alt === "iso"
+    childProcess.stdin.write(alt === "noniso" || alt === "iso" || table === "sys_ui_script"
         ? content
         : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"));
     childProcess.stdin.end();
