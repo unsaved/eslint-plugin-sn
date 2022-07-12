@@ -95,8 +95,8 @@ Alphabetically
 |Table                        |Altscopes alternatives
 |---                          |---
 |catalog_script_client        |iso, noniso
-|ecc_agent_script             |(can't specify any altscope)
-|ecc_agent_script_include     |(can't specify any altscope)
+|ecc_agent_script             |<NONE>[^1]
+|ecc_agent_script_include     |<NONE>[^1]
 |expert_script_client         |iso, noniso
 |sa_pattern_prepost_script    |global, scoped
 |sc_cat_item_producer         |global, scoped
@@ -116,6 +116,9 @@ Alphabetically
 |sys_ui_action                |global, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
 |sys_ui_policy.script_true    |iso, noniso
 |sys_ui_policy.script_false   |iso, noniso
+|sys_ui_script                |<NONE>[^1]
+
+[^1]: <NONE> means that you must specify no altscope for the table
 
 The 8 altscope variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client
 
@@ -123,7 +126,6 @@ The 8 altscope variants for the sys_ui_action script are necessary to support th
 In very rough order of priority
 |Table                        |Altscopes alternatives
 |---                          |---
-|sys_ui_script                |TBD
 |custom fields                |TBD
 |sp_widget.script             |global, scoped
 |sp_widget.client_script      |TBD
