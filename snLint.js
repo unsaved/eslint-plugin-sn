@@ -7,6 +7,7 @@ const { validate } = require("@admc.com/bycontract-plus");
 
 const fs = require("fs");
 const path = require("path");
+const childProcess = require("child_process");
 
 const yargs = require("yargs")(process.argv.slice(2)).
   strictOptions().
@@ -26,9 +27,6 @@ The most important differences from invoking 'eslint' directly are:
        'TABLENAME/ALTSCOPE/BASENAME.js'.  Example: "sys_script/global/sane.js"
        Use -d switch for ESLint to display the pseudo path that it uses.
     3. Since we pipe input, you can't use any fix or caching features.
-
-Set env variable SN_FORCE_COLOR to true to force ESLint to output colorized
-text (some terminal or shell setups cause ESLint to default to no-color).
 
 Most -eslint-switches related to config files, fixing, file selection or
 caching will probably break things.  Safe to use for things like config setting
@@ -84,17 +82,16 @@ function isSI(tableName) {
     return tableName.includes("_script_include");
 }
 
-const sleepMs = ms => new Promise(res => { setTimeout(res, ms); } );
-let errorCount = 0, activeJobs = 0;
+let errorCount = 0;
 
-async function lintFile(file, table, alt) {
+function lintFile(file, table, alt) {
     validate(arguments, ["string", "string", "string="]);
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     let objName;
     const baseName = file === "-" ? "-.js" : path.basename(file);
     if (file !== "-") objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = yargsDict._.slice();
-    if (process.env.SN_FORCE_COLOR) eslintArgs.unshift("--color");
+    if (process.stdout.isTTY) eslintArgs.unshift("--color");
     const content = fs.readFileSync(file === "-" ? 0 : file, "utf8");
     let pseudoDir = table;
     if (alt === undefined) {
@@ -121,22 +118,14 @@ async function lintFile(file, table, alt) {
     );
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     console.debug('eslint invocation args', eslintArgs);
-    const childProcess = require("child_process").spawn(process.execPath, eslintArgs, {
-        stdio: ["pipe", "inherit", "inherit"],
+    const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
+        input:
+          alt === "noniso" || alt === "iso" || table === "sys_ui_script"
+          ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
-    activeJobs++;
-    childProcess.stdin.write(alt === "noniso" || alt === "iso" || table === "sys_ui_script"
-        ? content
-        : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"));
-    childProcess.stdin.end();
-    while (childProcess.exitCode === null) await sleepMs(10);
-    if (childProcess.exitCode !== 0) errorCount++;
-    --activeJobs;
-    if (activeJobs < 1) process.exit(errorCount);
-    /* fs design makes it very difficult to just wait synchronously as we want to:
-    childProcess.on("exit", ()=> {
-        if (childProcess.exitCode !== 0) process.exit(childProcess.exitCode);
-    }); */
+    process.stderr.write(pObj.stderr);
+    process.stderr.write(pObj.stdout);
+    if (pObj.status !== 0) errorCount++;
 }
 
 /**
@@ -223,10 +212,9 @@ conciseCatcher(async function() {
     });
     if (haveStdin && !yargsDict.t)
         throw new AppErr("You must specify target table with -t if providing code through stdin");
-    // Process input files.  I just can't get this to process multiple strictly synchronously
-    // Can't use child_process.*Sync because we want to read/write pipes as it is executing.
     files.forEach(srcFilePath => {
         lintFile(srcFilePath,
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath)), yargsDict.a);
     });
+    process.exit(errorCount);
 }, 10)().catch(e0=>conciseErrorHandler(e0, 1));
