@@ -98,7 +98,7 @@ let errorCount = 0;
  * Returns the return value of the eslint invocation
  */
 function lintFile(file, table, alt, readStdin=false) {
-    validate(arguments, ["string", "string", "string=", "boolean"]);
+    validate(arguments, ["string", "string", "string=", "boolean="]);
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     const baseName = path.basename(file);
     const objName = baseName.replace(/[.][^.]+$/, "");
