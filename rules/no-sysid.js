@@ -1,7 +1,7 @@
 "use strict";
 
 const message =
-  "Use dot-walking instead of har-coded sysids.  E.g.: if (task.assignment_group_name.name ===...";
+  "Use dot-walking instead of hard-coded sysids.  E.g.: if (task.assignment_group_name.name ===...";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
