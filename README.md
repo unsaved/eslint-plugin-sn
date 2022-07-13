@@ -113,6 +113,7 @@ Alphabetically
 |sys_script_fix               |global, scoped
 |sys_script_include           |global, scoped
 |sys_security_acl             |global, scoped
+|sys_transform_entry          |global, scoped
 |sys_transform_map            |global, scoped
 |sys_transform_script         |global, scoped
 |sys_web_service              |global, scoped

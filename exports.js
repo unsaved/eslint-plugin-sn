@@ -49,11 +49,34 @@ try {
 } catch (parseE) {
     throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
 }
-const tableSpecificGlobals = (table, val="readonly") => {
+const tableSpecificGlobals = table => {
     if (!(table in tableSpecificGlobalMap))
         throw new Error(`'tableSpecifics.json' file has no entry for '${table}'`);
+    let k;
     const newGlobals = {};
-    tableSpecificGlobalMap[table].forEach(g => { newGlobals[g] = val; });
+    const testAndAdd = function(newKey) {
+        if (typeof newKey !== "string") throw new Error(
+            `Non-string value '${newKey}' for table '${table}' 'tableSpecifics.json'`);
+        newGlobals[newKey] = String(this);
+    };
+
+    if (Array.isArray(tableSpecificGlobalMap[table]))
+        tableSpecificGlobalMap[table].forEach(g => {
+            if (typeof g !== "string") new Error(
+                `Non-string value '${g}' for table '${table}' list in 'tableSpecifics.json'`);
+            newGlobals[g] = "readonly";
+        });
+    else if (typeof tableSpecificGlobalMap[table] === "object") {
+        for (k in tableSpecificGlobalMap[table]) switch (k) {
+            case "readonly":
+            case "writable":
+                tableSpecificGlobalMap[table][k].forEach(testAndAdd, k);
+                break;
+            default:
+                new Error(
+                  `Unexpected key value ${k} for table '${table}' in 'tableSpecifics.json'`);
+        }
+    }
     return newGlobals;
 };
 
@@ -136,7 +159,7 @@ module.exports = {
                 "dot-notation": "warn",
                 "consistent-return": "error",
                 "class-methods-use-this": "error",
-                "camelcase": ["warn", { properties: "never" }],
+                "camelcase": ["warn", { properties: "never", ignoreGlobals: true }],
                 "block-scoped-var": "error",
                 "no-use-before-define": ["error", { functions: false, classes: false }],
                 "no-unreachable-loop": "error",
@@ -148,6 +171,7 @@ module.exports = {
                 "eqeqeq": "warn",
                 "semi": "warn",
                 //"no-extra-parens": "warn",  In practice, too stringent
+                "no-mixed-spaces-and-tabs": "off",
 
                  ...ruleConfigs("error", ["immediate-iife", "log-scoped-varargs"]),
                  ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
@@ -159,12 +183,11 @@ module.exports = {
             overrides: [
                 {
                     files: [
-                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
                         "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
                     ],
                     rules: {
                       "@admc.com/sn/invalid-table-altscope": "off",
-                      "camelcase": ["warn", { properties: "never", ignoreGlobals: true }],
                       ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
                     },
                 }, {
@@ -258,6 +281,12 @@ module.exports = {
                         }],
                     },
                 }, {
+                    files: ["**/sys_transform_entry/*/*.js"],
+                    globals: tableSpecificGlobals("sys_transform_entry"),
+                }, {
+                    files: ["**/sys_security_acl/*/*.js"],
+                    globals: tableSpecificGlobals("sys_security_acl"),
+                }, {
                     files: ["**/sc_cat_item_producer/*/*.js"],
                     globals: tableSpecificGlobals("sc_cat_item_producer"),
                 }, {
@@ -297,6 +326,9 @@ module.exports = {
                 }, {
                     files: ["**/sys_ui_policy.script_@(true|false)/*/*.js"],
                     rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
+                }, {
+                    files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
+                    rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
                 },
             ]
         }

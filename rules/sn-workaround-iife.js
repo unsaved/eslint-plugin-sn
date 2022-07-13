@@ -31,9 +31,9 @@ const arraysEq = (a1, a2, ordered=true) => {
  * @returns boolean if ancestry has a FunctionDeclaration before any FunctionExpression
  */
 const hasFnAncestor = ctx =>
-    ctx.getAncestors().some(node => {
-        return node.type === "FunctionExpression" || node.type === "FunctionDeclaration";
-    })
+    ctx.getAncestors().some(node =>
+        node.type === "FunctionExpression" || node.type === "FunctionDeclaration"
+    );
 
 const message =
   "For {{tables}} table scriptlets you must pass {{paramCallVars}} to IIFE param(s)";
@@ -96,7 +96,7 @@ const esLintObj = {
                 if (!hasFnAncestor(context)) assignAndDeclCount++;
             }, VariableDeclarator: () => {
                 if (!hasFnAncestor(context)) assignAndDeclCount++;
-            }, FunctionDeclaration: (node) => {
+            }, FunctionDeclaration: () => {
                 if (!hasFnAncestor(context)) assignAndDeclCount++;
             }, onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;

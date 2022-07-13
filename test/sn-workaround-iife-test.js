@@ -31,6 +31,7 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
             options: [{tables: ["msg_tbl1", "msg_tbl2"], paramCallVars: ["a", "b"]}],
         },
         {  // SN-provided sys_script script template
+            // eslint-disable-next-line prefer-template
             code: FIRST_TEMPLATE_LINE + '\t // Add your code here\n    var x1 = 2;\n\nx2 = 4;\n'
               + '})(current, previous);',
             options: [{tables: ["sys_script"], paramCallVars: ["previous", "current"]}],
