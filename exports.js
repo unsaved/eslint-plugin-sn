@@ -288,7 +288,7 @@ module.exports = {
                     files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],
                     rules: clientRules,
                 }, {
-                    files: ["**/sys_script_client/*/*.js"],
+                    files: ["**/@(sys|catalog)_script_client/*/*.js"],
                     rules: {
                         "no-unused-vars": ["error", {
                             varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
