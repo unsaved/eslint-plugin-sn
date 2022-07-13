@@ -5,4 +5,7 @@ snLint Transform output to make source paths relative by starting --stdin-filena
 
 Add setup settings customTables and customScopes  and test custom of both
 
+Fork or enhance "mergeEslintHtml.js" to take input HTML strings instead of files.
+Then snLint can support multiple HTML files directly.
+
 Add fix capabilities

@@ -7,7 +7,7 @@ const args = process.argv.slice(2);
 let head, foot, errCount, warnCount;
 const rows = [];
 
-if (args.length < 1) throw new Error("SYNTAX:  node mergeEslintHtml.js");
+if (args.length < 1) throw new Error("SYNTAX:  node mergeEslintHtml.js file1.html file2.html...");
 
 args.forEach((f, i) => {
     const ex = /^([\s\S]+?)(<tr[\s\S]+<[/]tr>)([\s\S]+)$/.exec(fs.readFileSync(f, "utf8"));

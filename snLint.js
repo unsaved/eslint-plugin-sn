@@ -11,10 +11,13 @@ const childProcess = require("child_process");
 
 const yargs = require("yargs")(process.argv.slice(2)).
   strictOptions().
-  usage(`SYNTAX: $0 [-dHqv] [-t sntbl] [-a scopealt] [-- -eslint-switches] dir/or/file.js...
-  OR     $0 -h     OR
-         $0 -s
-         $0 -g
+  usage(`SYNTAX:
+$0 [-dHqv] [-t sntbl] [-a scopealt] [-- -eslint-switches] dir/or/file.js...
+  OR
+$0 [-dHqv] -p [-t sntbl] [-a scopealt] [-- -pass-thru] label/path.js < ...
+  OR
+... > $0 [-dHqv] -p [-t sntbl] [-a scopealt] [-- -pass-thru] label/path.js
+  OR     $0 -h|-s|-g
 
 The most important differences from invoking 'eslint' directly are:
     1. Internally we use -c and --no-eslintrc, so that only config file
@@ -36,10 +39,11 @@ overrides, 'Handling warnings', 'Output', 'Inline...comments', 'Miscellaneous'
 Since you can specify at most one scopealt with -a switch, all input files must
 have the same scopealt (or none).  Similarly for target table with -t switch
 except that if you specify no -t then each file's table name will derive from
-that file's directory.  Input file of - means to read code from stdin.
+that file's directory.  If using stdin with -p switch, then you can specify
+just one fake file path.
 
 Directories are searched recursively for *.js files, with exclusions, like
-'eslint', but we don't yet support .eslintignore files or --ext switch.`).
+'eslint', but we don't yet support .eslintignore files or --ext switch.`.replace(/ /g, "\u2009")).
   option("v", {
       describe: "Verbose.  N.b. may display passwords!",
       type: "boolean",
@@ -62,12 +66,18 @@ Directories are searched recursively for *.js files, with exclusions, like
       describe: "Quiet logging by logging only at level WARN and ERROR",
       type: "boolean",
   }).
+  option("p", {
+      describe: "Read input code from stdin Pipe rather than from a file.  " +
+        "Specified single file path is used for labelling and table determination (if no -t)",
+      type: "boolean",
+  }).
   option("s", {
       describe: "write template 'sneslintrc.json' Sample file into current directory",
       type: "boolean",
   }).
   option("t", {
-      describe: "target Table.  If not set then we use the directory name of the specified file",
+      describe:
+        "target Table.  If -t and -T not set then we use the directory name of the specified path",
       type: "string",
   }).
   alias("help", "h").
@@ -84,18 +94,20 @@ function isSI(tableName) {
 
 let errorCount = 0;
 
-function lintFile(file, table, alt) {
-    validate(arguments, ["string", "string", "string="]);
+/**
+ * Returns the return value of the eslint invocation
+ */
+function lintFile(file, table, alt, readStdin=false) {
+    validate(arguments, ["string", "string", "string=", "boolean"]);
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
-    let objName;
-    const baseName = file === "-" ? "-.js" : path.basename(file);
-    if (file !== "-") objName = baseName.replace(/[.][^.]+$/, "");
+    const baseName = path.basename(file);
+    const objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = yargsDict._.slice();
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
-    const content = fs.readFileSync(file === "-" ? 0 : file, "utf8");
+    const content = fs.readFileSync(readStdin ? 0 : file, "utf8");
     let pseudoDir = table;
     if (alt === undefined) {
-        // Goal here is to set the default alt to match simplest created record
+        // Goal here is to set the default alt to match simplest created ServiceNow record
         if (!table.includes("mid_") && !table.includes("ecc")
           && !table.includes("_client") && table !== "sys_ui_script"
           && !table.startsWith("sys_ui_policy") && !table.startsWith("sa_")) alt = "global";
@@ -126,6 +138,7 @@ function lintFile(file, table, alt) {
     process.stderr.write(pObj.stderr);
     process.stderr.write(pObj.stdout);
     if (pObj.status !== 0) errorCount++;
+    return pObj.status;
 }
 
 /**
@@ -178,18 +191,29 @@ conciseCatcher(async function() {
         process.exit(0);
     }
     if (yargsDict._.length < 1) {
-        console.error("You must specify a 'filepath.js' param unless using a -h, -r, or -s switch");
+        console.error("You must specify a 'filepath.js' param unless using a -g, -h, or -s switch");
         yargs.showHelp();
+        process.exit(9);
+    }
+    if (yargsDict.p && yargsDict._.length > 1) {
+        console.error("You must specify just one label path when using -p switch");
+        yargs.showHelp();
+        process.exit(9);
+    }
+    if (yargsDict.H && yargsDict._.length > 1) {
+        console.error(`I haven't yet implemented generation of a merged HTML report."
+Until I do, run snLint with -H once for each input file to generate it's HTML,
+then merge those HTML files with 'mergeEslintHtml.js'.`);
         process.exit(9);
     }
     if (yargsDict.t && !/^[a-z][\w.]*$/.test(yargsDict.t))
         throw new AppErr(`Target table from -t switch is invalid: ${yargsDict.t}`);
+    if (yargsDict.p)
+        process.exit(lintFile(yargsDict._[0],
+          yargsDict.t ? yargsDict.t : path.basename(path.dirname(yargsDict._[0])),
+          yargsDict.a, true));
     const files = [];
     yargsDict._.forEach(inputNode => {
-        if (inputNode === "-") {
-            files.push(inputNode);
-            return;
-        }
         if (!fs.existsSync(inputNode)) throw new AppErr(`'${inputNode}' does not exists`);
         if (fs.statSync(inputNode).isDirectory(inputNode)) {
             Array.prototype.push.apply(files, jsFilesInBranch(fs.opendirSync(inputNode)));
@@ -199,19 +223,12 @@ conciseCatcher(async function() {
     });
     // eslint-disable-next-line prefer-template
     console.debug(files.length + " source file matches:\n" + files.join("\n"));
-    let haveStdin = false;
     // First validate input files
     files.forEach(srcFilePath => {
-        if (srcFilePath === "-") {
-            haveStdin = true;
-            return;
-        }
         const t = yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath));
         if (!/^[a-z][\w.]*$/.test(t))
             throw new AppErr(`Target table from source file directory is invalid: ${t}`);
     });
-    if (haveStdin && !yargsDict.t)
-        throw new AppErr("You must specify target table with -t if providing code through stdin");
     files.forEach(srcFilePath => {
         lintFile(srcFilePath,
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath)), yargsDict.a);
