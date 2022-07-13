@@ -1,6 +1,3 @@
-snLint Change from "-" arg to a switch like -p/-i for Pipe/Input to read stdinput and use last
- regular arg as label
-
 snLint Transform output to make source paths relative by starting --stdin-filename value with ::
 
 Add setup settings customTables and customScopes  and test custom of both
