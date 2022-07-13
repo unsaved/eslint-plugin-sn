@@ -12,11 +12,11 @@ const childProcess = require("child_process");
 const yargs = require("yargs")(process.argv.slice(2)).
   strictOptions().
   usage(`SYNTAX:
-$0 [-dHqv] [-t sntbl] [-a scopealt] [-- -eslint-switches] dir/or/file.js...
+$0 [-dHqv] [-t sntbl] [-a scopealt] [-L -eslint-switches --] dir/or/file.js...
   OR
-$0 [-dHqv] -p [-t sntbl] [-a scopealt] [-- -pass-thru] label/path.js < ...
+$0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L -...  --] label/path.js < ...
   OR
-... > $0 [-dHqv] -p [-t sntbl] [-a scopealt] [-- -pass-thru] label/path.js
+... > $0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L -... --] label/path.js
   OR     $0 -h|-s|-g
 
 The most important differences from invoking 'eslint' directly are:
@@ -62,6 +62,10 @@ Directories are searched recursively for *.js files, with exclusions, like
       describe: "populate 'snglobals' as new subdirectory of current directory",
       type: "boolean",
   }).
+  option("L", {
+      describe: "pass-through parameters for esLint.  End the lint params with '--'",
+      type: "array",
+  }).
   option("q", {
       describe: "Quiet logging by logging only at level WARN and ERROR",
       type: "boolean",
@@ -102,7 +106,7 @@ function lintFile(file, table, alt, readStdin=false) {
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     const baseName = path.basename(file);
     const objName = baseName.replace(/[.][^.]+$/, "");
-    const eslintArgs = yargsDict._.slice();
+    const eslintArgs = yargsDict.L ? yargsDict.L.slice() : [];
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
     const content = fs.readFileSync(readStdin ? 0 : file, "utf8");
     let pseudoDir = table;
@@ -126,7 +130,7 @@ function lintFile(file, table, alt, readStdin=false) {
         "--resolve-plugins-relative-to", path.join(__dirname, ".."),  // reqd for global installs
         "--stdin",
         "--stdin-filename",
-        pseudoPath,
+        `::${pseudoPath}`,
     );
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     console.debug('eslint invocation args', eslintArgs);
@@ -135,8 +139,10 @@ function lintFile(file, table, alt, readStdin=false) {
           alt === "noniso" || alt === "iso" || table === "sys_ui_script"
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
-    process.stderr.write(pObj.stderr);
-    process.stderr.write(pObj.stdout);
+console.info(`<${process.cwd()}>`);
+    process.stderr.write(pObj.stderr.toString("utf8"));
+    process.stderr.write(
+      pObj.stdout.toString("utf8").replaceAll(`${process.cwd()}${path.sep}::`, ""));
     if (pObj.status !== 0) errorCount++;
     return pObj.status;
 }
