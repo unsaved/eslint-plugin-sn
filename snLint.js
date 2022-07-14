@@ -12,11 +12,11 @@ const childProcess = require("child_process");
 const yargs = require("yargs")(process.argv.slice(2)).
   strictOptions().
   usage(`SYNTAX:
-$0 [-dHqv] [-t sntbl] [-a scopealt] [-L '(-eslint-switches)'] dir/or/file.js...
+$0 [-cdHqv] [-t sntbl] [-a scopealt] [-L '(-eslint-switches)'] dir/or/file.js...
   OR
-$0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
+$0 [-cdHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
   OR
-... > $0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
+... > $0 [-cdHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
   OR     $0 -h|-s|-g
 
 The most important differences from invoking 'eslint' directly are:
@@ -53,9 +53,14 @@ Directories are searched recursively for *.js files, with exclusions, like
       type: "boolean",
   }).
   option("a", {
-      describe: "optional scope-alternative, such as 'global' or 'scoped' for server scripts, " +
-        "or 'iso' or 'noniso' for client scripts",
+      describe: "optional scope-alternative, such as 'global' or 'scoped' for server scripts, "
+        + "or 'iso' or 'noniso' for client scripts",
       type: "string",
+  }).
+  option("c", {
+      describe: "return code will be Count of rule failures rather than number of errored files.  "
+        + "this switch is implied by -p switch",
+      type: "boolean",
   }).
   option("d", { describe: "Debug logging", type: "boolean", }).
   option("g", {
@@ -100,15 +105,16 @@ function isSI(tableName) {
 
 let passThruArgs;
 let errorCount = 0;
+let fileFailureCount = 0;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
- * Returns the return value of the eslint invocation
+ * Returns the number of rule errors for specified script
  */
 function lintFile(file, table, alt, readStdin=false) {
     validate(arguments, ["string", "string", "string=", "boolean="]);
-    let stdout;
+    let stdout, thisErrorCount = 0;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     const baseName = path.basename(file);
     const objName = baseName.replace(/[.][^.]+$/, "");
@@ -152,9 +158,25 @@ function lintFile(file, table, alt, readStdin=false) {
         stdout = pObj.stdout.toString("utf8").  // eslint-disable-next-line prefer-template
           replace(new RegExp("(\u001b...|\\n)" + escapedCwd, "g"), "$1");
     }
+    if (pObj.status !== 0) {
+        fileFailureCount++;
+        let errMatches;
+        if (yargsDict.H) {
+            errMatches = /[(](\d+) errors?,/.exec(stdout);
+            if (!errMatches)
+                throw new Error(`We could find error counts in the output: ${stdout}`);
+            thisErrorCount += parseInt(errMatches[1]);
+        } else {
+            errMatches = stdout.match(
+              /\d+:\d+\u001b....  \u001b....error\u001b|\n  \d+:\d+  error  /g);
+            if (errMatches === null) throw new AppErr(
+              `ESLint returned error but we could find no rule errors in the output: ${stdout}`);
+            thisErrorCount += errMatches.length;
+        }
+        errorCount += thisErrorCount;
+    }
     process.stdout.write(stdout);
-    if (pObj.status !== 0) errorCount++;
-    return pObj.status;
+    return thisErrorCount;
 }
 
 /**
@@ -188,7 +210,7 @@ conciseCatcher(async function() {
         const targRcFile = "sneslintrc.json";
         if (fs.existsSync(targRcFile)) {
             console.error(`Refusing to overwrite existing '${targRcFile}'`);
-            process.exit(8);
+            process.exit(255);
         }
         fs.copyFileSync(path.join(__dirname, "resources/sneslintrc.json"), targRcFile);
         console.info(`Created file '${targRcFile}'`);
@@ -197,7 +219,7 @@ conciseCatcher(async function() {
     if (yargsDict.g) {
         if (fs.existsSync("snglobals")) {
             console.error("Refusing to update existing 'snglobals'");
-            process.exit(8);
+            process.exit(255);
         }
         fs.cpSync(path.join(__dirname, "resources/snglobals"), "snglobals", {
             preserveTimestamps: true,
@@ -209,24 +231,24 @@ conciseCatcher(async function() {
     if (yargsDict._.length < 1) {
         console.error("You must specify a 'filepath.js' param unless using a -g, -h, or -s switch");
         yargs.showHelp();
-        process.exit(9);
+        process.exit(255);
     }
     if (yargsDict.p && yargsDict._.length > 1) {
         console.error("You must specify just one label path when using -p switch");
         yargs.showHelp();
-        process.exit(9);
+        process.exit(255);
     }
     if (yargsDict.H && yargsDict._.length > 1) {
         console.error(`I haven't yet implemented generation of a merged HTML report."
 Until I do, run snLint with -H once for each input file to generate it's HTML,
 then merge those HTML files with 'mergeEslintHtml.js'.`);
-        process.exit(9);
+        process.exit(255);
     }
     if (yargsDict.L) {
         if (!/^[(].+[)]$/.test(yargsDict.L)) {
             console.error(`The value for -L switch must be OS-isolated (most easily by 
     using quotes) and then be of format: (first param,second param,third param)`);
-            process.exit(9);
+            process.exit(255);
         }
         passThruArgs = yargsDict.L.slice(1, -1).split(",");
     }
@@ -257,5 +279,5 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
         lintFile(srcFilePath,
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath)), yargsDict.a);
     });
-    process.exit(errorCount);
-}, 10)().catch(e0=>conciseErrorHandler(e0, 1));
+    process.exit(yargsDict.c ? errorCount : fileFailureCount);
+}, 254)().catch(e0=>conciseErrorHandler(e0, 253));
