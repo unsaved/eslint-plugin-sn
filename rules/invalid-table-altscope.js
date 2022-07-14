@@ -72,7 +72,8 @@ const esLintObj = {
                     // Imperfect way to distinguish if alt directory or no alt directory.
                     // We check if that token in that position is a known altscope.
                     // If we miss it, no major issue since this is only for error reporting.
-                    const ex = /([^/]+)[/]([^/]+)[/][^/]+[.]js/.exec(context.getFilename());
+                    const ex =
+                      /([^\\/]+)[\\/]([^\\/]+)[\\/][^\\/]+[.]js/.exec(context.getFilename());
                     if (!ex)
                         throw new Error(`Malformatted ESLint filename: ${context.getFilename()}`);
                     if (allAlts.includes(ex[2])) {
