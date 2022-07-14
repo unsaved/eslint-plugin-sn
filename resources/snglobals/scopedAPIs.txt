@@ -4,7 +4,6 @@
 GlideChoiceList
 GlideEmailAction
 
-action
 CertificateEncryption
 FlowScriptAPI
 GlideAggregate

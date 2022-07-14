@@ -50,9 +50,7 @@ try {
     throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
 }
 fp = path.join(globalsDir, "tableSpecifics-local.json");
-if (!fs.existsSync(fp))
-    throw new Error(`SN Plugin does not find file 'tableSpecifics-local.json'`);
-try {
+if (fs.existsSync(fp)) try {
     tableSpecificGlobalMap =
       {...tableSpecificGlobalMap, ...JSON.parse(fs.readFileSync(fp, "utf8"))};
 } catch (parseE) {
@@ -325,6 +323,10 @@ module.exports = {
                 }, {
                     files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],
                     rules: clientRules,
+                }, {
+                    // All ui_actions EXCEPT client only iso and noniso:
+                    files: ["**/sys_ui_action/@(global|scoped|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
+                    globals: tableSpecificGlobals("sys_ui_action"),
                 }, {
                     files: ["**/@(sys|catalog)_script_client/*/*.js"],
                     rules: {
