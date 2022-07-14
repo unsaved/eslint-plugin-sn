@@ -40,12 +40,21 @@ function globalsFromFiles() {
     return pObj;
 }
 
-let tableSpecificGlobalMap;
-const fp = path.join(globalsDir, "tableSpecifics.json");
+let tableSpecificGlobalMap, fp;
+fp = path.join(globalsDir, "tableSpecifics.json");
 if (!fs.existsSync(fp))
     throw new Error(`SN Plugin does not find file 'tableSpecifics.json'`);
 try {
     tableSpecificGlobalMap = JSON.parse(fs.readFileSync(fp, "utf8"));
+} catch (parseE) {
+    throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
+}
+fp = path.join(globalsDir, "tableSpecifics-local.json");
+if (!fs.existsSync(fp))
+    throw new Error(`SN Plugin does not find file 'tableSpecifics-local.json'`);
+try {
+    tableSpecificGlobalMap =
+      {...tableSpecificGlobalMap, ...JSON.parse(fs.readFileSync(fp, "utf8"))};
 } catch (parseE) {
     throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
 }
