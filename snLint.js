@@ -146,10 +146,10 @@ function lintFile(file, table, alt, readStdin=false) {
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
     process.stderr.write(pObj.stderr.toString("utf8"));
-    if (yargsDict.H) {
+    if (yargsDict.H) {  // eslint-disable-next-line prefer-template
         stdout = pObj.stdout.toString("utf8").replaceAll("[+] " + process.cwd() + path.sep, "[+] ");
     } else {
-        stdout = pObj.stdout.toString("utf8").
+        stdout = pObj.stdout.toString("utf8").  // eslint-disable-next-line prefer-template
           replace(new RegExp("(\u001b...|\\n)" + escapedCwd, "g"), "$1");
     }
     process.stdout.write(stdout);

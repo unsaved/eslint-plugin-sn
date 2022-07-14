@@ -13,20 +13,26 @@ complexities.
 This plugin handles the global-object and rule variants by switching ESLint environments and rules
 based on the ServiceNow table and an optional "altscope".
 
-The provided config generator uses
-'altscopes' in overrides/files entries, !!and you can add or customize with overrides/file entries in
-your own "snlintrc.json" file, and you can add to the available global variable lists by adding
-local list files.~~
-As of today, you can only used the predefined tables and altscopes.
-My highest priority TODO is to support options customTables and customScopes.
+The provided config generator uses 'altscopes' in overrides/files entries, and you can add or
+customize with overrides/file entries in your own "sneslintrc.json" file.
+Our design design leverages ESLint override/files entries.
+Normally ESLint override/files entries are matched against input file paths.
+We instead use this switching to provide the needed ServiceNow capability toggling by internally
+generating pseudopaths which contain the targeted ServiceNow table and (usually) altscope.
+You can see the mappings between pseudo paths and ServiceNow script capabilities in file
+"exports.js".
+You can override or add your own mappings of pseudo paths with an "sneslintrc.json" file.
+
+You can also add to the available global variable lists by adding local list files.
+See the customize section below for details.
 
 The snLint snlint-wrapper script decouples eslint from filepaths on your system, passing
 pseudo paths TO ESLint.  This allows you to
 1. Code const statements in server and MID scripts.  We transform these ES5 'const' statements
-   to var to satisfy ESLint.
+   to 'var' to satisfy ESLint.
 1. Specify altscope with -a switch, such as 'scoped' vs. 'global' for ServiceNow app scope;
    or 'iso' vs. 'noniso' for Client Script isolation mode.
-   (From script perspective app scope doesn't matter for client scripts).
+   (From scripting perspective app scope doesn't matter for client scripts).
 1. Indicate target ServiceNow table (so we know which rules to apply) with -t switch, OR
 1. If you do not specify -t (which overrides) then target table is determined by the directory
    name in which each script resides.
@@ -73,12 +79,15 @@ The provided globals were generated from a fresh San Diego instance with default
 the Discovery plugin.
 
 To support a new target table and/or scopealt, add new override elements to your 'sneslitrc.json'
-file, with your files values including the table and scopealt.
+file, with your files values including the table and (optional) scopealt.
 To mark the new table/altscope as supported, you must add the following special rule to one
 overrides element.
 ```
     "@admc.com/sn/invalid-table-altscope": "off"
 ```
+Just for accurate error messages, when you start handling paths with overrides/file entries you
+can also add to "sneslintrc.json" 'settings' for customTables and/or customAlts, both which take
+a string array.
 
 Our globals list for intra-scoped-SI accesses is purposefully over-liberal.
 There is no difficulty restricting intra-scope access (including to or from global) because the
