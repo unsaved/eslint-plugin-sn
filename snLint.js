@@ -100,14 +100,15 @@ function isSI(tableName) {
 
 let passThruArgs;
 let errorCount = 0;
-const escapedCwd = (process.cwd() + path.sep).replaceAll(".", "[.]").replaceAll("\\", "\\\\");
+// From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 /**
  * Returns the return value of the eslint invocation
  */
 function lintFile(file, table, alt, readStdin=false) {
     validate(arguments, ["string", "string", "string=", "boolean="]);
-    let stderr;
+    let stdout;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     const baseName = path.basename(file);
     const objName = baseName.replace(/[.][^.]+$/, "");
@@ -135,7 +136,7 @@ function lintFile(file, table, alt, readStdin=false) {
         "--resolve-plugins-relative-to", path.join(__dirname, ".."),  // reqd for global installs
         "--stdin",
         "--stdin-filename",
-        `::${pseudoPath}`,
+        pseudoPath,
     );
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     console.debug('eslint invocation args', eslintArgs);
@@ -146,14 +147,12 @@ function lintFile(file, table, alt, readStdin=false) {
     });
     process.stderr.write(pObj.stderr.toString("utf8"));
     if (yargsDict.H) {
-        stderr = pObj.stderr.toString("utf8").
-          replace(new RegExp("(\u001b|\\n)" + escapedCwd, "g"), "");
+        stdout = pObj.stdout.toString("utf8").replaceAll("[+] " + process.cwd() + path.sep, "[+] ");
     } else {
-        stderr = pObj.stderr.toString("utf8").replaceAll("[+] " + process.cwd() + path.sep, "");
+        stdout = pObj.stdout.toString("utf8").
+          replace(new RegExp("(\u001b...|\\n)" + escapedCwd, "g"), "$1");
     }
-    process.stderr.write(stderr);
-    process.stderr.write(
-      pObj.stdout.toString("utf8").replaceAll(`${process.cwd()}${path.sep}::`, ""));
+    process.stdout.write(stdout);
     if (pObj.status !== 0) errorCount++;
     return pObj.status;
 }
