@@ -12,11 +12,11 @@ const childProcess = require("child_process");
 const yargs = require("yargs")(process.argv.slice(2)).
   strictOptions().
   usage(`SYNTAX:
-$0 [-dHqv] [-t sntbl] [-a scopealt] [-L -eslint-switches --] dir/or/file.js...
+$0 [-dHqv] [-t sntbl] [-a scopealt] [-L '(-eslint-switches)'] dir/or/file.js...
   OR
-$0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L -...  --] label/path.js < ...
+$0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
   OR
-... > $0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L -... --] label/path.js
+... > $0 [-dHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
   OR     $0 -h|-s|-g
 
 The most important differences from invoking 'eslint' directly are:
@@ -63,8 +63,10 @@ Directories are searched recursively for *.js files, with exclusions, like
       type: "boolean",
   }).
   option("L", {
-      describe: "pass-through parameters for esLint.  End the lint params with '--'",
-      type: "array",
+      describe: `pass-through parameters for esLint.
+Quote, parenthesize, and comma-delimite all the Lint args like so:  `
+        + `'(-f,html,--rule,{"prefer-template": "off"})'`,
+      type: "string",
   }).
   option("q", {
       describe: "Quiet logging by logging only at level WARN and ERROR",
@@ -96,17 +98,20 @@ function isSI(tableName) {
     return tableName.includes("_script_include");
 }
 
+let passThruArgs;
 let errorCount = 0;
+const escapedCwd = (process.cwd() + path.sep).replaceAll(".", "[.]").replaceAll("\\", "\\\\");
 
 /**
  * Returns the return value of the eslint invocation
  */
 function lintFile(file, table, alt, readStdin=false) {
     validate(arguments, ["string", "string", "string=", "boolean="]);
+    let stderr;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     const baseName = path.basename(file);
     const objName = baseName.replace(/[.][^.]+$/, "");
-    const eslintArgs = yargsDict.L ? yargsDict.L.slice() : [];
+    const eslintArgs = passThruArgs ? passThruArgs.slice() : [];
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
     const content = fs.readFileSync(readStdin ? 0 : file, "utf8");
     let pseudoDir = table;
@@ -139,8 +144,14 @@ function lintFile(file, table, alt, readStdin=false) {
           alt === "noniso" || alt === "iso" || table === "sys_ui_script"
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
-console.info(`<${process.cwd()}>`);
     process.stderr.write(pObj.stderr.toString("utf8"));
+    if (yargsDict.H) {
+        stderr = pObj.stderr.toString("utf8").
+          replace(new RegExp("(\u001b|\\n)" + escapedCwd, "g"), "");
+    } else {
+        stderr = pObj.stderr.toString("utf8").replaceAll("[+] " + process.cwd() + path.sep, "");
+    }
+    process.stderr.write(stderr);
     process.stderr.write(
       pObj.stdout.toString("utf8").replaceAll(`${process.cwd()}${path.sep}::`, ""));
     if (pObj.status !== 0) errorCount++;
@@ -211,6 +222,14 @@ conciseCatcher(async function() {
 Until I do, run snLint with -H once for each input file to generate it's HTML,
 then merge those HTML files with 'mergeEslintHtml.js'.`);
         process.exit(9);
+    }
+    if (yargsDict.L) {
+        if (!/^[(].+[)]$/.test(yargsDict.L)) {
+            console.error(`The value for -L switch must be OS-isolated (most easily by 
+    using quotes) and then be of format: (first param,second param,third param)`);
+            process.exit(9);
+        }
+        passThruArgs = yargsDict.L.slice(1, -1).split(",");
     }
     if (yargsDict.t && !/^[a-z][\w.]*$/.test(yargsDict.t))
         throw new AppErr(`Target table from -t switch is invalid: ${yargsDict.t}`);
