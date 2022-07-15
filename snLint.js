@@ -64,7 +64,7 @@ Directories are searched recursively for *.js files, with exclusions, like
   }).
   option("d", { describe: "Debug logging", type: "boolean", }).
   option("g", {
-      describe: "populate 'snglobals' as new subdirectory of current directory",
+      describe: "populate 'snglobals' subdirectory (of current directory)",
       type: "boolean",
   }).
   option("L", {
@@ -217,15 +217,12 @@ conciseCatcher(async function() {
         process.exit(0);
     }
     if (yargsDict.g) {
-        if (fs.existsSync("snglobals")) {
-            console.error("Refusing to update existing 'snglobals'");
-            process.exit(255);
-        }
         fs.cpSync(path.join(__dirname, "resources/snglobals"), "snglobals", {
             preserveTimestamps: true,
             recursive: true,
+            force: true,
         });
-        console.info("Populated new directory 'snglobals'");
+        console.info("Populated directory 'snglobals'");
         process.exit(0);
     }
     if (yargsDict._.length < 1) {
