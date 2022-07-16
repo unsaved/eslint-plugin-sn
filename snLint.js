@@ -10,6 +10,12 @@ const path = require("path");
 const childProcess = require("child_process");
 
 const yargs = require("yargs")(process.argv.slice(2)).
+  fail((msg, err, yargs) => {
+      if (err) throw err;
+      console.error(msg);
+      console.error(yargs.help());
+      process.exit(251);
+  }).
   strictOptions().
   usage(`SYNTAX:
 $0 [-cdHqv] [-t sntbl] [-a scopealt] [-L '(-eslint-switches)'] dir/or/file.js...
@@ -93,7 +99,9 @@ Quote, parenthesize, and comma-delimite all the Lint args like so:  `
   }).
   alias("help", "h").
   version(getAppVersion(__dirname));
+console.error("A");
 const yargsDict = yargs.argv;
+console.error("B"); process.exit(12);
 const progName = yargsDict.$0.replace(/^.*[\\/]/, "");  // eslint-disable-line no-unused-vars
 
 if (!yargsDict.d) console.debug = () => {};
