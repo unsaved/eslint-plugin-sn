@@ -99,9 +99,7 @@ Quote, parenthesize, and comma-delimite all the Lint args like so:  `
   }).
   alias("help", "h").
   version(getAppVersion(__dirname));
-console.error("A");
 const yargsDict = yargs.argv;
-console.error("B"); process.exit(12);
 const progName = yargsDict.$0.replace(/^.*[\\/]/, "");  // eslint-disable-line no-unused-vars
 
 if (!yargsDict.d) console.debug = () => {};
