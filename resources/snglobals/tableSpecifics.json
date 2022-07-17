@@ -9,16 +9,17 @@
  */
 {
   "sa_pattern_prepost_script": ["patternId", "payload"],
-  "sys_web_service": ["request", "response"],
-  "sys_ws_operation": ["request", "response"],
-  "sys_script": ["current", "previous", "g_scratchpad", "action"],
-  "sys_processor": ["g_request", "g_response", "g_processor"],
+  "sys_web_service": { "iifeParams": ["request", "response"] },
+  "sys_ws_operation": { "iifeParams": ["request", "response"] },
+  "sys_script": { "iifeParams": ["current", "previous"], "readable": ["g_scratchpad", "action"] },
+  "sys_processor": { "iifeParams": ["g_request", "g_response", "g_processor"] },
   "sysevent_script_action": ["event"],
   "sc_cat_item_producer": ["producer"],
-  "sys_script_email": ["current", "template", "email", "email_action", "event"],
-  "sys_transform_map": ["source", "target", "map", "log", "isUpdate"],
-  "sys_transform_script": ["source", "map", "log", "target"],
+  "sys_script_email": { "iifeParams":  ["current", "template", "email", "email_action", "event"] },
+  "sys_transform_map": { "iifeParams": ["source", "target", "map", "log", "isUpdate"] },
+  "sys_transform_script": { "iifeParams": ["source", "map", "log", "target"] },
   "sys_security_acl": { "writable": ["answer"] },
-  "sys_transform_entry": { "writable": ["answer"] },
-  "sys_ui_action": [ "action" ]
+  "sys_transform_entry": { "writable": ["answer"] }
+  /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because it the globals
+   * are dependent upon altscope not just table name */
 }

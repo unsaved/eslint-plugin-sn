@@ -40,12 +40,12 @@ function globalsFromFiles() {
     return pObj;
 }
 
-let tableSpecificGlobalMap, fp;
+let tableSpecificMap, fp;
 fp = path.join(globalsDir, "tableSpecifics.json");
 if (!fs.existsSync(fp))
     throw new Error(`SN Plugin does not find file 'tableSpecifics.json'`);
 try {
-    tableSpecificGlobalMap = JSON.parse(fs.readFileSync(fp, "utf8").replace(/\r/g, "").
+    tableSpecificMap = JSON.parse(fs.readFileSync(fp, "utf8").replace(/\r/g, "").
           replace(/^[ \t]*[/][*][\S\s]*?[*][/]/mg, "").
           replace(/^[ \t]*[/][/][^\n]*\n/mg, "").replace(/^[ \t]*\n/mg, ""));
 } catch (parseE) {
@@ -53,40 +53,54 @@ try {
 }
 fp = path.join(globalsDir, "tableSpecifics-local.json");
 if (fs.existsSync(fp)) try {
-    tableSpecificGlobalMap =
-      {...tableSpecificGlobalMap, ...JSON.parse(fs.readFileSync(fp, "utf8"))};
+    tableSpecificMap =
+      {...tableSpecificMap, ...JSON.parse(fs.readFileSync(fp, "utf8"))};
 } catch (parseE) {
     throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
 }
-const tableSpecificGlobals = table => {
-    if (!(table in tableSpecificGlobalMap))
-        throw new Error(`'tableSpecifics.json' file has no entry for '${table}'`);
+const tableSpecificEntries = table => {
+    if (!(table in tableSpecificMap)) return null;
+        //throw new Error(`'tableSpecifics.json' file has no entry for '${table}'`);
     let k;
-    const newGlobals = {};
-    const testAndAdd = function(newKey) {
+    const overrideEntries = {};
+    const testAndAddGlobals = function(newKey) {
         if (typeof newKey !== "string") throw new Error(
-            `Non-string value '${newKey}' for table '${table}' 'tableSpecifics.json'`);
-        newGlobals[newKey] = String(this);
+            `Non-string value '${newKey}' for table '${table}' in 'tableSpecifics*.json'`);
+        if (overrideEntries.globals === undefined) overrideEntries.globals = {};
+        overrideEntries.globals[newKey] = String(this);
+    };
+    const testAndAddRule = function(pList) {
+        if (!Array.isArray(pList)) throw new Error(
+            `Non-Array value '${pList}' for table '${table}' in 'tableSpecifics*.json'`);
+        if (overrideEntries.rules === undefined) overrideEntries.rules = {};
+        overrideEntries.rules["@admc.com/sn/sn-workaround-iife"] = ["error", {
+            table: table,
+            paramCallVars: pList,
+        }];
     };
 
-    if (Array.isArray(tableSpecificGlobalMap[table]))
-        tableSpecificGlobalMap[table].forEach(g => {
+    if (Array.isArray(tableSpecificMap[table])) {
+        overrideEntries.globals = {};
+        tableSpecificMap[table].forEach(g => {
             if (typeof g !== "string") new Error(
-                `Non-string value '${g}' for table '${table}' list in 'tableSpecifics.json'`);
-            newGlobals[g] = "readonly";
+                `Non-string value '${g}' for table '${table}' list in 'tableSpecifics*.json'`);
+            overrideEntries.globals[g] = "readonly";
         });
-    else if (typeof tableSpecificGlobalMap[table] === "object") {
-        for (k in tableSpecificGlobalMap[table]) switch (k) {
+    } else if (typeof tableSpecificMap[table] === "object") {
+        for (k in tableSpecificMap[table]) switch (k) {
+            case "iifeParams":
+                testAndAddRule(tableSpecificMap[table].iifeParams);
             case "readonly":
             case "writable":
-                tableSpecificGlobalMap[table][k].forEach(testAndAdd, k);
+                tableSpecificMap[table][k].forEach(testAndAddGlobals,
+                  k === "iifeParams" ? "readonly" : k);
                 break;
             default:
                 new Error(
-                  `Unexpected key value ${k} for table '${table}' in 'tableSpecifics.json'`);
+                  `Unexpected key value ${k} for table '${table}' in 'tableSpecifics*.json'`);
         }
     }
-    return newGlobals;
+    return overrideEntries;
 };
 
 
@@ -118,6 +132,8 @@ const clientConstsCommon =
   globalsFromFiles("client-commonForm", "client-commonList-only", "windowMembers");
 
 const overrides = [
+    // Overrides entries with only a 'files' member are present only to trigger automatic additions
+    // according to tableSpecifics*.json file(s).
     {
         files: [
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_script_validator|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
@@ -171,85 +187,28 @@ const overrides = [
         rules: { "prefer-template": "off", },
     }, {
         files: ["**/sys_script/*/*.js"],
-        globals: tableSpecificGlobals("sys_script"),
-        rules: {
-            "@admc.com/sn/sn-workaround-iife": ["error", {
-                table: "sys_script",
-                paramCallVars: ["current", "previous"],
-            }],
-        },
     }, {
         files: ["**/sys_processor/*/*.js"],
-        globals: tableSpecificGlobals("sys_processor"),
-        rules: {
-            "@admc.com/sn/sn-workaround-iife": ["error", {
-                table: "sys_processor",
-                paramCallVars: ["g_request", "g_response", "g_processor"],
-            }],
-        },
     }, {
         files: ["**/sys_script_email/*/*.js"],
-        globals: tableSpecificGlobals("sys_script_email"),
-        rules: {
-            "@admc.com/sn/sn-workaround-iife": ["error", {
-                table: "sys_script_email",
-                paramCallVars:
-                  ["current", "template", "email", "email_action", "event"],
-            }],
-        },
     }, {
         files: ["**/sys_transform_map/*/*.js"],
-        globals: tableSpecificGlobals("sys_transform_map"),
-        rules: {
-            "@admc.com/sn/sn-workaround-iife": ["error", {
-                table: "sys_transform_map",
-                paramCallVars: ["source", "target", "map", "log", "isUpdate"],
-            }],
-        },
     }, {
         files: ["**/sys_transform_script/*/*.js"],
-        globals: tableSpecificGlobals("sys_transform_script"),
-        rules: {
-            "@admc.com/sn/sn-workaround-iife": ["error", {
-                table: "sys_transform_script",
-                paramCallVars: ["source", "map", "log", "target"],
-            }],
-        },
     }, {
         files: ["**/sys_transform_entry/*/*.js"],
-        globals: tableSpecificGlobals("sys_transform_entry"),
     }, {
         files: ["**/sys_security_acl/*/*.js"],
-        globals: tableSpecificGlobals("sys_security_acl"),
     }, {
         files: ["**/sc_cat_item_producer/*/*.js"],
-        globals: tableSpecificGlobals("sc_cat_item_producer"),
     }, {
         files: ["**/sysevent_script_action/*/*.js"],
-        globals: tableSpecificGlobals("sysevent_script_action"),
     }, {
         files: ["**/sa_pattern_prepost_script/*/*.js"],
-        globals: tableSpecificGlobals("sa_pattern_prepost_script"),
     }, {
         files: ["**/sys_ws_operation/*/*.js"],
-        globals: {
-            ...tableSpecificGlobals("sys_ws_operation"),
-        }, rules: {
-            "@admc.com/sn/sn-workaround-iife": ["error", {
-                table: "sys_ws_operation",
-                paramCallVars: ["request", "response"],
-            }],
-        },
     }, {
         files: ["**/sys_web_service/*/*.js"],
-        globals: {
-            ...tableSpecificGlobals("sys_web_service"),
-        }, rules: {
-            "@admc.com/sn/sn-workaround-iife": ["error", {
-                table: "sys_ws_operation",
-                paramCallVars: ["request", "response"],
-            }],
-        },
     }, {
         files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
         env: {"@admc.com/sn/sn_client_iso": true },
@@ -265,7 +224,7 @@ const overrides = [
     }, {
         // All ui_actions EXCEPT client only iso and noniso:
         files: ["**/sys_ui_action/@(global|scoped|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
-        globals: tableSpecificGlobals("sys_ui_action"),
+        globals: { action: false },
     }, {
         files: ["**/@(sys|catalog)_script_client/*/*.js"],
         rules: {
@@ -280,7 +239,19 @@ const overrides = [
         files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
     },
-]
+];
+
+overrides.filter(oRide => oRide.files.length === 1 && !oRide.files[0].includes("@")).
+  forEach(oRide => {
+      const ex = /\w+/.exec(oRide.files[0]);
+      if (!ex) return;
+      const entries = tableSpecificEntries(ex[0]);
+      if (entries === null) return;
+      //if (entries.globals) console.info(`+ ${ex[0]}`, entries.globals);
+      if (entries.globals) oRide.globals = entries.globals;
+      if (entries.rules) console.info(`+ ${ex[0]}`, entries.rules);
+      if (entries.globals) oRide.rules = entries.rules;
+  });
 
 module.exports = {
     rules: allRules,
