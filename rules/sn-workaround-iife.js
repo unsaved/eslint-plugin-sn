@@ -36,7 +36,7 @@ const hasFnAncestor = ctx =>
     );
 
 const message =
-  "For {{tables}} table scriptlets you must pass {{paramCallVars}} to IIFE param(s)";
+  "For {{table}} table scriptlets you must pass {{paramCallVars}} to IIFE param(s)";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -51,13 +51,7 @@ const esLintObj = {
         schema: [{
             type: "object",
             properties: {
-                tables: {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    uniqueItems: true
-                },
+                table: { type: "string", },
                 paramCallVars: {
                     /* IMPORTANT!  If set paramCallVars then these variables must be accessible to
                      * pass to the function.  Since table-specific this would normally be done
@@ -105,7 +99,7 @@ const esLintObj = {
                 if (assignAndDeclCount === 0 && iifeCount === 0) return;  // No IIFE ok
                 if (assignAndDeclCount > 0 || !goodParams)
                     context.report({node, messageId, data: {
-                        tables: context.options[0].tables,
+                        table: context.options[0].table,
                         paramCallVars: context.options[0].paramCallVars,
                     }});
             },

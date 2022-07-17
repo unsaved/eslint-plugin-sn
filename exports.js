@@ -45,7 +45,9 @@ fp = path.join(globalsDir, "tableSpecifics.json");
 if (!fs.existsSync(fp))
     throw new Error(`SN Plugin does not find file 'tableSpecifics.json'`);
 try {
-    tableSpecificGlobalMap = JSON.parse(fs.readFileSync(fp, "utf8"));
+    tableSpecificGlobalMap = JSON.parse(fs.readFileSync(fp, "utf8").replace(/\r/g, "").
+          replace(/^[ \t]*[/][*][\S\s]*?[*][/]/mg, "").
+          replace(/^[ \t]*[/][/][^\n]*\n/mg, "").replace(/^[ \t]*\n/mg, ""));
 } catch (parseE) {
     throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
 }
@@ -115,6 +117,171 @@ const serverConstsCommon = globalsFromFiles("coreServerObjects", "SIScopes");
 const clientConstsCommon =
   globalsFromFiles("client-commonForm", "client-commonList-only", "windowMembers");
 
+const overrides = [
+    {
+        files: [
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_script_validator|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+            "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
+        ],
+        rules: {
+          ...ruleConfigs("off", ["invalid-table-altscope"]),
+          ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
+        },
+    }, {
+        files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
+        env: {"@admc.com/sn/sn_server_global": true },
+        rules: {
+          ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
+        },
+    }, {
+        files: [ "**/@(scoped|iso_scopedaction|noniso_scopedaction)/*.js" ],
+        env: {"@admc.com/sn/sn_server_scoped": true },
+        rules: {
+          ...ruleConfigs("error", ["no-log-global"])
+        },
+    }, {
+        files: ["**/ecc_agent_script@(|_include)/*.js"],
+        env: {"@admc.com/sn/sn_mid": true },
+        rules: { ...ruleConfigs("off", ["invalid-table-altscope"]), },
+    }, {
+        files: [
+            "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
+            "**/sys_ui_script/*.js",
+        ],
+        parserOptions: { ecmaVersion: 6 },
+        rules: {
+          ...ruleConfigs("off", ["invalid-table-altscope"]),
+          "strict": ["warn", "safe"],
+          "prefer-exponentiation-operator": "error",
+          "prefer-const": "error",
+          "prefer-arrow-callback": "warn",
+          "object-shorthand": "warn",
+          "no-useless-rename": "warn",
+          "no-var": "warn",
+          "no-useless-constructor": "error",
+          "prefer-template": "warn",
+          "no-iterator": "error",
+          "require-atomic-updates": "error",
+          "no-unused-private-class-members": "error",
+          "no-promise-executor-return": "error",
+          ...clientRules,
+        },
+    }, {
+        files: ["**/sys_ui_script/*.js"],
+        rules: { "prefer-template": "off", },
+    }, {
+        files: ["**/sys_script/*/*.js"],
+        globals: tableSpecificGlobals("sys_script"),
+        rules: {
+            "@admc.com/sn/sn-workaround-iife": ["error", {
+                table: "sys_script",
+                paramCallVars: ["current", "previous"],
+            }],
+        },
+    }, {
+        files: ["**/sys_processor/*/*.js"],
+        globals: tableSpecificGlobals("sys_processor"),
+        rules: {
+            "@admc.com/sn/sn-workaround-iife": ["error", {
+                table: "sys_processor",
+                paramCallVars: ["g_request", "g_response", "g_processor"],
+            }],
+        },
+    }, {
+        files: ["**/sys_script_email/*/*.js"],
+        globals: tableSpecificGlobals("sys_script_email"),
+        rules: {
+            "@admc.com/sn/sn-workaround-iife": ["error", {
+                table: "sys_script_email",
+                paramCallVars:
+                  ["current", "template", "email", "email_action", "event"],
+            }],
+        },
+    }, {
+        files: ["**/sys_transform_map/*/*.js"],
+        globals: tableSpecificGlobals("sys_transform_map"),
+        rules: {
+            "@admc.com/sn/sn-workaround-iife": ["error", {
+                table: "sys_transform_map",
+                paramCallVars: ["source", "target", "map", "log", "isUpdate"],
+            }],
+        },
+    }, {
+        files: ["**/sys_transform_script/*/*.js"],
+        globals: tableSpecificGlobals("sys_transform_script"),
+        rules: {
+            "@admc.com/sn/sn-workaround-iife": ["error", {
+                table: "sys_transform_script",
+                paramCallVars: ["source", "map", "log", "target"],
+            }],
+        },
+    }, {
+        files: ["**/sys_transform_entry/*/*.js"],
+        globals: tableSpecificGlobals("sys_transform_entry"),
+    }, {
+        files: ["**/sys_security_acl/*/*.js"],
+        globals: tableSpecificGlobals("sys_security_acl"),
+    }, {
+        files: ["**/sc_cat_item_producer/*/*.js"],
+        globals: tableSpecificGlobals("sc_cat_item_producer"),
+    }, {
+        files: ["**/sysevent_script_action/*/*.js"],
+        globals: tableSpecificGlobals("sysevent_script_action"),
+    }, {
+        files: ["**/sa_pattern_prepost_script/*/*.js"],
+        globals: tableSpecificGlobals("sa_pattern_prepost_script"),
+    }, {
+        files: ["**/sys_ws_operation/*/*.js"],
+        globals: {
+            ...tableSpecificGlobals("sys_ws_operation"),
+        }, rules: {
+            "@admc.com/sn/sn-workaround-iife": ["error", {
+                table: "sys_ws_operation",
+                paramCallVars: ["request", "response"],
+            }],
+        },
+    }, {
+        files: ["**/sys_web_service/*/*.js"],
+        globals: {
+            ...tableSpecificGlobals("sys_web_service"),
+        }, rules: {
+            "@admc.com/sn/sn-workaround-iife": ["error", {
+                table: "sys_ws_operation",
+                paramCallVars: ["request", "response"],
+            }],
+        },
+    }, {
+        files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
+        env: {"@admc.com/sn/sn_client_iso": true },
+    }, {
+        files: [
+            "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
+            "**/sys_ui_script/*.js",
+        ],
+        env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
+    }, {
+        files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],
+        rules: clientRules,
+    }, {
+        // All ui_actions EXCEPT client only iso and noniso:
+        files: ["**/sys_ui_action/@(global|scoped|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
+        globals: tableSpecificGlobals("sys_ui_action"),
+    }, {
+        files: ["**/@(sys|catalog)_script_client/*/*.js"],
+        rules: {
+            "no-unused-vars": ["error", {
+                varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
+            }],
+        },
+    }, {
+        files: ["**/sys_ui_policy.script_@(true|false)/*/*.js"],
+        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
+    }, {
+        files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
+        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
+    },
+]
+
 module.exports = {
     rules: allRules,
     environments: {
@@ -180,168 +347,14 @@ module.exports = {
                 //"no-extra-parens": "warn",  In practice, too stringent
                 "no-mixed-spaces-and-tabs": "off",
 
-                 ...ruleConfigs("error", ["immediate-iife", "log-scoped-varargs"]),
+                // 'invalid-table-altscope' purposefully fails tests that aren't for a
+                // supported override subset:
+                 ...ruleConfigs("error",
+                   ["invalid-table-altscope", "immediate-iife", "log-scoped-varargs"]),
                  ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
-
-                // This purposefully fails tests that aren't for a supported override subset:
-                "@admc.com/sn/invalid-table-altscope": "error",
             },
 
-            overrides: [
-                {
-                    files: [
-                        "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
-                        "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
-                    ],
-                    rules: {
-                      "@admc.com/sn/invalid-table-altscope": "off",
-                      ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
-                    },
-                }, {
-                    files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
-                    env: {"@admc.com/sn/sn_server_global": true },
-                    rules: {
-                      ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
-                    },
-                }, {
-                    files: [ "**/@(scoped|iso_scopedaction|noniso_scopedaction)/*.js" ],
-                    env: {"@admc.com/sn/sn_server_scoped": true },
-                    rules: {
-                      ...ruleConfigs("error", ["no-log-global"])
-                    },
-                }, {
-                    files: ["**/ecc_agent_script@(|_include)/*.js"],
-                    env: {"@admc.com/sn/sn_mid": true },
-                    rules: {
-                      "@admc.com/sn/invalid-table-altscope": "off",
-                    },
-                }, {
-                    files: [
-                        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-                        "**/sys_ui_script/*.js",
-                    ],
-                    parserOptions: { ecmaVersion: 6 },
-                    rules: {
-                      "@admc.com/sn/invalid-table-altscope": "off",
-                      "strict": ["warn", "safe"],
-                      "prefer-exponentiation-operator": "error",
-                      "prefer-const": "error",
-                      "prefer-arrow-callback": "warn",
-                      "object-shorthand": "warn",
-                      "no-useless-rename": "warn",
-                      "no-var": "warn",
-                      "no-useless-constructor": "error",
-                      "prefer-template": "warn",
-                      "no-iterator": "error",
-                      "require-atomic-updates": "error",
-                      "no-unused-private-class-members": "error",
-                      "no-promise-executor-return": "error",
-                      ...clientRules,
-                    },
-                }, {
-                    files: ["**/sys_ui_script/*.js"],
-                    rules: { "prefer-template": "off", },
-                }, {
-                    files: ["**/sys_script/*/*.js"],
-                    globals: tableSpecificGlobals("sys_script"),
-                    rules: {
-                        "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tables: ["sys_script"],
-                            paramCallVars: ["current", "previous"],
-                        }],
-                    },
-                }, {
-                    files: ["**/sys_processor/*/*.js"],
-                    globals: tableSpecificGlobals("sys_processor"),
-                    rules: {
-                        "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tables: ["sys_processor"],
-                            paramCallVars: ["g_request", "g_response", "g_processor"],
-                        }],
-                    },
-                }, {
-                    files: ["**/sys_script_email/*/*.js"],
-                    globals: tableSpecificGlobals("sys_script_email"),
-                    rules: {
-                        "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tables: ["sys_script_email"],
-                            paramCallVars:
-                              ["current", "template", "email", "email_action", "event"],
-                        }],
-                    },
-                }, {
-                    files: ["**/sys_transform_map/*/*.js"],
-                    globals: tableSpecificGlobals("sys_transform_map"),
-                    rules: {
-                        "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tables: ["sys_transform_map"],
-                            paramCallVars: ["source", "target", "map", "log", "isUpdate"],
-                        }],
-                    },
-                }, {
-                    files: ["**/sys_transform_script/*/*.js"],
-                    globals: tableSpecificGlobals("sys_transform_script"),
-                    rules: {
-                        "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tables: ["sys_transform_script"],
-                            paramCallVars: ["source", "map", "log", "target"],
-                        }],
-                    },
-                }, {
-                    files: ["**/sys_transform_entry/*/*.js"],
-                    globals: tableSpecificGlobals("sys_transform_entry"),
-                }, {
-                    files: ["**/sys_security_acl/*/*.js"],
-                    globals: tableSpecificGlobals("sys_security_acl"),
-                }, {
-                    files: ["**/sc_cat_item_producer/*/*.js"],
-                    globals: tableSpecificGlobals("sc_cat_item_producer"),
-                }, {
-                    files: ["**/sysevent_script_action/*/*.js"],
-                    globals: tableSpecificGlobals("sysevent_script_action"),
-                }, {
-                    files: ["**/sa_pattern_prepost_script/*/*.js"],
-                    globals: tableSpecificGlobals("sa_pattern_prepost_script"),
-                }, {
-                    files: ["**/sys_@(ws_operation|web_service)/@(global|scoped)/*.js"],
-                    globals: tableSpecificGlobals("sys_web_service,sys_ws_operation"),
-                    rules: {
-                        "@admc.com/sn/sn-workaround-iife": ["error", {
-                            tables: ["sys_ws_operation", "sys_web_service"],
-                            paramCallVars: ["request", "response"],
-                        }],
-                    },
-                }, {
-                    files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
-                    env: {"@admc.com/sn/sn_client_iso": true },
-                }, {
-                    files: [
-                        "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
-                        "**/sys_ui_script/*.js",
-                    ],
-                    env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
-                }, {
-                    files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],
-                    rules: clientRules,
-                }, {
-                    // All ui_actions EXCEPT client only iso and noniso:
-                    files: ["**/sys_ui_action/@(global|scoped|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
-                    globals: tableSpecificGlobals("sys_ui_action"),
-                }, {
-                    files: ["**/@(sys|catalog)_script_client/*/*.js"],
-                    rules: {
-                        "no-unused-vars": ["error", {
-                            varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
-                        }],
-                    },
-                }, {
-                    files: ["**/sys_ui_policy.script_@(true|false)/*/*.js"],
-                    rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
-                }, {
-                    files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
-                    rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
-                },
-            ]
+            overrides: overrides
         }
     }
 };

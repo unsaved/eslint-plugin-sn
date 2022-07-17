@@ -1,6 +1,16 @@
+/*
+ * Top-level keys are tablenames
+ * Top-level value is one of:
+ *    a string list to just add read-only global values
+ *    a map with single key 'readable'.  Equivalent to previous.
+ *    a map with single key 'writable'.  Map map value is a string list of writable globals
+ *    a map with single key 'iifeParams'.
+ *        Map map value is a string list of required IIFE parameers 
+ */
 {
   "sa_pattern_prepost_script": ["patternId", "payload"],
-  "sys_web_service,sys_ws_operation": ["request", "response"],
+  "sys_web_service": ["request", "response"],
+  "sys_ws_operation": ["request", "response"],
   "sys_script": ["current", "previous", "g_scratchpad", "action"],
   "sys_processor": ["g_request", "g_response", "g_processor"],
   "sysevent_script_action": ["event"],
