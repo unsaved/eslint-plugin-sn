@@ -189,8 +189,6 @@ const overrides = [
     }, {
         files: ["**/sys_script/*/*.js"],
     }, {
-        files: ["**/sys_script_validator/*.js"],
-    }, {
         files: ["**/sys_processor/*/*.js"],
     }, {
         files: ["**/sys_script_email/*/*.js"],
@@ -241,6 +239,9 @@ const overrides = [
     }, {
         files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
+    }, {
+        files: ["**/sys_script_validator/*.js"],
+        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^validate$", }] },
     },
 ];
 
