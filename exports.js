@@ -136,7 +136,7 @@ const overrides = [
     // according to tableSpecifics*.json file(s).
     {
         files: [
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_script_validator|sys_transform_map|sys_transform_script|sys_transform_entry|sys_script_validator)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
         ],
         rules: {
@@ -162,7 +162,7 @@ const overrides = [
     }, {
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/sys_ui_script/*.js",
+            "**/@(sys_ui_script|sys_script_validator)/*.js",
         ],
         parserOptions: { ecmaVersion: 6 },
         rules: {
@@ -181,6 +181,7 @@ const overrides = [
           "no-unused-private-class-members": "error",
           "no-promise-executor-return": "error",
           ...clientRules,
+          ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls"]),
         },
     }, {
         files: ["**/sys_ui_script/*.js"],
@@ -188,7 +189,7 @@ const overrides = [
     }, {
         files: ["**/sys_script/*/*.js"],
     }, {
-        files: ["**/sys_script_validator/*/*.js"],
+        files: ["**/sys_script_validator/*.js"],
     }, {
         files: ["**/sys_processor/*/*.js"],
     }, {
@@ -217,7 +218,7 @@ const overrides = [
     }, {
         files: [
             "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
-            "**/sys_ui_script/*.js",
+            "**/@(sys_ui_script|sys_script_validator)/*.js",
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {

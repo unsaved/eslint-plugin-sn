@@ -125,7 +125,7 @@ Alphabetically
 |sys_script_email             |global, scoped
 |sys_script_fix               |global, scoped
 |sys_script_include           |global, scoped
-|sys_script_validator         |global, scoped
+|sys_script_validator         |\<NONE\>[^1]
 |sys_security_acl             |global, scoped
 |sys_transform_entry          |global, scoped
 |sys_transform_map            |global, scoped

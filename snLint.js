@@ -131,7 +131,8 @@ function lintFile(file, table, alt, readStdin=false) {
     if (alt === undefined) {
         // Goal here is to set the default alt to match simplest created ServiceNow record
         if (!table.includes("mid_") && !table.includes("ecc")
-          && !table.includes("_client") && table !== "sys_ui_script"
+          && !table.includes("_client")
+          && table !== "sys_ui_script" && table !== "sys_script_validator"
           && !table.startsWith("sys_ui_policy") && !table.startsWith("sa_")) alt = "global";
         else if (table.includes("_client") || table.startsWith("sys_ui_policy")) alt = "iso";
     }
