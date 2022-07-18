@@ -38,7 +38,7 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
         },
         {  // function decl is nested inside a lower level IIFE
             code: 'if (true) {(function() { function g() {} })();}',
-            options: [{table: "table_for_message"], paramCallVars: ["a", "b", "c"]}],
+            options: [{table: "table_for_message", paramCallVars: ["a", "b", "c"]}],
         },
     ],
     invalid: [

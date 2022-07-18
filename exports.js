@@ -74,7 +74,7 @@ const tableSpecificEntries = table => {
             `Non-Array value '${pList}' for table '${table}' in 'tableSpecifics*.json'`);
         if (overrideEntries.rules === undefined) overrideEntries.rules = {};
         overrideEntries.rules["@admc.com/sn/sn-workaround-iife"] = ["error", {
-            table: table,
+            table,
             paramCallVars: pList,
         }];
     };
@@ -90,7 +90,7 @@ const tableSpecificEntries = table => {
         for (k in tableSpecificMap[table]) switch (k) {
             case "iifeParams":
                 testAndAddRule(tableSpecificMap[table].iifeParams);
-            case "readonly":
+            case "readonly":  // eslint-disable-line no-fallthrough
             case "writable":
                 tableSpecificMap[table][k].forEach(testAndAddGlobals,
                   k === "iifeParams" ? "readonly" : k);
@@ -325,7 +325,7 @@ module.exports = {
                  ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
             },
 
-            overrides: overrides
+            overrides
         }
     }
 };

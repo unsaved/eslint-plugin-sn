@@ -173,8 +173,8 @@ function lintFile(file, table, alt, readStdin=false) {
                 throw new Error(`We could find error counts in the output: ${stdout}`);
             thisErrorCount += parseInt(errMatches[1]);
         } else {
-            errMatches = stdout.match(
-              /\d+:\d+\u001b....  \u001b....error\u001b|\n  \d+:\d+  error  /g);
+            errMatches = stdout.match(  // eslint-disable-next-line no-control-regex
+              /\d+:\d+\u001b.... {2}\u001b....error\u001b|\n {2}\d+:\d+ {2}error  {2}/g);
             if (errMatches === null) throw new AppErr(
               `ESLint returned error but we could find no rule errors in the output: ${stdout}`);
             thisErrorCount += errMatches.length;
