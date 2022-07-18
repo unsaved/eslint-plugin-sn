@@ -37,6 +37,10 @@ pseudo paths TO ESLint.  This allows you to
 1. If you do not specify -t (which overrides) then target table is determined by the directory
    name in which each script resides.
 
+Related module @admc.com/sn-developer provides other conveniences for ServiceNow developers,
+including tinymce ESLint configurations and a system to do scriptlet development on your workstation
+rather than using the web editor (tinymce).
+
 ## Installation
 To install globally (accessible to all npm projects):
 ```
@@ -121,6 +125,7 @@ Alphabetically
 |sys_script_email             |global, scoped
 |sys_script_fix               |global, scoped
 |sys_script_include           |global, scoped
+|sys_script_validator         |global, scoped
 |sys_security_acl             |global, scoped
 |sys_transform_entry          |global, scoped
 |sys_transform_map            |global, scoped

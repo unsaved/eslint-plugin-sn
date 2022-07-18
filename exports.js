@@ -136,7 +136,7 @@ const overrides = [
     // according to tableSpecifics*.json file(s).
     {
         files: [
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_script_validator|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_script_validator|sys_transform_map|sys_transform_script|sys_transform_entry|sys_script_validator)/@(global|scoped)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
         ],
         rules: {
@@ -187,6 +187,8 @@ const overrides = [
         rules: { "prefer-template": "off", },
     }, {
         files: ["**/sys_script/*/*.js"],
+    }, {
+        files: ["**/sys_script_validator/*/*.js"],
     }, {
         files: ["**/sys_processor/*/*.js"],
     }, {
@@ -247,9 +249,7 @@ overrides.filter(oRide => oRide.files.length === 1 && !oRide.files[0].includes("
       if (!ex) return;
       const entries = tableSpecificEntries(ex[0]);
       if (entries === null) return;
-      //if (entries.globals) console.info(`+ ${ex[0]}`, entries.globals);
       if (entries.globals) oRide.globals = entries.globals;
-      if (entries.rules) console.info(`+ ${ex[0]}`, entries.rules);
       if (entries.globals) oRide.rules = entries.rules;
   });
 
