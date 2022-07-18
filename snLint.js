@@ -155,7 +155,8 @@ function lintFile(file, table, alt, readStdin=false) {
     console.debug('eslint invocation args', eslintArgs);
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
         input:
-          alt === "noniso" || alt === "iso" || table === "sys_ui_script"
+          alt === "noniso" || alt === "iso"
+          || table === "sys_ui_script" || table === "sys_script_validator"
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
     process.stderr.write(pObj.stderr.toString("utf8"));
