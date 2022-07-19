@@ -172,7 +172,7 @@ function lintFile(file, table, alt, readStdin=false) {
         if (yargsDict.H) {
             errMatches = /[(](\d+) errors?,/.exec(stdout);
             if (!errMatches)
-                throw new Error(`We could find error counts in the output: ${stdout}`);
+                throw new Error(`We could find no error counts in the output: ${stdout}`);
             thisErrorCount += parseInt(errMatches[1]);
         } else {
             errMatches = stdout.match(  // eslint-disable-next-line no-control-regex
