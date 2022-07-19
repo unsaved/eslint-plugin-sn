@@ -168,19 +168,9 @@ function lintFile(file, table, alt, readStdin=false) {
     }
     if (pObj.status !== 0) {
         fileFailureCount++;
-        let errMatches;
-        if (yargsDict.H) {
-            errMatches = /[(](\d+) errors?,/.exec(stdout);
-            if (!errMatches)
-                throw new Error(`We could find no error counts in the output: ${stdout}`);
-            thisErrorCount += parseInt(errMatches[1]);
-        } else {
-            errMatches = stdout.match(  // eslint-disable-next-line no-control-regex
-              /\d+:\d+\u001b.... {2}\u001b....error\u001b|\n {2}\d+:\d+ {2}error {2}/g);
-            if (errMatches === null) throw new AppErr(
-              `ESLint returned error but we could find no rule errors in the output:\n${stdout}`);
-            thisErrorCount += errMatches.length;
-        }
+        const errMatches = /\d problem.*[(](\d+) errors?,/.exec(stdout);
+        if (!errMatches) throw new Error(`We could find no error counts in the output: ${stdout}`);
+        thisErrorCount += parseInt(errMatches[1]);
         errorCount += thisErrorCount;
     }
     process.stdout.write(stdout);
