@@ -76,7 +76,8 @@ target tables, and altscopes.
 
 As a work-around for a mingw or git-for-windows glitch, if Node.js can't determine tty interactivity
 correctly, then you can export env node variable FORCE_COLOR to true.
-You can check your system with ```
+You can check your system with
+```
     node -p process.stdout.isTTY
 ```
 
