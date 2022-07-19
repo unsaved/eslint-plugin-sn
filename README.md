@@ -74,6 +74,12 @@ To get invocation syntax help:
 Do read the brief output from this command for essential information about specifying files,
 target tables, and altscopes.
 
+As a work-around for a mingw or git-for-windows glitch, if Node.js can't determine tty interactivity
+correctly, then you can export env node variable FORCE_COLOR to true.
+You can check your system with ```
+    node -p process.stdout.isTTY
+```
+
 ## Customization
 See file "snglobals/README.txt" for instructions on how to customize the global JavaScript object
 lists, to prevent ESLint from generating 'no-undef' violations, without having to code
