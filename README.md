@@ -38,8 +38,8 @@ pseudo paths TO ESLint.  This allows you to
    name in which each script resides.
 
 Related module @admc.com/sn-developer provides other conveniences for ServiceNow developers,
-including tinymce ESLint configurations and a system to do scriptlet development on your workstation
-rather than using the web editor (tinymce).
+including TinyMCE ESLint configurations and a system to do scriptlet development on your workstation
+rather than using the web editor (TinyMCE).
 
 ## Installation
 To install globally (accessible to all npm projects):
