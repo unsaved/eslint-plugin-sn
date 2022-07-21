@@ -153,7 +153,7 @@ const overrides = [
         files: [ "**/@(scoped|iso_scopedaction|noniso_scopedaction)/*.js" ],
         env: {"@admc.com/sn/sn_server_scoped": true },
         rules: {
-          ...ruleConfigs("error", ["no-log-global"])
+          ...ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
         },
     }, {
         files: ["**/ecc_agent_script@(|_include)/*.js"],
@@ -323,7 +323,8 @@ module.exports = {
                 // 'invalid-table-altscope' purposefully fails tests that aren't for a
                 // supported override subset:
                  ...ruleConfigs("error",
-                   ["invalid-table-altscope", "immediate-iife", "log-scoped-varargs"]),
+                   ["invalid-table-altscope", "immediate-iife",
+                    "no-boilerplate", "no-useless-rtrn"]),
                  ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
             },
 

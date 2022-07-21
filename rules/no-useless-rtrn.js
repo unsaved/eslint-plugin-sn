@@ -17,7 +17,6 @@ const esLintObj = {
     create: context => { return {
         Program: node => {
             const exprs = node.body.filter(bmemb => bmemb.type === "ExpressionStatement");
-            console.info(exprs.length);
             if (exprs < 1) return;
             const lastExpr = exprs.pop().expression;
             if (lastExpr.type === "AssignmentExpression" && lastExpr.operator === "="
