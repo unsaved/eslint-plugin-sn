@@ -9,3 +9,5 @@ local/
 /build
 /node_modules
 /*?jre.?*
+/sneslintrc.json
+/snglobals

@@ -40,9 +40,10 @@ const esLintObj = {
 
     create: context => { return {
         Program: node => {
-            if (context.getSourceCode().getAllComments().some(cmt =>
-                SN_BOILERPLATE_TEXTS.some(bpRe => bpRe.test(cmt.value))
-            )) context.report({node, messageId});
+            if (context.getSourceCode().getAllComments().forEach(cmt => {
+                if (SN_BOILERPLATE_TEXTS.some(bpRe => bpRe.test(cmt.value)))
+                context.report({node, loc: cmt.loc, messageId});
+            }));
         }
     }; }
 };
