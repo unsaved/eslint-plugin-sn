@@ -172,6 +172,7 @@ Rules can be reconfigured to apply where you say.
 The table shows by default what scopes they are applied to and at what level.
 Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
+|---                         |---    |---              |---
 |immediate-iife              |error  |all              |IIFEs must execute immediately
 |invalid-table-altscope      |error  |Unsupported[^2]  |Invalid table/altscope combination
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
