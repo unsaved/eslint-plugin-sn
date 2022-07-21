@@ -160,8 +160,18 @@ function lintFile(file, table, alt, readStdin=false) {
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
     process.stderr.write(pObj.stderr.toString("utf8"));
-    if (yargsDict.H) {  // eslint-disable-next-line prefer-template
-        stdout = pObj.stdout.toString("utf8").replaceAll("[+] " + process.cwd() + path.sep, "[+] ");
+    if (yargsDict.H) {
+        /* eslint-disable prefer-template */
+        if ("".replaceAll === undefined) {
+            // Workaround for old node.js
+            stdout = pObj.stdout.toString("utf8");
+            while (stdout.includes("[+] " + process.cwd() + path.sep, "[+] "))
+                stdout = stdout.replace("[+] " + process.cwd() + path.sep, "[+] ");
+        } else {
+            stdout = pObj.stdout.toString("utf8").
+              replaceAll("[+] " + process.cwd() + path.sep, "[+] ");
+        }
+        /* eslint-enable prefer-template */
     } else {
         stdout = pObj.stdout.toString("utf8").  // eslint-disable-next-line prefer-template
           replace(new RegExp("(\u001b...|\\n)" + escapedCwd, "g"), "$1");

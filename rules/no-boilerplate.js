@@ -8,7 +8,7 @@ const SN_BOILERPLATE_TEXTS = [
     /^ populate the 'data' object/,  // sp_widget.script
     /^ e[.]g[.] data[.]table = [$]sp[.]getValue[(]'table'[)];/,  // sp_widget.script
     // /^ widget controller $/, // sp_widget.client_script
-    /^[*] 1[.] Pre sensor:  You can change payload before it will be proccese/m, //prepost/sensorsd
+    /^[*] 1[.] Pre sensor: {2}You can change payload before it will be proccese/m, //prepost/sensors
     // /^parsing the json string to a json object/m, //prepost/sensors
     /^put your business logic here/, //prepost/multiple
  // /^you can return a message and a status, on top of the input variables that/, //prepost/multip
