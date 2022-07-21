@@ -166,3 +166,29 @@ project and load this plugin.  Since this module's 'snLint.js' loads this plugin
 be tested from here.  This is the reason for existence of peer module
 @admc.com/eslintplugin-sn-test.
 
+## Provided Rules
+Rules in the @admc.com/sn/ namespace.
+Rules can be reconfigured to apply where you say.
+The table shows by default what scopes they are applied to and at what level.
+Note that scriptlet scope of "server" does not include MID scriptlets.
+|Rule                        |Level  |Sciptlet Scope   |Description/justification
+|immediate-iife              |error  |all              |IIFEs must execute immediately
+|invalid-table-altscope      |error  |Unsupported[^2]  |Invalid table/altscope combination
+|log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
+|log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
+|no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
+|no-console-info             |error  |client           |Level-specific console logging statements are better because console.info default filtering is inconsistent
+|no-init-emptystring         |warn   |all              |For rare cases where the value is to really be used as a string (not just tested) this is ok.  Normally the system default of undefined works great.
+|no-log-global               |error  |server scoped    |Scoped app scripts should use the scoped logging API
+|no-log-scoped               |error  |server global    |Global scope scripts should use the global logging API
+|no-sysid                    |error, warn[^3]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.
+|no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
+|prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
+|sn-workaround-iife          |error  |some server[^4]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
+|validate-gliderecord-calls  |error, warn[^3]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
+
+[^2]: invalid-table-altscope rule always fails when it is applied so it works by being
+descoped from all valid table/scope combinations
+[^3]: no-sysid and validate-gliderecod-calls rules default to error level for server-side scriptlets and warn level for
+[^4]: The sn-workaround-iife rule is applied to some specific server tables
+client-side scriptlets
