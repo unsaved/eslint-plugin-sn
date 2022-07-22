@@ -2,11 +2,12 @@
  * Can run this as a bg script or in a fix script
  */
 
-/* eslint-disable strict, prefer-template */
+/* eslint-disable strict, prefer-template, no-var */
 /* global GlideAggregate, gs */
 const ga = new GlideAggregate("sys_script_include");
 ga.addQuery("sys_scope.scope", "!=", "global");
 ga.addQuery("access", "public");
+ga.addQuery("active", true);  // Comment out statement to allow for enabling active==false's
 ga.orderBy("sys_scope.scope");
 ga._query();
 const scopes = [];
