@@ -24,7 +24,7 @@ most often you can use the Service Now query builder of table_name.list or
 or scope that you need, do a CSV export of it.  The ServiceNow API does not
 facilitate export of groupings, so for more complicated cases like all used
 sys_scopes used by the records, use a server script like those provided at
-"/resources/gatherSiScopes.js", "/resources/gatherSiNames.js".
+"/resources/gather*.js".
 
 For accessing scoped SIs you will need to add entries to your local
 "sneslintrc.json" file.  Consider defining your own "altscope".  In
