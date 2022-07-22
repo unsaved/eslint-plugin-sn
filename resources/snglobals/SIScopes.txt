@@ -1,31 +1,4 @@
-# Generated with BG script:
-#(function() {
-#const logSrc = "BG";
-#var eMsg;
-#
-#try {
-#
-#const gr = new GlideAggregate("sys_script_include");
-#gr.addQuery("sys_scope.scope", "!=", "global");
-#gr.addQuery("access", "public");
-#gr.orderBy("sys_scope.scope");
-#gr._query();
-#const scopes = [];
-#while (gr.next()) scopes.push(gr.getValue("sys_scope.scope"));
-#scopes.sort();
-#gs.log(gr.getRowCount() + "\n" + scopes.join("\n"), logSrc);
-#
-#} catch(e) {
-#    if (typeof e === "object" && e !== null && "message" in e) try {
-#        if (e.message) eMsg = String(e.message);
-#    } catch (eNest) { } // Intentionally empty
-#    gs.logError((eMsg === undefined) ? String(e) : eMsg, logSrc);
-#} finally {
-#    gs.log("Done", logSrc);  // Good to report counts here
-#}
-#
-#})();
-
+# Generated with script "resources/gatherSiScopes.js".
 
 sn_agent_recommend
 sn_app_eng_notify

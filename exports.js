@@ -133,7 +133,8 @@ const clientConstsCommon =
 
 const overrides = [
     // Overrides entries with only a 'files' member are present only to trigger automatic additions
-    // according to tableSpecifics*.json file(s).
+    // according to tableSpecifics*.json file(s).  Version 2.x.y will eliminate the need for these
+    // entries.
     {
         files: [
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len

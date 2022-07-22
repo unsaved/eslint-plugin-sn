@@ -163,6 +163,15 @@ In very rough order of priority
 |sa_pattern                   |probably none
 |mid_limited_resource_script  |none
 
+## Upcoming
+Supporting pseudo-paths with no altscope necessitates a huge amount of exception-handling in
+scripts, configurations, and config file paths.
+All of this would be massively simplified by always requiring an altscope and using a special
+altscope value such as "all" or "unscoped".
+Since this will make the system incompatible with pre-existing config files, we need an increment
+to the module major version, hence this will be implemented with major version 2, i.e. version
+2.0.0.
+
 ## Development
 Though you can test the individual rules from this project, due to eslint-plugin system design,
 you can't test usage of the plugin from here.  To test the plugin you need to be outside of this
