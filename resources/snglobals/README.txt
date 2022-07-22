@@ -17,7 +17,7 @@ You can make the text global lists using any method you want.
 It makes it much easier and more reliable if you run server scripts using 
 bg or fix scripts that generate lists, then use a minus/subtract shell script
 (or 'diff') to generate the delta that you need in your *local* files.
-(Email me if you'd like my Bash 'minus' script).
+(A bash minus script is provided at "resources/minus.bash").
 To generate your local super-list (i.e. before subtraction of OOTB entries),
 most often you can use the Service Now query builder of table_name.list or
 /table_name_list.do URL, customize the columns-to-display down to just the  API
