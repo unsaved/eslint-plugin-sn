@@ -23,19 +23,23 @@ requirements.  All server and MID scripts are evaluated with ES5, and only these
 scripts have access to the 'gs' object.
 Client scripts run on the SN-compliant ES6+ browsers and have access to 'g_form' and
 other objects.  MID scripts have access to MID SIs.  Client scripts have isolated and non-isolated
-variants which determines accessibilty to 'window', jQuery, etc. al.  Besides that, ServiceNow
-global scripts can use const statements despite being ES5.  ESLint OOTB can't handle these
-complexities.
+variants which determines accessibilty to 'window', jQuery, et. al.  Besides that, ServiceNow
+global scripts can use const statements despite being ES5.
+ESLint OOTB can't handle these complexities.
 
 This plugin handles the global-object and rule variants by switching ESLint environments and rules
-based on the ServiceNow table and an optional "altscope".
+based on the ServiceNow table and usually an _alt_.
+"alt" is our term for distinguishing between _alt_-ernate JavaScript environments for the same
+scriptlet field.
+For example, linting of field sys_script.script must specify alt of either ``global`` or ``scoped``;
+and linting of field sys_script_client.script must specify alt of either ``iso`` or ``noniso``.
 
-The provided config generator uses 'altscopes' in overrides/files entries, and you can add or
+The provided config generator uses alts in overrides/files entries, and you can add or
 customize with overrides/file entries in your own "sneslintrc.json" file.
 Our design design leverages ESLint override/files entries.
 Normally ESLint override/files entries are matched against input file paths.
 We instead use this switching to provide the needed ServiceNow capability toggling by internally
-generating pseudopaths which contain the targeted ServiceNow table and (usually) altscope.
+generating pseudopaths which contain the targeted ServiceNow table and (usually) alt.
 You can see the mappings between pseudo paths and ServiceNow script capabilities in file
 "exports.js".
 You can override or add your own mappings of pseudo paths with an "sneslintrc.json" file.
@@ -47,7 +51,7 @@ The snLint snlint-wrapper script decouples eslint from filepaths on your system,
 pseudo paths TO ESLint.  This allows you to
 1. Code const statements in server and MID scripts.  We transform these ES5 'const' statements
    to 'var' to satisfy ESLint.
-1. Specify altscope with -a switch, such as 'scoped' vs. 'global' for ServiceNow app scope;
+1. Specify _alt_ with -a switch, such as 'scoped' vs. 'global' for ServiceNow app scope;
    or 'iso' vs. 'noniso' for Client Script isolation mode.
    (From scripting perspective app scope doesn't matter for client scripts).
 1. Indicate target ServiceNow table (so we know which rules to apply) with -t switch, OR
@@ -89,7 +93,7 @@ To get invocation syntax help:
     npm exec snLint -- -h    # with local project installation
 ```
 Do read the brief output from this command for essential information about specifying files,
-target tables, and altscopes.
+target tables, and alts.
 
 As a work-around for a mingw or git-for-windows glitch, if Node.js can't determine tty interactivity
 correctly, then you can export env node variable FORCE_COLOR to true.
@@ -106,15 +110,16 @@ eslint-disable directives.
 The provided globals were generated from a fresh San Diego instance with default plugins plus
 the Discovery plugin.
 
-To support a new target table and/or scopealt, add new override elements to your 'sneslitrc.json'
-file, with your files values including the table and (optional) scopealt.
-To mark the new table/altscope as supported, you must add the following special rule to one
+To support a new target table and/or alt, add new override elements to your 'sneslitrc.json'
+file, with your files values including the table and (optional) alt.
+To mark the new table/alt as supported, you must add the following special rule to one
 overrides element.
 ```
     "@admc.com/sn/invalid-table-altscope": "off"
 ```
+(The rule name will change to @admc.com/sn/invalid-table-alt" for consistency with version 2.x.y).
 Just for accurate error messages, when you start handling paths with overrides/file entries you
-can also add to "sneslintrc.json" 'settings' for customTables and/or customAlts, both which take
+can also add to "sneslintrc.json" 'settings' for customTables and/or custom alts, both which take
 a string array.
 
 Our globals list for intra-scoped-SI accesses is purposefully over-liberal.
@@ -125,7 +130,7 @@ But for non-global intra-scope accesses we only check that any scope has the SI 
 To restrict accurately we would have to maintain a separate list for every non-global scope, and
 that's just not practical.
 If you want to narrow down intra-scope SI accesses for specific scopes, you're welcome to define
-new altscopes for this purpose, defining "sneslintrc.json" environments, override elements.
+new alts for this purpose, defining "sneslintrc.json" environments, override elements.
 If you only edit scripts in one or a few scopes, then a much easier customizaton procedure is
 documented in the "snglobals/README.txt" file, to replace the list of all scopedSIs with just those
 that you should be accessing.
@@ -133,7 +138,7 @@ that you should be accessing.
 ## Supported ServiceNow scriptlet types
 ### Supported Now
 Alphabetically
-|Table                        |Altscopes alternatives
+|Table                        |Alts
 |---                          |---
 |catalog_script_client        |iso, noniso
 |ecc_agent_script             |\<NONE\>[^1]
@@ -161,13 +166,13 @@ Alphabetically
 |sys_ui_policy.script_false   |iso, noniso
 |sys_ui_script                |\<NONE\>[^1]
 
-[^1]: \<NONE\> means that you must specify no altscope for the table
+[^1]: \<NONE\> means that you must specify no alt for the table
 
-The 8 altscope variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client
+The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client
 
 ### Planned
 In very rough order of priority
-|Table                        |Altscopes alternatives
+|Table                        |Alts
 |---                          |---
 |custom fields                |TBD
 |sp_widget.script             |global, scoped
@@ -191,7 +196,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
 |---                         |---    |---              |---
 |immediate-iife              |error  |all              |IIFEs must execute immediately
-|invalid-table-altscope      |error  |Unsupported[^2]  |Invalid table/altscope combination
+|invalid-table-altscope      |error  |Unsupported[^2]  |Invalid table/alt combination
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
 |log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
@@ -205,7 +210,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |sn-workaround-iife          |error  |some server[^4]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
 |validate-gliderecord-calls  |error, warn[^3]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
 
-[^2]: invalid-table-altscope rule always fails when it is applied so it works by being
+[^2]: invalid-table-alt rule always fails when it is applied so it works by being
 descoped from all valid table/scope combinations
 [^3]: no-sysid and validate-gliderecod-calls rules default to error level for server-side scriptlets and warn level for
 [^4]: The sn-workaround-iife rule is applied to some specific server tables
