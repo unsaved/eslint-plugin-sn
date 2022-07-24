@@ -141,7 +141,7 @@ const overrides = [
             "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
         ],
         rules: {
-          ...ruleConfigs("off", ["invalid-table-altscope"]),
+          ...ruleConfigs("off", ["invalid-table-alt"]),
           ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
         },
     }, {
@@ -159,7 +159,7 @@ const overrides = [
     }, {
         files: ["**/ecc_agent_script@(|_include)/*.js"],
         env: {"@admc.com/sn/sn_mid": true },
-        rules: { ...ruleConfigs("off", ["invalid-table-altscope"]), },
+        rules: { ...ruleConfigs("off", ["invalid-table-alt"]), },
     }, {
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
@@ -167,7 +167,7 @@ const overrides = [
         ],
         parserOptions: { ecmaVersion: 6 },
         rules: {
-          ...ruleConfigs("off", ["invalid-table-altscope"]),
+          ...ruleConfigs("off", ["invalid-table-alt"]),
           "strict": ["warn", "safe"],
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
@@ -353,10 +353,10 @@ module.exports = {
                 //"no-extra-parens": "warn",  In practice, too stringent
                 "no-mixed-spaces-and-tabs": "off",
 
-                // 'invalid-table-altscope' purposefully fails tests that aren't for a
+                // 'invalid-table-alt' purposefully fails tests that aren't for a
                 // supported override subset:
                  ...ruleConfigs("error",
-                   ["invalid-table-altscope", "immediate-iife",
+                   ["invalid-table-alt", "immediate-iife",
                     "no-boilerplate", "no-useless-rtrn"]),
                  ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
             },
