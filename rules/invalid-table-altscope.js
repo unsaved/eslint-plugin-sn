@@ -35,6 +35,9 @@ const esLintObj = {
                     t = context.settings.testTable;
                     if (context.settings.testAltScope) a = context.settings.testAltScope;
                 } else {
+                    // Imperfect way to distinguish if alt directory or no alt directory.
+                    // We check if that token in that position is a known altscope.
+                    // If we miss it, no major issue since this is only for error reporting.
                     const ex =
                       /([^\\/]+)[\\/]([^\\/]+)[\\/][^\\/]+[.]js/.exec(context.getFilename());
                     if (!ex)
