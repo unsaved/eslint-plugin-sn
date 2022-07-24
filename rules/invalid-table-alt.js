@@ -1,8 +1,5 @@
 "use strict";
 
-/**
- * This rule ALWAYS fails when it is executed
- */
 const tableMessage = `Invalid table '{{table}}'.
 Table alternatives are: {{allTables}}`;
 const altMessage = `Invalid table/scopealt combo '{{table}}/{{alt}}'.
@@ -30,7 +27,7 @@ const esLintObj = {
         return {
             onCodePathStart: (codePath, node) => {
                 if (node.type !== "Program") return;
-                let t, a;
+                let t, a = null;
                 if (context.settings && context.settings.testTable) {
                     t = context.settings.testTable;
                     if (context.settings.testAltScope) a = context.settings.testAltScope;
@@ -45,20 +42,23 @@ const esLintObj = {
                     if (Array.isArray(allTables[ex[1]])) {
                         t = ex[1]; a = ex[2];
                     } else {
-                        t = ex[2]; a = '<NONE>';
+                        t = ex[2];
                     }
                 }
-                if (t in allTables)
-                    context.report({node, messageId: altMessageId, data: {
-                        table: t,
-                        alt: a,
-                        allTables: allTables[t],
-                    }});
-                else
+                if (t in allTables) {
+                    if (allTables[t] === null && a !== null
+                      || Array.isArray(allTables[t]) && !allTables[t].includes(a))
+                        context.report({node, messageId: altMessageId, data: {
+                            table: t,
+                            alt: a,
+                            allTables: allTables[t],
+                        }});
+                } else {
                     context.report({node, messageId: tableMessageId, data: {
                         table: t,
                         allTables: Object.keys(allTables),
                     }});
+                }
             }
         };
     }

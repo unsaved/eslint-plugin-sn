@@ -99,12 +99,7 @@ the Discovery plugin.
 
 To support a new target table and/or alt, add new override elements to your 'sneslitrc.json'
 file, with your files values including the table and (optional) alt.
-To mark the new table/alt as supported, you must add the following special rule to one
-overrides element.
-```
-    "@admc.com/sn/invalid-table-altscope": "off"
-```
-(The rule name will change to @admc.com/sn/invalid-table-alt" for consistency with version 2.x.y).
+
 You need to also add a ``customTables`` element to "sneslintrc.json".
 The value is a mapping from new table name to the list of supported alt names, with the default alt name first.
 If you are modifying an out-of-the-box table (adding or removing alts),
@@ -185,7 +180,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
 |---                         |---    |---              |---
 |immediate-iife              |error  |all              |IIFEs must execute immediately
-|invalid-table-altscope      |error  |Unsupported[^2]  |Invalid table/alt combination
+|invalid-table-alt           |error  |Unsupported[^2]  |Invalid table/alt combination
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
 |log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented

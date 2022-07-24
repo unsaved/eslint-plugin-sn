@@ -140,10 +140,7 @@ const overrides = [
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
         ],
-        rules: {
-          ...ruleConfigs("off", ["invalid-table-alt"]),
-          ...ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
-        },
+        rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
     }, {
         files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
         env: {"@admc.com/sn/sn_server_global": true },
@@ -159,7 +156,6 @@ const overrides = [
     }, {
         files: ["**/ecc_agent_script@(|_include)/*.js"],
         env: {"@admc.com/sn/sn_mid": true },
-        rules: { ...ruleConfigs("off", ["invalid-table-alt"]), },
     }, {
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
@@ -167,7 +163,6 @@ const overrides = [
         ],
         parserOptions: { ecmaVersion: 6 },
         rules: {
-          ...ruleConfigs("off", ["invalid-table-alt"]),
           "strict": ["warn", "safe"],
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
@@ -257,38 +252,6 @@ overrides.filter(oRide => oRide.files.length === 1 && !oRide.files[0].includes("
   });
 
 module.exports = {
-    settings: {
-        ootbTables: {
-          "catalog_script_client": ["iso", "noniso"],
-          "ecc_agent_script": null,
-          "ecc_agent_script_include": null,
-          "expert_script_client": ["iso", "noniso"],
-          "sa_pattern_prepost_script": ["global", "scoped"],
-          "sc_cat_item_producer": ["global", "scoped"],
-          "sysauto_script": ["global", "scoped"],
-          "sysevent_script_action": ["global", "scoped"],
-          "sys_processor": ["global", "scoped"],
-          "sys_script": ["global", "scoped"],
-          "sys_script_client": ["iso", "noniso"],
-          "sys_script_email": ["global", "scoped"],
-          "sys_script_fix": ["global", "scoped"],
-          "sys_script_include": ["global", "scoped"],
-          "sys_script_validator": null,
-          "sys_security_acl": ["global", "scoped"],
-          "sys_transform_entry": ["global", "scoped"],
-          "sys_transform_map": ["global", "scoped"],
-          "sys_transform_script": ["global", "scoped"],
-          "sys_web_service": ["global", "scoped"],
-          "sys_ws_operation": ["global", "scoped"],
-          "sys_ui_action": [
-            "global", "scoped", "iso", "noniso", "iso_globalaction",
-            "noniso_globalaction", "iso_scopedaction", "noniso_scopedaction"
-          ],
-          "sys_ui_policy.script_true": ["iso", "noniso"],
-          "sys_ui_policy.script_false": ["iso", "noniso"],
-          "sys_ui_script": null,
-        }
-    },
     rules: allRules,
     environments: {
         sn_server_global: { globals: {
@@ -312,6 +275,38 @@ module.exports = {
     configs: {
         servicenow: {
             extends: ["eslint:recommended"],
+            settings: {
+                ootbTables: {
+                  "catalog_script_client": ["iso", "noniso"],
+                  "ecc_agent_script": null,
+                  "ecc_agent_script_include": null,
+                  "expert_script_client": ["iso", "noniso"],
+                  "sa_pattern_prepost_script": ["global", "scoped"],
+                  "sc_cat_item_producer": ["global", "scoped"],
+                  "sysauto_script": ["global", "scoped"],
+                  "sysevent_script_action": ["global", "scoped"],
+                  "sys_processor": ["global", "scoped"],
+                  "sys_script": ["global", "scoped"],
+                  "sys_script_client": ["iso", "noniso"],
+                  "sys_script_email": ["global", "scoped"],
+                  "sys_script_fix": ["global", "scoped"],
+                  "sys_script_include": ["global", "scoped"],
+                  "sys_script_validator": null,
+                  "sys_security_acl": ["global", "scoped"],
+                  "sys_transform_entry": ["global", "scoped"],
+                  "sys_transform_map": ["global", "scoped"],
+                  "sys_transform_script": ["global", "scoped"],
+                  "sys_web_service": ["global", "scoped"],
+                  "sys_ws_operation": ["global", "scoped"],
+                  "sys_ui_action": [
+                    "global", "scoped", "iso", "noniso", "iso_globalaction",
+                    "noniso_globalaction", "iso_scopedaction", "noniso_scopedaction"
+                  ],
+                  "sys_ui_policy.script_true": ["iso", "noniso"],
+                  "sys_ui_policy.script_false": ["iso", "noniso"],
+                  "sys_ui_script": null,
+                }
+            },
             rules: {
                 "operator-assignment": "error",
                 "no-useless-return": "error",
@@ -353,12 +348,9 @@ module.exports = {
                 //"no-extra-parens": "warn",  In practice, too stringent
                 "no-mixed-spaces-and-tabs": "off",
 
-                // 'invalid-table-alt' purposefully fails tests that aren't for a
-                // supported override subset:
-                 ...ruleConfigs("error",
-                   ["invalid-table-alt", "immediate-iife",
-                    "no-boilerplate", "no-useless-rtrn"]),
-                 ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
+                ...ruleConfigs("error",
+                  ["invalid-table-alt", "immediate-iife", "no-boilerplate", "no-useless-rtrn"]),
+                ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
             },
 
             overrides

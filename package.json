@@ -36,6 +36,8 @@
   },
   "dependencies": {
     "@admc.com/apputil": "^2.0.6",
+    "joi": "^17.6.0",
+    "json-easy-strip": "^1.0.6",
     "requireindex": "^1.2.0"
   }
 }

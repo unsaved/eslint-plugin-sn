@@ -2,9 +2,12 @@
 
 "use strict";
 
-const { AppErr, conciseCatcher, conciseErrorHandler, getAppVersion } = require("@admc.com/apputil");
+const { AppErr, conciseCatcher, conciseErrorHandler, getAppVersion, isPlainObject } =
+  require("@admc.com/apputil");
 const { validate } = require("@admc.com/bycontract-plus");
+const joi = require("joi");
 
+const RCFILE = "sneslintrc.json";
 const fs = require("fs");
 const path = require("path");
 const childProcess = require("child_process");
@@ -112,6 +115,7 @@ function isSI(tableName) {
 let passThruArgs;
 let errorCount = 0;
 let fileFailureCount = 0;
+let allTables;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -127,16 +131,17 @@ function lintFile(file, table, alt, readStdin=false) {
     const eslintArgs = passThruArgs ? passThruArgs.slice() : [];
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
     const content = fs.readFileSync(readStdin ? 0 : file, "utf8");
+    if (!(table in allTables)) throw new AppErr(`Unsupported table: ${table}`);
     let pseudoDir = table;
+    if (alt === undefined && Array.isArray(allTables[table])) alt = allTables[table][0];
     if (alt === undefined) {
-        // Goal here is to set the default alt to match simplest created ServiceNow record
-        if (!table.includes("mid_") && !table.includes("ecc")
-          && !table.includes("_client")
-          && table !== "sys_ui_script" && table !== "sys_script_validator"
-          && !table.startsWith("sys_ui_policy") && !table.startsWith("sa_")) alt = "global";
-        else if (table.includes("_client") || table.startsWith("sys_ui_policy")) alt = "iso";
+        if (allTables[table] !== null)
+            throw new AppErr(`Table ${table} must use one of these alts: ${allTables[table]}`);
+    } else {
+        if (allTables[table] === null || !allTables[table].includes(alt))
+            throw new AppErr(`'${alt}' not among table ${table} alts: ${allTables[table]}`);
+        pseudoDir = path.join(pseudoDir, alt);
     }
-    if (alt !== undefined) pseudoDir = path.join(pseudoDir, alt);
     const pseudoPath = path.join(pseudoDir, baseName);
     console.debug(`pseudoPath: ${pseudoPath}`);
     if (objName && isSI(table)) eslintArgs.splice(0, 0, "--rule",
@@ -264,6 +269,73 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(yargsDict._[0])),
           yargsDict.a, true));
     const files = [];
+    let customRC;
+
+    if (!fs.existsSync(RCFILE) || !fs.statSync(RCFILE).isFile(RCFILE))
+        throw new AppErr(`'${RCFILE}' does not exists or is not a file`);
+    const snesExports = require("./exports");
+    if (!snesExports || !isPlainObject(snesExports))
+        throw new AppErr("eslint-plugin-rc does not have valid 'exports.js'");
+    joi.assert(snesExports, joi.object({
+        configs: joi.object({
+            servicenow: joi.object({
+                settings: joi.object({
+                    ootbTables: joi.object()
+                }).unknown()
+            }).unknown()
+        }).unknown()
+    }).unknown(), new AppErr(
+        "eslint-plugin-rc exports.js missing 'configs.servicenow.settings.ootbTables' map"),
+      { presence: "required" });
+    const defaultTables = snesExports.configs.servicenow.settings.ootbTables;
+    allTables = {};
+    for (const t in defaultTables)
+        if (Array.isArray(defaultTables[t])) {
+            if (defaultTables[t].length < 1)
+                throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.defaultTables' "
+                  + `length ${defaultTables[t].length}`);
+            if (defaultTables[t].some(a => typeof a !== "string"))
+                throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.defaultTables' "
+                  + "has a non-string element");
+            allTables[t] = defaultTables[t];
+        } else if (defaultTables[t] === null) {
+            allTables[t] = null;
+        } else {
+            throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.defaultTables' "
+              + `has unexpected type: ${typeof defaultTables[t]}`);
+        }
+    try {
+        customRC = require("json-easy-strip")(RCFILE);
+    } catch (parseE) {
+        throw new AppErr(`'${RCFILE}' does not contain valid JSON: ${parseE}`);
+    }
+    if (!isPlainObject(customRC))
+        throw new AppErr(`'${RCFILE}' does not contain JSON object but: ${typeof customRC}`);
+    if ("settings" in customRC) {
+        if (!isPlainObject(customRC.settings))
+            throw new AppErr(`'${RCFILE}' 'settings' not a plain object`);
+        if ("customTables" in customRC.settings) {
+            const custTables = customRC.settings.customTables;
+            if (!isPlainObject(custTables))
+                throw new AppErr(`'${RCFILE}' optional 'settings.customTables' not a plain object`);
+            for (const t in custTables)
+                if (Array.isArray(custTables[t])) {
+                    if (custTables[t].length < 1)
+                        throw new AppErr(`'${RCFILE}' 'settings.customTables' `
+                          + `length ${custTables[t].length}`);
+                    if (custTables[t].some(a => typeof a !== "string"))
+                        throw new AppErr(`'${RCFILE}' 'settings.customTables' `
+                          + "has a non-string element");
+                    allTables[t] = custTables[t];
+                } else if (custTables[t] === null) {
+                    allTables[t] = null;
+                } else {
+                    throw new AppErr(`'${RCFILE}' 'settings.customTables' `
+                      + `has unexpected type: ${typeof custTables[t]}`);
+                }
+        }
+    }
+
     yargsDict._.forEach(inputNode => {
         if (!fs.existsSync(inputNode)) throw new AppErr(`'${inputNode}' does not exists`);
         if (fs.statSync(inputNode).isDirectory(inputNode)) {
