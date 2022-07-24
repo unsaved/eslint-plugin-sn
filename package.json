@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha",
     "lint": "eslint",
-    "toc": "node -p \"require('markdown-toc').insert(require('fs').readFileSync('doc/README.md', 'utf8'))\" > README.md"
+    "toc": "chmod u+w README.md && node -p \"require('markdown-toc').insert(require('fs').readFileSync('doc/README.md', 'utf8'))\" > README.md && chmod u-w README.md"
   },
   "repository": {
     "type": "git",

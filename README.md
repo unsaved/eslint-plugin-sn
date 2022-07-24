@@ -36,10 +36,10 @@ and linting of field sys_script_client.script must specify alt of either ``iso``
 
 The provided config generator uses alts in overrides/files entries, and you can add or
 customize with overrides/file entries in your own "sneslintrc.json" file.
-Our design design leverages ESLint override/files entries.
+Our design leverages ESLint override/files entries.
 Normally ESLint override/files entries are matched against input file paths.
 We instead use this switching to provide the needed ServiceNow capability toggling by internally
-generating pseudopaths which contain the targeted ServiceNow table and (usually) alt.
+generating pseudopaths which always contain the targeted ServiceNow table and an alt.
 You can see the mappings between pseudo paths and ServiceNow script capabilities in file
 "exports.js".
 You can override or add your own mappings of pseudo paths with an "sneslintrc.json" file.
@@ -54,6 +54,8 @@ pseudo paths TO ESLint.  This allows you to
 1. Specify _alt_ with -a switch, such as 'scoped' vs. 'global' for ServiceNow app scope;
    or 'iso' vs. 'noniso' for Client Script isolation mode.
    (From scripting perspective app scope doesn't matter for client scripts).
+   Each table has a default alt value, so the switch is optional.
+   (Consequently, for cases where table has only one alt value, the -a switch adds no benefit).
 1. Indicate target ServiceNow table (so we know which rules to apply) with -t switch, OR
 1. If you do not specify -t (which overrides) then target table is determined by the directory
    name in which each script resides.
@@ -112,15 +114,12 @@ the Discovery plugin.
 
 To support a new target table and/or alt, add new override elements to your 'sneslitrc.json'
 file, with your files values including the table and (optional) alt.
-To mark the new table/alt as supported, you must add the following special rule to one
-overrides element.
-```
-    "@admc.com/sn/invalid-table-altscope": "off"
-```
-(The rule name will change to @admc.com/sn/invalid-table-alt" for consistency with version 2.x.y).
-Just for accurate error messages, when you start handling paths with overrides/file entries you
-can also add to "sneslintrc.json" 'settings' for customTables and/or custom alts, both which take
-a string array.
+
+You need to also add a ``customTables`` element to "sneslintrc.json".
+The value is a mapping from new table name to the list of supported alt names, with the default alt name first.
+If you are modifying an out-of-the-box table (adding or removing alts),
+  just specify the new alt list and it will override.
+For table with no alts, the value needs to be null instead of a list.
 
 Our globals list for intra-scoped-SI accesses is purposefully over-liberal.
 There is no difficulty restricting intra-scope access (including to or from global) because the
@@ -138,35 +137,33 @@ that you should be accessing.
 ## Supported ServiceNow scriptlet types
 ### Supported Now
 Alphabetically
-|Table                        |Alts
+|Table                        |Alts (default bolded)
 |---                          |---
-|catalog_script_client        |iso, noniso
-|ecc_agent_script             |\<NONE\>[^1]
-|ecc_agent_script_include     |\<NONE\>[^1]
-|expert_script_client         |iso, noniso
-|sa_pattern_prepost_script    |global, scoped
-|sc_cat_item_producer         |global, scoped
-|sysauto_script               |global, scoped
-|sysevent_script_action       |global, scoped
-|sys_processor                |global, scoped
-|sys_script                   |global, scoped
-|sys_script_client            |iso, noniso
-|sys_script_email             |global, scoped
-|sys_script_fix               |global, scoped
-|sys_script_include           |global, scoped
-|sys_script_validator         |\<NONE\>[^1]
-|sys_security_acl             |global, scoped
-|sys_transform_entry          |global, scoped
-|sys_transform_map            |global, scoped
-|sys_transform_script         |global, scoped
-|sys_web_service              |global, scoped
-|sys_ws_operation             |global, scoped
-|sys_ui_action                |global, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
-|sys_ui_policy.script_true    |iso, noniso
-|sys_ui_policy.script_false   |iso, noniso
-|sys_ui_script                |\<NONE\>[^1]
-
-[^1]: \<NONE\> means that you must specify no alt for the table
+|catalog_script_client        |**iso**, noniso
+|ecc_agent_script             |**all**
+|ecc_agent_script_include     |**all**
+|expert_script_client         |**iso**, noniso
+|sa_pattern_prepost_script    |**global**, scoped
+|sc_cat_item_producer         |**global**, scoped
+|sysauto_script               |**global**, scoped
+|sysevent_script_action       |**global**, scoped
+|sys_processor                |**global**, scoped
+|sys_script                   |**global**, scoped
+|sys_script_client            |**iso**, noniso
+|sys_script_email             |**global**, scoped
+|sys_script_fix               |**global**, scoped
+|sys_script_include           |**global**, scoped
+|sys_script_validator         |**all**
+|sys_security_acl             |**global**, scoped
+|sys_transform_entry          |**global**, scoped
+|sys_transform_map            |**global**, scoped
+|sys_transform_script         |**global**, scoped
+|sys_web_service              |**global**, scoped
+|sys_ws_operation             |**global**, scoped
+|sys_ui_action                |**global**, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
+|sys_ui_policy.script_true    |**iso**, noniso
+|sys_ui_policy.script_false   |**iso**, noniso
+|sys_ui_script                |**all**
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client
 
@@ -175,11 +172,11 @@ In very rough order of priority
 |Table                        |Alts
 |---                          |---
 |custom fields                |TBD
-|sp_widget.script             |global, scoped
+|sp_widget.script             |**global**, scoped
 |sp_widget.client_script      |TBD
 |sys_cb_topic                 |TBD
-|sa_pattern                   |probably none
-|mid_limited_resource_script  |none
+|sa_pattern                   |probably all
+|mid_limited_resource_script  |**all**
 
 ## Development
 Though you can test the individual rules from this project, due to eslint-plugin system design,
@@ -196,7 +193,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
 |---                         |---    |---              |---
 |immediate-iife              |error  |all              |IIFEs must execute immediately
-|invalid-table-altscope      |error  |Unsupported[^2]  |Invalid table/alt combination
+|invalid-table-alt           |error  |Unsupported[^2]  |Invalid table/alt combination
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
 |log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented

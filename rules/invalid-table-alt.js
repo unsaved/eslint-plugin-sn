@@ -51,7 +51,7 @@ const esLintObj = {
                         context.report({node, messageId: altMessageId, data: {
                             table: t,
                             alt: a,
-                            allTables: allTables[t],
+                            alts: allTables[t],
                         }});
                 } else {
                     context.report({node, messageId: tableMessageId, data: {
