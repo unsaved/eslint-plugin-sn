@@ -36,13 +36,13 @@ const esLintObj = {
                     if (context.settings.testAltScope) a = context.settings.testAltScope;
                 } else {
                     // Imperfect way to distinguish if alt directory or no alt directory.
-                    // We check if that token in that position is a known altscope.
-                    // If we miss it, no major issue since this is only for error reporting.
+                    // We check if that token in table position is a supported table that has
+                    // alts defined.
                     const ex =
                       /([^\\/]+)[\\/]([^\\/]+)[\\/][^\\/]+[.]js/.exec(context.getFilename());
                     if (!ex)
                         throw new Error(`Malformatted ESLint filename: ${context.getFilename()}`);
-                    if (allAlts.includes(ex[2])) {
+                    if (Array.isArray(allTables[ex[1]])) {
                         t = ex[1]; a = ex[2];
                     } else {
                         t = ex[2]; a = '<NONE>';
