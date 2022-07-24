@@ -105,9 +105,11 @@ overrides element.
     "@admc.com/sn/invalid-table-altscope": "off"
 ```
 (The rule name will change to @admc.com/sn/invalid-table-alt" for consistency with version 2.x.y).
-Just for accurate error messages, when you start handling paths with overrides/file entries you
-can also add to "sneslintrc.json" 'settings' for customTables and/or custom alts, both which take
-a string array.
+You need to also add a ``customTables`` element to "sneslintrc.json".
+The value is a mapping from new table name to the list of supported alt names, with the default alt name first.
+If you are modifying an out-of-the-box table (adding or removing alts),
+  just specify the new alt list and it will override.
+For table with no alts, the value needs to be null instead of a list.
 
 Our globals list for intra-scoped-SI accesses is purposefully over-liberal.
 There is no difficulty restricting intra-scope access (including to or from global) because the

@@ -257,6 +257,38 @@ overrides.filter(oRide => oRide.files.length === 1 && !oRide.files[0].includes("
   });
 
 module.exports = {
+    settings: {
+        ootbTables: {
+          "catalog_script_client": ["iso", "noniso"],
+          "ecc_agent_script": null,
+          "ecc_agent_script_include": null,
+          "expert_script_client": ["iso", "noniso"],
+          "sa_pattern_prepost_script": ["global", "scoped"],
+          "sc_cat_item_producer": ["global", "scoped"],
+          "sysauto_script": ["global", "scoped"],
+          "sysevent_script_action": ["global", "scoped"],
+          "sys_processor": ["global", "scoped"],
+          "sys_script": ["global", "scoped"],
+          "sys_script_client": ["iso", "noniso"],
+          "sys_script_email": ["global", "scoped"],
+          "sys_script_fix": ["global", "scoped"],
+          "sys_script_include": ["global", "scoped"],
+          "sys_script_validator": null,
+          "sys_security_acl": ["global", "scoped"],
+          "sys_transform_entry": ["global", "scoped"],
+          "sys_transform_map": ["global", "scoped"],
+          "sys_transform_script": ["global", "scoped"],
+          "sys_web_service": ["global", "scoped"],
+          "sys_ws_operation": ["global", "scoped"],
+          "sys_ui_action": [
+            "global", "scoped", "iso", "noniso", "iso_globalaction",
+            "noniso_globalaction", "iso_scopedaction", "noniso_scopedaction"
+          ],
+          "sys_ui_policy.script_true": ["iso", "noniso"],
+          "sys_ui_policy.script_false": ["iso", "noniso"],
+          "sys_ui_script": null,
+        }
+    },
     rules: allRules,
     environments: {
         sn_server_global: { globals: {
