@@ -63,7 +63,7 @@ Directories are searched recursively for *.js files, with exclusions, like
   }).
   option("a", {
       describe: "optional scope-alternative, such as 'global' or 'scoped' for server scripts, "
-        + "or 'iso' or 'noniso' for client scripts",
+        + "or 'iso' or 'noniso' for client scripts.  Defaults to the default alt for the table.",
       type: "string",
   }).
   option("c", {
@@ -132,17 +132,10 @@ function lintFile(file, table, alt, readStdin=false) {
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
     const content = fs.readFileSync(readStdin ? 0 : file, "utf8");
     if (!(table in allTables)) throw new AppErr(`Unsupported table: ${table}`);
-    let pseudoDir = table;
-    if (alt === undefined && Array.isArray(allTables[table])) alt = allTables[table][0];
-    if (alt === undefined) {
-        if (allTables[table] !== null)
-            throw new AppErr(`Table ${table} must use one of these alts: ${allTables[table]}`);
-    } else {
-        if (allTables[table] === null || !allTables[table].includes(alt))
-            throw new AppErr(`'${alt}' not among table ${table} alts: ${allTables[table]}`);
-        pseudoDir = path.join(pseudoDir, alt);
-    }
-    const pseudoPath = path.join(pseudoDir, baseName);
+    if (alt === undefined) alt = allTables[table][0];
+    if (!allTables[table].includes(alt))
+        throw new AppErr(`'${alt}' not among table ${table} alts: ${allTables[table]}`);
+    const pseudoPath = path.join(table, alt, baseName);
     console.debug(`pseudoPath: ${pseudoPath}`);
     if (objName && isSI(table)) eslintArgs.splice(0, 0, "--rule",
         JSON.stringify({ "no-unused-vars": ["error", { varsIgnorePattern: `^${objName}$` }] }));
@@ -287,22 +280,20 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
     }).unknown(), new AppErr(
         "eslint-plugin-rc exports.js missing 'configs.servicenow.settings.ootbTables' map"),
       { presence: "required" });
-    const defaultTables = snesExports.configs.servicenow.settings.ootbTables;
+    const ootbTables = snesExports.configs.servicenow.settings.ootbTables;
     allTables = {};
-    for (const t in defaultTables)
-        if (Array.isArray(defaultTables[t])) {
-            if (defaultTables[t].length < 1)
-                throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.defaultTables' "
-                  + `length ${defaultTables[t].length}`);
-            if (defaultTables[t].some(a => typeof a !== "string"))
-                throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.defaultTables' "
+    for (const t in ootbTables)
+        if (Array.isArray(ootbTables[t])) {
+            if (ootbTables[t].length < 1)
+                throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.ootbTables' "
+                  + `length ${ootbTables[t].length}`);
+            if (ootbTables[t].some(a => typeof a !== "string"))
+                throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.ootbTables' "
                   + "has a non-string element");
-            allTables[t] = defaultTables[t];
-        } else if (defaultTables[t] === null) {
-            allTables[t] = null;
+            allTables[t] = ootbTables[t];
         } else {
-            throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.defaultTables' "
-              + `has unexpected type: ${typeof defaultTables[t]}`);
+            throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.ootbTables' "
+              + `has unexpected type: ${typeof ootbTables[t]}`);
         }
     try {
         customRC = require("json-easy-strip")(RCFILE);
@@ -319,6 +310,7 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
             if (!isPlainObject(custTables))
                 throw new AppErr(`'${RCFILE}' optional 'settings.customTables' not a plain object`);
             for (const t in custTables)
+                /* eslint-disable max-depth */
                 if (Array.isArray(custTables[t])) {
                     if (custTables[t].length < 1)
                         throw new AppErr(`'${RCFILE}' 'settings.customTables' `
@@ -327,12 +319,11 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
                         throw new AppErr(`'${RCFILE}' 'settings.customTables' `
                           + "has a non-string element");
                     allTables[t] = custTables[t];
-                } else if (custTables[t] === null) {
-                    allTables[t] = null;
                 } else {
                     throw new AppErr(`'${RCFILE}' 'settings.customTables' `
                       + `has unexpected type: ${typeof custTables[t]}`);
                 }
+                /* eslint-enable max-depth */
         }
     }
 

@@ -154,12 +154,12 @@ const overrides = [
           ...ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
         },
     }, {
-        files: ["**/ecc_agent_script@(|_include)/*.js"],
+        files: ["**/ecc_agent_script@(|_include)/all/*.js"],
         env: {"@admc.com/sn/sn_mid": true },
     }, {
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator)/*.js",
+            "**/@(sys_ui_script|sys_script_validator)/all/*.js",
         ],
         parserOptions: { ecmaVersion: 6 },
         rules: {
@@ -180,7 +180,7 @@ const overrides = [
           ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls"]),
         },
     }, {
-        files: ["**/sys_ui_script/*.js"],
+        files: ["**/sys_ui_script/*/*.js"],
         rules: { "prefer-template": "off", },
     }, {
         files: ["**/sys_script/*/*.js"],
@@ -212,7 +212,7 @@ const overrides = [
     }, {
         files: [
             "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
-            "**/@(sys_ui_script|sys_script_validator)/*.js",
+            "**/@(sys_ui_script|sys_script_validator)/*/*.js",
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
@@ -236,7 +236,7 @@ const overrides = [
         files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
     }, {
-        files: ["**/sys_script_validator/*.js"],
+        files: ["**/sys_script_validator/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^validate$", }] },
     },
 ];
@@ -278,8 +278,8 @@ module.exports = {
             settings: {
                 ootbTables: {
                   "catalog_script_client": ["iso", "noniso"],
-                  "ecc_agent_script": null,
-                  "ecc_agent_script_include": null,
+                  "ecc_agent_script": ["all"],
+                  "ecc_agent_script_include": ["all"],
                   "expert_script_client": ["iso", "noniso"],
                   "sa_pattern_prepost_script": ["global", "scoped"],
                   "sc_cat_item_producer": ["global", "scoped"],
@@ -291,7 +291,7 @@ module.exports = {
                   "sys_script_email": ["global", "scoped"],
                   "sys_script_fix": ["global", "scoped"],
                   "sys_script_include": ["global", "scoped"],
-                  "sys_script_validator": null,
+                  "sys_script_validator": ["all"],
                   "sys_security_acl": ["global", "scoped"],
                   "sys_transform_entry": ["global", "scoped"],
                   "sys_transform_map": ["global", "scoped"],
@@ -304,7 +304,7 @@ module.exports = {
                   ],
                   "sys_ui_policy.script_true": ["iso", "noniso"],
                   "sys_ui_policy.script_false": ["iso", "noniso"],
-                  "sys_ui_script": null,
+                  "sys_ui_script": ["all"],
                 }
             },
             rules: {
