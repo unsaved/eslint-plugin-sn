@@ -20,6 +20,6 @@
   "sys_transform_script": { "iifeParams": ["source", "map", "log", "target"] },
   "sys_security_acl": { "writable": ["answer"] },
   "sys_transform_entry": { "writable": ["answer"] }
-  /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because it the globals
+  /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because the globals
    * are dependent upon altscope not just table name */
 }

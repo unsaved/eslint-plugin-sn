@@ -106,7 +106,6 @@ You need to also add a ``customTables`` element to "sneslintrc.json".
 The value is a mapping from new table name to the list of supported alt names, with the default alt name first.
 If you are modifying an out-of-the-box table (adding or removing alts),
   just specify the new alt list and it will override.
-For table with no alts, the value needs to be null instead of a list.
 
 Our globals list for intra-scoped-SI accesses is purposefully over-liberal.
 There is no difficulty restricting intra-scope access (including to or from global) because the

@@ -1,7 +1,9 @@
 "use strict";
+const { isPlainObject } = require("@admc.com/apputil");
 const path = require("path");
 const fs = require("fs");
 const globalsDir = require("./lib/resolveGlobalsDir");
+const jsonEasyStrip = require("json-easy-strip");
 if (process.env.DEBUG) console.debug(`Using globalsDir '${globalsDir}'`);
 
 /**
@@ -45,64 +47,16 @@ fp = path.join(globalsDir, "tableSpecifics.json");
 if (!fs.existsSync(fp))
     throw new Error(`SN Plugin does not find file 'tableSpecifics.json'`);
 try {
-    tableSpecificMap = JSON.parse(fs.readFileSync(fp, "utf8").replace(/\r/g, "").
-          replace(/^[ \t]*[/][*][\S\s]*?[*][/]/mg, "").
-          replace(/^[ \t]*[/][/][^\n]*\n/mg, "").replace(/^[ \t]*\n/mg, ""));
+    tableSpecificMap = jsonEasyStrip(fp);
 } catch (parseE) {
     throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
 }
 fp = path.join(globalsDir, "tableSpecifics-local.json");
 if (fs.existsSync(fp)) try {
-    tableSpecificMap =
-      {...tableSpecificMap, ...JSON.parse(fs.readFileSync(fp, "utf8"))};
+    tableSpecificMap = {...tableSpecificMap, ...jsonEasyStrip(fp)};
 } catch (parseE) {
     throw new Error(`Failed to parse JSON from '${fp}': ${parseE.message}`);
 }
-const tableSpecificEntries = table => {
-    if (!(table in tableSpecificMap)) return null;
-        //throw new Error(`'tableSpecifics.json' file has no entry for '${table}'`);
-    let k;
-    const overrideEntries = {};
-    const testAndAddGlobals = function(newKey) {
-        if (typeof newKey !== "string") throw new Error(
-            `Non-string value '${newKey}' for table '${table}' in 'tableSpecifics*.json'`);
-        if (overrideEntries.globals === undefined) overrideEntries.globals = {};
-        overrideEntries.globals[newKey] = String(this);
-    };
-    const testAndAddRule = function(pList) {
-        if (!Array.isArray(pList)) throw new Error(
-            `Non-Array value '${pList}' for table '${table}' in 'tableSpecifics*.json'`);
-        if (overrideEntries.rules === undefined) overrideEntries.rules = {};
-        overrideEntries.rules["@admc.com/sn/sn-workaround-iife"] = ["error", {
-            table,
-            paramCallVars: pList,
-        }];
-    };
-
-    if (Array.isArray(tableSpecificMap[table])) {
-        overrideEntries.globals = {};
-        tableSpecificMap[table].forEach(g => {
-            if (typeof g !== "string") new Error(
-                `Non-string value '${g}' for table '${table}' list in 'tableSpecifics*.json'`);
-            overrideEntries.globals[g] = "readonly";
-        });
-    } else if (typeof tableSpecificMap[table] === "object") {
-        for (k in tableSpecificMap[table]) switch (k) {
-            case "iifeParams":
-                testAndAddRule(tableSpecificMap[table].iifeParams);
-            case "readonly":  // eslint-disable-line no-fallthrough
-            case "writable":
-                tableSpecificMap[table][k].forEach(testAndAddGlobals,
-                  k === "iifeParams" ? "readonly" : k);
-                break;
-            default:
-                new Error(
-                  `Unexpected key value ${k} for table '${table}' in 'tableSpecifics*.json'`);
-        }
-    }
-    return overrideEntries;
-};
-
 
 const allRules = require("requireindex")(path.join(__dirname, "rules"));
 // Due to hyphens in the names, there are hyphens in the object keys.
@@ -132,9 +86,6 @@ const clientConstsCommon =
   globalsFromFiles("client-commonForm", "client-commonList-only", "windowMembers");
 
 const overrides = [
-    // Overrides entries with only a 'files' member are present only to trigger automatic additions
-    // according to tableSpecifics*.json file(s).  Version 2.x.y will eliminate the need for these
-    // entries.
     {
         files: [
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
@@ -183,30 +134,6 @@ const overrides = [
         files: ["**/sys_ui_script/*/*.js"],
         rules: { "prefer-template": "off", },
     }, {
-        files: ["**/sys_script/*/*.js"],
-    }, {
-        files: ["**/sys_processor/*/*.js"],
-    }, {
-        files: ["**/sys_script_email/*/*.js"],
-    }, {
-        files: ["**/sys_transform_map/*/*.js"],
-    }, {
-        files: ["**/sys_transform_script/*/*.js"],
-    }, {
-        files: ["**/sys_transform_entry/*/*.js"],
-    }, {
-        files: ["**/sys_security_acl/*/*.js"],
-    }, {
-        files: ["**/sc_cat_item_producer/*/*.js"],
-    }, {
-        files: ["**/sysevent_script_action/*/*.js"],
-    }, {
-        files: ["**/sa_pattern_prepost_script/*/*.js"],
-    }, {
-        files: ["**/sys_ws_operation/*/*.js"],
-    }, {
-        files: ["**/sys_web_service/*/*.js"],
-    }, {
         files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
         env: {"@admc.com/sn/sn_client_iso": true },
     }, {
@@ -221,7 +148,7 @@ const overrides = [
     }, {
         // All ui_actions EXCEPT client only iso and noniso:
         files: ["**/sys_ui_action/@(global|scoped|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
-        globals: { action: false },
+        globals: { action: "readonly" },
     }, {
         files: ["**/@(sys|catalog)_script_client/*/*.js"],
         rules: {
@@ -241,15 +168,71 @@ const overrides = [
     },
 ];
 
-overrides.filter(oRide => oRide.files.length === 1 && !oRide.files[0].includes("@")).
-  forEach(oRide => {
-      const ex = /\w+/.exec(oRide.files[0]);
-      if (!ex) return;
-      const entries = tableSpecificEntries(ex[0]);
-      if (entries === null) return;
-      if (entries.globals) oRide.globals = entries.globals;
-      if (entries.globals) oRide.rules = entries.rules;
-  });
+let entry, writables, readables, iifeParams, overridesEntry, overridesFiles,
+  overridesRules, overridesGlobals;
+const filesFinder = function(ent) { return ent.files.includes(String(this)); };
+const addGlobal = function(newKey) { this.toMap[newKey] = String(this.access); };
+for (const table in tableSpecificMap) {
+    readables = writables = iifeParams = undefined;  // reset for this entry
+    entry = tableSpecificMap[table];
+    if (Array.isArray(entry)) {
+        readables = entry;
+    } else if (isPlainObject(entry)) {
+        if ("readable" in entry) readables = entry.readable;
+        if ("writable" in entry) writables = entry.writable;
+        if ("iifeParams" in entry) iifeParams = readables = entry.iifeParams;
+    } else {
+        throw new Error(`tableSpecificMap entry for ${table} is of unsupported type`);
+    }
+    if (readables === undefined && writables === undefined) {
+        console.warn(`It appears that there is empty useless specificTables entry for ${table}`);
+        continue;
+    }
+
+    //Validate all Array entries
+    if (readables !== undefined) {
+        if (!Array.isArray(readables))
+            throw new Error(`tableSpecificMap entry for ${table} readables is not an array`);
+        readables.forEach(ts => { if (typeof ts !== "string")
+            throw new Error(`A tableSpecificMap ${table} readables entry not a string`);
+        });
+    }
+    if (writables !== undefined) {
+        if (!Array.isArray(writables))
+            throw new Error(`tableSpecificMap entry for ${table} writables is not an array`);
+        writables.forEach(ts => { if (typeof ts !== "string")
+            throw new Error(`A tableSpecificMap ${table} writables entry not a string`);
+        });
+    }
+    overridesFiles = `**/${table}/*/*.js`;
+    overridesEntry = overrides.find(filesFinder, overridesFiles);
+    if (!overridesEntry) {
+        overridesEntry = { files: overridesFiles };
+        overrides.push(overridesEntry);
+    }
+    if (iifeParams) {
+        if ("rules" in overridesEntry) {
+            overridesRules = overridesEntry.rules;
+        } else {
+            overridesRules = {};
+            overridesEntry.rules = overridesRules;
+        }
+        overridesEntry.rules["@admc.com/sn/sn-workaround-iife"] = ["error", {
+            table,
+            paramCallVars: iifeParams,
+        }];
+    }
+    if ("globals" in overridesEntry) {
+        overridesGlobals = overridesEntry.globals;
+    } else {
+        overridesGlobals = {};
+        overridesEntry.globals = overridesGlobals;
+    }
+    if (readables !== undefined)
+        readables.forEach(addGlobal, {toMap: overridesGlobals, access: "readable"});
+    if (writables !== undefined)
+        writables.forEach(addGlobal, {toMap: overridesGlobals, access: "writable"});
+}
 
 module.exports = {
     rules: allRules,

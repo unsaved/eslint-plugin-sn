@@ -27,12 +27,14 @@ sys_scopes used by the records, use a server script like those provided at
 "/resources/gather*.js".
 
 For accessing scoped SIs you will need to add entries to your local
-"sneslintrc.json" file.  Consider defining your own "altscope".  In
+"sneslintrc.json" file.  Consider defining your own "alt".  In
 "sneslintrc.json" you would create an environment with the list of globals of your
-altscope SIs, update existing server overrides.files entries (depending whether
+alt SIs, update existing server overrides.files entries (depending whether
 your scripts have access of public vs. package_private), and add a new overrides
 object for intra-scope access.
-After that you would use your new altscope with snLint -a switch.
+After that you would use your new alt with snLint -a switch.
+The "resources" directory has some sample *.js scripts to make it easier generate
+the needed list.
 
 If you only work with one or a few scopes, then a perfect and easy customization
 is to just empty the "scopedSIs.txt" file (leave it there empty or with a
