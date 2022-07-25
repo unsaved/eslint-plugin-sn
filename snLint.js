@@ -266,11 +266,6 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
     }
     if (yargsDict.t && !/^[a-z][\w.]*$/.test(yargsDict.t))
         throw new AppErr(`Target table from -t switch is invalid: ${yargsDict.t}`);
-    if (yargsDict.p)
-        process.exit(lintFile(yargsDict._[0],
-          yargsDict.t ? yargsDict.t : path.basename(path.dirname(yargsDict._[0])),
-          yargsDict.a, true));
-    const files = [];
     let customRC;
 
     if (!fs.existsSync(RCFILE) || !fs.statSync(RCFILE).isFile(RCFILE))
@@ -335,7 +330,12 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
                 /* eslint-enable max-depth */
         }
     }
+    if (yargsDict.p)
+        process.exit(lintFile(yargsDict._[0],
+          yargsDict.t ? yargsDict.t : path.basename(path.dirname(yargsDict._[0])),
+          yargsDict.a, true));
 
+    const files = [];
     yargsDict._.forEach(inputNode => {
         if (!fs.existsSync(inputNode)) throw new AppErr(`'${inputNode}' does not exists`);
         if (fs.statSync(inputNode).isDirectory(inputNode)) {
