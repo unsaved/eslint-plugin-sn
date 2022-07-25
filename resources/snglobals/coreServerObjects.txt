@@ -2,3 +2,4 @@ current
 gs
 global
 sn_ws_err
+Class

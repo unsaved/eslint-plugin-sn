@@ -399,7 +399,6 @@ CiscoCliSensor
 CISETReprocessCheck
 CIUtils
 ci_admin_console_utility
-Class
 ClassifierProbes
 CleanTemplateInputName
 clearMIDEnvCache

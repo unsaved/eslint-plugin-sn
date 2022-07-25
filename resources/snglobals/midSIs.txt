@@ -264,7 +264,6 @@ CIMQuery2Tool
 CiscoAceXmlProbe
 CiscoCliProbe
 CiscoGSSProbe
-Class
 CloudAPIBase
 CloudRESTAPIInvoker
 CloudRESTRequestSigningUtil
