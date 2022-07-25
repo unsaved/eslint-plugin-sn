@@ -81,8 +81,8 @@ function ruleConfigs(mapVals, ruleNames) {
 }
 
 const clientRules = ruleConfigs("error", ["no-console-info"]);
-const serverConstsCommon = globalsFromFiles("coreServerObjects", "SIScopes");
-const clientConstsCommon =
+const serverGlobalsCommon = globalsFromFiles("coreServerObjects", "SIScopes");
+const clientGlobalsCommon =
   globalsFromFiles("client-commonForm", "client-commonList-only", "windowMembers");
 
 const overrides = [
@@ -238,10 +238,10 @@ module.exports = {
     rules: allRules,
     environments: {
         sn_server_global: { globals: {
-            SNC: false, ...serverConstsCommon, ...globalsFromFiles("globalSIs", "globalAPIs"),
+            SNC: false, ...serverGlobalsCommon, ...globalsFromFiles("globalSIs", "globalAPIs"),
         } },
         sn_server_scoped: { globals: {
-            ...serverConstsCommon,
+            ...serverGlobalsCommon,
             ...globalsFromFiles("scopedSIs"), ...globalsFromFiles("scopedAPIs"),
         } },
         sn_mid: { globals: {
@@ -249,10 +249,10 @@ module.exports = {
         } },
         sn_client_iso: { globals: {
             URL: false,
-            ...clientConstsCommon, ...globalsFromFiles("client-iso-only")
+            ...clientGlobalsCommon, ...globalsFromFiles("client-iso-only")
         } },
         sn_client_noniso: { globals: {
-            ...clientConstsCommon, ...globalsFromFiles("client-noniso-only")
+            ...clientGlobalsCommon, ...globalsFromFiles("client-noniso-only")
         } },
     },
     configs: {
