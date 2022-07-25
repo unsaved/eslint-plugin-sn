@@ -108,16 +108,13 @@ const progName = yargsDict.$0.replace(/^.*[\\/]/, "");  // eslint-disable-line n
 if (!yargsDict.d) console.debug = () => {};
 if (yargsDict.q) console.debug = console.log = console.info = () => {};
 
-function isSI(tableName) {
-    return tableName.includes("_script_include");
-}
-
 let passThruArgs;
 let errorCount = 0;
 let fileFailureCount = 0;
 let allTables;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const ALLOW_DEFINE_CMT = "/* eslint-disable-line no-redeclare, no-unused-vars, max-len */";
 
 /**
  * Returns the number of rule errors for specified script
@@ -130,15 +127,27 @@ function lintFile(file, table, alt, readStdin=false) {
     const objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = passThruArgs ? passThruArgs.slice() : [];
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
-    const content = fs.readFileSync(readStdin ? 0 : file, "utf8");
+    let content = fs.readFileSync(readStdin ? 0 : file, "utf8");
     if (!(table in allTables)) throw new AppErr(`Unsupported table: ${table}`);
     if (alt === undefined) alt = allTables[table][0];
     if (!allTables[table].includes(alt))
         throw new AppErr(`'${alt}' not among table ${table} alts: ${allTables[table]}`);
     const pseudoPath = path.join(table, alt, baseName);
     console.debug(`pseudoPath: ${pseudoPath}`);
-    if (objName && isSI(table)) eslintArgs.splice(0, 0, "--rule",
-        JSON.stringify({ "no-unused-vars": ["error", { varsIgnorePattern: `^${objName}$` }] }));
+    if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
+        /* eslint-disable prefer-template */
+        if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
+            content = content.replace(
+              new RegExp("\\b" + objName + "(\\s*=[^~=<>])"), `${objName} ${ALLOW_DEFINE_CMT}$1`);
+            console.warn("Inserted comment directives within SI object assignment");
+        } else if (new RegExp("\\bfunction\\s+" + objName + "\\s*[(]").test(content)) {
+            content = content.replace(
+              new RegExp("\\bfunction(\\s+)" + objName + "(\\s*)[(]"),
+                `function$1${objName} ${ALLOW_DEFINE_CMT}$2(`);
+            console.warn("Inserted comment directives within SI function definition");
+        }
+        /* eslint-enable prefer-template */
+    }
     eslintArgs.splice(0, 0,
         path.join(require.resolve("eslint"), "../../bin/eslint.js"),
         "-c",
