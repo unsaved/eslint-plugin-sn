@@ -60,8 +60,11 @@ UNIX users will need root privileges, so run this as root or under sudo.
 
 To use just with your own project, install locally:
 ```
+    npm init -y  # If a ``./package.json`` or ``./node_modules/`` is not already present
     npm i @admc.com/eslint-plugin-sn
 ```
+(Without a ``./package.json`` or ``./node_modules/`` present, npm may install the package to
+another cascade directory).
 
 ## Setup
 With global installation
@@ -84,6 +87,7 @@ To get invocation syntax help:
 Do read the brief output from this command for essential information about specifying files,
 target tables, and alts.
 
+### Color Output Work-around
 As a work-around for a mingw or git-for-windows glitch, if Node.js can't determine tty interactivity
 correctly, then you can export env node variable FORCE_COLOR to true.
 You can check your system with

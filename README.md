@@ -8,6 +8,7 @@
 - [Installation](#installation)
 - [Setup](#setup)
 - [Usage](#usage)
+  * [Color Output Work-around](#color-output-work-around)
 - [Customization](#customization)
 - [Supported ServiceNow scriptlet types](#supported-servicenow-scriptlet-types)
   * [Supported Now](#supported-now)
@@ -73,8 +74,11 @@ UNIX users will need root privileges, so run this as root or under sudo.
 
 To use just with your own project, install locally:
 ```
+    npm init -y  # If a ``./package.json`` or ``./node_modules/`` is not already present
     npm i @admc.com/eslint-plugin-sn
 ```
+(Without a ``./package.json`` or ``./node_modules/`` present, npm may install the package to
+another cascade directory).
 
 ## Setup
 With global installation
@@ -97,6 +101,7 @@ To get invocation syntax help:
 Do read the brief output from this command for essential information about specifying files,
 target tables, and alts.
 
+### Color Output Work-around
 As a work-around for a mingw or git-for-windows glitch, if Node.js can't determine tty interactivity
 correctly, then you can export env node variable FORCE_COLOR to true.
 You can check your system with
@@ -119,7 +124,6 @@ You need to also add a ``customTables`` element to "sneslintrc.json".
 The value is a mapping from new table name to the list of supported alt names, with the default alt name first.
 If you are modifying an out-of-the-box table (adding or removing alts),
   just specify the new alt list and it will override.
-For table with no alts, the value needs to be null instead of a list.
 
 Our globals list for intra-scoped-SI accesses is purposefully over-liberal.
 There is no difficulty restricting intra-scope access (including to or from global) because the
