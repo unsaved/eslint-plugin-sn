@@ -107,6 +107,7 @@ const overrides = [
     }, {
         files: ["**/ecc_agent_script@(|_include)/all/*.js"],
         env: {"@admc.com/sn/sn_mid": true },
+        rules: globalsFromFiles("coreMidObjects"),
     }, {
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
