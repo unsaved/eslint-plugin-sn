@@ -135,6 +135,8 @@ Alphabetically
 |expert_script_client         |**iso**, noniso
 |sa_pattern_prepost_script    |**global**, scoped
 |sc_cat_item_producer         |**global**, scoped
+|sp_widget.script             |**global**, scoped
+|sp_widget.client_script      |**all**
 |sysauto_script               |**global**, scoped
 |sysevent_script_action       |**global**, scoped
 |sys_processor                |**global**, scoped
@@ -162,8 +164,6 @@ In very rough order of priority
 |Table                        |Alts
 |---                          |---
 |custom fields                |TBD
-|sp_widget.script             |**global**, scoped
-|sp_widget.client_script      |TBD
 |sys_cb_topic                 |TBD
 |sa_pattern                   |probably all
 |mid_limited_resource_script  |**all**

@@ -1,5 +1,7 @@
 "use strict";
 
+/* eslint-disable no-template-curly-in-string */
+
 /**
  * N.b. ServiceNow will clobber ${...} refs regardless whether inside of backticks, so that's what
  * we check for.

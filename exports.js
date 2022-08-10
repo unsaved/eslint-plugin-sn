@@ -88,7 +88,7 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script)/@(global|scoped)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
         ],
         rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
@@ -110,7 +110,7 @@ const overrides = [
     }, {
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator)/all/*.js",
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script)/all/*.js",
         ],
         parserOptions: { ecmaVersion: 6 },
         rules: {
@@ -132,7 +132,7 @@ const overrides = [
         },
     }, {
         files: ["**/sys_ui_script/*/*.js"],
-        rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]),
+        rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
     }, {
         files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
         env: {"@admc.com/sn/sn_client_iso": true },
@@ -267,6 +267,7 @@ module.exports = {
                   "expert_script_client": ["iso", "noniso"],
                   "sa_pattern_prepost_script": ["global", "scoped"],
                   "sc_cat_item_producer": ["global", "scoped"],
+                  "sp_widget.script": ["global", "scoped"],
                   "sysauto_script": ["global", "scoped"],
                   "sysevent_script_action": ["global", "scoped"],
                   "sys_processor": ["global", "scoped"],
@@ -289,6 +290,7 @@ module.exports = {
                   "sys_ui_policy.script_true": ["iso", "noniso"],
                   "sys_ui_policy.script_false": ["iso", "noniso"],
                   "sys_ui_script": ["all"],
+                  "sp_widget.client_script": ["all"],
                 }
             },
             rules: {
