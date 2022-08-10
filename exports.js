@@ -61,21 +61,21 @@ if (fs.existsSync(fp)) try {
 const allRules = require("requireindex")(path.join(__dirname, "rules"));
 // Due to hyphens in the names, there are hyphens in the object keys.
 // That makes it impossible to use the JavaScript destructuring operators, so we go old-school:
-function ruleConfigs(mapVals, ruleNames) {
-    switch (mapVals) {
+function ruleConfigs(mapVal, ruleNames) {
+    switch (mapVal) {
         case "error":
         case "warn":
         case "off":
             break;
         default:
             throw new Error(
-              `ruleConfigs 'mapVals' value not one of "error", "warn", "off": ${mapVals}`);
+              `ruleConfigs 'mapVal' value not one of "error", "warn", "off": ${mapVal}`);
     }
     const newRuleObj = {};
     ruleNames.forEach(k => {
         if (!(k in allRules))
             throw new Error(`Bad rule name given to 'ruleConfigs' function: ${k}`);
-        newRuleObj[`@admc.com/sn/${k}`] = mapVals;
+        newRuleObj[`@admc.com/sn/${k}`] = mapVal;
     });
     return newRuleObj;
 }
@@ -132,7 +132,7 @@ const overrides = [
         },
     }, {
         files: ["**/sys_ui_script/*/*.js"],
-        rules: { "prefer-template": "off", },
+        rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]),
     }, {
         files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
         env: {"@admc.com/sn/sn_client_iso": true },
