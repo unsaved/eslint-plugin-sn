@@ -183,7 +183,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
 |---                         |---    |---              |---
 |immediate-iife              |error  |all              |IIFEs must execute immediately
-|invalid-table-alt           |error  |Unsupported[^2]  |Invalid table/alt combination
+|invalid-table-alt           |error  |Unsupported      |Invalid table/alt combination
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
 |log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
@@ -197,8 +197,6 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |sn-workaround-iife          |error  |some server[^4]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
 |validate-gliderecord-calls  |error, warn[^3]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
 
-[^2]: invalid-table-alt rule always fails when it is applied so it works by being
-descoped from all valid table/scope combinations
-[^3]: no-sysid and validate-gliderecod-calls rules default to error level for server-side scriptlets and warn level for
+[^3]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for
 [^4]: The sn-workaround-iife rule is applied to some specific server tables
 client-side scriptlets
