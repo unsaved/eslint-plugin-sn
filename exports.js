@@ -139,7 +139,7 @@ const overrides = [
     }, {
         files: [
             "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
-            "**/@(sys_ui_script|sys_script_validator)/*/*.js",
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script)/*/*.js",
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
@@ -180,7 +180,13 @@ for (const table in tableSpecificMap) {
     } else if (isPlainObject(entry)) {
         if ("readable" in entry) readables = entry.readable;
         if ("writable" in entry) writables = entry.writable;
-        if ("iifeParams" in entry) iifeParams = readables = entry.iifeParams;
+        if ("iifeParams" in entry) {
+            iifeParams = entry.iifeParams;
+            if (readables)
+                Array.prototype.push.apply(readables, iifeParams);
+            else
+                readables = iifeParams;
+        }
     } else {
         throw new Error(`tableSpecificMap entry for ${table} is of unsupported type`);
     }
@@ -194,14 +200,14 @@ for (const table in tableSpecificMap) {
         if (!Array.isArray(readables))
             throw new Error(`tableSpecificMap entry for ${table} readables is not an array`);
         readables.forEach(ts => { if (typeof ts !== "string")
-            throw new Error(`A tableSpecificMap ${table} readables entry not a string`);
+            throw new Error(`A tableSpecificMap ${table} readables entry not a string: ${ts}`);
         });
     }
     if (writables !== undefined) {
         if (!Array.isArray(writables))
             throw new Error(`tableSpecificMap entry for ${table} writables is not an array`);
         writables.forEach(ts => { if (typeof ts !== "string")
-            throw new Error(`A tableSpecificMap ${table} writables entry not a string`);
+            throw new Error(`A tableSpecificMap ${table} writables entry not a string: ${ts}`);
         });
     }
     overridesFiles = `**/${table}/*/*.js`;

@@ -36,7 +36,7 @@ const hasFnAncestor = ctx =>
     );
 
 const message =
-  "For {{table}} table scriptlets you must pass {{paramCallVars}} to IIFE param(s)";
+  "For {{table}} scriptlets you must implement top-level IIFE passing param(s) '{{paramCallVars}}'";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
