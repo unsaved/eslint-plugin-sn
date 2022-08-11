@@ -127,32 +127,34 @@ that you should be accessing.
 ## Supported ServiceNow scriptlet types
 ### Supported Now
 Alphabetically
-|Table                        |Alts (default bolded)
-|---                          |---
-|catalog_script_client        |**iso**, noniso
-|ecc_agent_script             |**all**
-|ecc_agent_script_include     |**all**
-|expert_script_client         |**iso**, noniso
-|sa_pattern_prepost_script    |**global**, scoped
-|sc_cat_item_producer         |**global**, scoped
-|sp_widget.script             |**global**, scoped
-|sp_widget.client_script      |**all**
-|sysauto_script               |**global**, scoped
-|sysevent_script_action       |**global**, scoped
-|sys_processor                |**global**, scoped
-|sys_script                   |**global**, scoped
-|sys_script_client            |**iso**, noniso
-|sys_script_email             |**global**, scoped
-|sys_script_fix               |**global**, scoped
-|sys_script_include           |**global**, scoped
-|sys_script_validator         |**all**
-|sys_security_acl             |**global**, scoped
-|sys_transform_entry          |**global**, scoped
-|sys_transform_map            |**global**, scoped
-|sys_transform_script         |**global**, scoped
-|sys_web_service              |**global**, scoped
-|sys_ws_operation             |**global**, scoped
-|sys_ui_action                |**global**, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
+|Table                          |Alts (default bolded)
+|---                            |---
+|catalog_script_client          |**iso**, noniso
+|catalog_ui_policy.script_true  |**iso**, noniso
+|catalog_ui_policy.script_false |**iso**, noniso
+|ecc_agent_script               |**all**
+|ecc_agent_script_include       |**all**
+|expert_script_client           |**iso**, noniso
+|sa_pattern_prepost_script      |**global**, scoped
+|sc_cat_item_producer           |**global**, scoped
+|sp_widget.script               |**global**, scoped
+|sp_widget.client_script        |**all**
+|sysauto_script                 |**global**, scoped
+|sysevent_script_action         |**global**, scoped
+|sys_processor                  |**global**, scoped
+|sys_script                     |**global**, scoped
+|sys_script_client              |**iso**, noniso
+|sys_script_email               |**global**, scoped
+|sys_script_fix                 |**global**, scoped
+|sys_script_include             |**global**, scoped
+|sys_script_validator           |**all**
+|sys_security_acl               |**global**, scoped
+|sys_transform_entry            |**global**, scoped
+|sys_transform_map              |**global**, scoped
+|sys_transform_script           |**global**, scoped
+|sys_web_service                |**global**, scoped
+|sys_ws_operation               |**global**, scoped
+|sys_ui_action                  |**global**, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
 |sys_ui_policy.script_true    |**iso**, noniso
 |sys_ui_policy.script_false   |**iso**, noniso
 |sys_ui_script                |**all**
@@ -167,6 +169,8 @@ In very rough order of priority
 |sys_cb_topic                 |TBD
 |sa_pattern                   |probably all
 |mid_limited_resource_script  |**all**
+|sc_cat_item_composer_producer|**global**, scoped
+|sp_header_footer             |**all**
 
 ## Development
 Though you can test the individual rules from this project, due to eslint-plugin system design,

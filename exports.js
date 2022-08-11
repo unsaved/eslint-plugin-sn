@@ -109,7 +109,7 @@ const overrides = [
         env: {"@admc.com/sn/sn_mid": true },
     }, {
         files: [
-            "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
+            "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script)/all/*.js",
         ],
         parserOptions: { ecmaVersion: 6 },
@@ -157,7 +157,7 @@ const overrides = [
             }],
         },
     }, {
-        files: ["**/sys_ui_policy.script_@(true|false)/*/*.js"],
+        files: ["**/@(sys|catalog)_ui_policy.script_@(true|false)/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
     }, {
         files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
@@ -268,6 +268,8 @@ module.exports = {
             settings: {
                 ootbTables: {
                   "catalog_script_client": ["iso", "noniso"],
+                  "catalog_ui_policy.script_true": ["iso", "noniso"],
+                  "catalog_ui_policy.script_false": ["iso", "noniso"],
                   "ecc_agent_script": ["all"],
                   "ecc_agent_script_include": ["all"],
                   "expert_script_client": ["iso", "noniso"],
