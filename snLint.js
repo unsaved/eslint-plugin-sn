@@ -142,8 +142,8 @@ function lintFile(file, table, alt, readStdin=false) {
         const deCommented = content.replace(/\r/g, "").
           replace(/^[ \t]*[/][*][\S\s]*?[*][/]/mg, "").
           replace(/^[ \t]*[/][/][^\n]*\n/mg, "").replace(/^[ \t]*\n/mg, "");
-        if (ANGULAR_RAWFN_TEST_PAT.test(deCommented))
-            content = content.replace(ANGULAR_RAWFN_SUB_PAT, "function api._dummy(");
+        if (ANGULAR_RAWFN_TEST_PAT.test(deCommented))  // eslint-disable-next-line prefer-template
+            content = content.replace(ANGULAR_RAWFN_SUB_PAT, "api._dummy=function(") + ";";
     } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
         /* eslint-disable prefer-template */
         if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
