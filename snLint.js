@@ -115,6 +115,8 @@ let allTables;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const ALLOW_DEFINE_CMT = "/* eslint-disable-line no-redeclare, no-unused-vars, max-len */";
+const ANGULAR_RAWFN_TEST_PAT = /^\s*function\s*[(]/;  // We strip comments before this test
+const ANGULAR_RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before for substitution
 
 /**
  * Returns the number of rule errors for specified script
@@ -134,7 +136,15 @@ function lintFile(file, table, alt, readStdin=false) {
         throw new AppErr(`'${alt}' not among table ${table} alts: ${allTables[table]}`);
     const pseudoPath = path.join(table, alt, baseName);
     console.debug(`pseudoPath: ${pseudoPath}`);
-    if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
+    if (table === "sp_widget.client_script") {
+        // For widget client scripts, allow non-invoked anonymous function definition, if
+        // it's the first thing in the scriptlet.
+        const deCommented = content.replace(/\r/g, "").
+          replace(/^[ \t]*[/][*][\S\s]*?[*][/]/mg, "").
+          replace(/^[ \t]*[/][/][^\n]*\n/mg, "").replace(/^[ \t]*\n/mg, "");
+        if (ANGULAR_RAWFN_TEST_PAT.test(deCommented))
+            content = content.replace(ANGULAR_RAWFN_SUB_PAT, "function api._dummy(");
+    } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
         /* eslint-disable prefer-template */
         if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
             content = content.replace(
