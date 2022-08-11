@@ -210,6 +210,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |no-log-global               |error  |server scoped    |Scoped app scripts should use the scoped logging API
 |no-log-scoped               |error  |server global    |Global scope scripts should use the global logging API
 |no-sysid                    |error, warn[^3]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.
+|no-uiscript-curlref         |warn   |sys_ui_scripts   |References like ${this} get clobbered by the platform, at least if you load the UI script via \*.jsdbx file.
 |no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
 |sn-workaround-iife          |error  |some server[^4]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
