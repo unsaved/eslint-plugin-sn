@@ -4,6 +4,9 @@
  * IF an IIFE exists, we need to check that its params are good, but there is no reason to
  * explicitly check for existence of IIFE since ultimate goal is to prevent root-level assignments
  * and declarations.
+ *
+ * Since this is executed by a direct ESLint script, we have no control over logging redirection.
+ * We don't want debug messages mixing in with stdout, so log at level warning for debugging.
  */
 
 /*
@@ -94,7 +97,7 @@ const esLintObj = {
                 if (!hasFnAncestor(context)) assignAndDeclCount++;
             }, onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;
-                console.debug('IIFE check counts.  '
+                console.warn('IIFE check counts.  '
                   + `assg ${assignAndDeclCount}, iife ${iifeCount}, goodPs ${goodParams}`);
                 if (assignAndDeclCount === 0 && iifeCount === 0) return;  // No IIFE ok
                 if (assignAndDeclCount > 0 || !goodParams)
