@@ -342,8 +342,13 @@ module.exports = {
                 //"no-extra-parens": "warn",  In practice, too stringent
                 "no-mixed-spaces-and-tabs": "off",
 
-                ...ruleConfigs("error",
-                  ["invalid-table-alt", "immediate-iife", "no-boilerplate", "no-useless-rtrn"]),
+                ...ruleConfigs("error", [
+                    "invalid-table-alt",
+                    "immediate-iife",
+                    "no-boilerplate",
+                    "no-useless-rtrn",
+                    "legacy-use-this",
+                ]),
                 ...ruleConfigs("warn", ["prefer-array-iterator", "no-init-emptystring"]),
             },
 

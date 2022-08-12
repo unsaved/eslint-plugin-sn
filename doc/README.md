@@ -188,6 +188,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |---                         |---    |---              |---
 |immediate-iife              |error  |all              |IIFEs must execute immediately
 |invalid-table-alt           |error  |Unsupported      |Invalid table/alt combination
+|legacy-use-this             |error  |all              |Same as OOTB ESLint rule [class-methods-use-this](https://eslint.org/docs/latest/rules/class-methods-use-this) but for pre-ES6
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
 |log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented

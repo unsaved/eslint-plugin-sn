@@ -9,11 +9,9 @@
  * If testing shows that it also fails in global UI scripts and when loaded by jelly form formatter
  * and mobile/portal g_ui_scripts cals, then set rule level to error.
  * Until this is known, probably safer to leave at warn level.
- *
- * LIMITATION:  I would like to allow for ${...} within comments, but ESLint doesn't allow to
- *              get the full code text without comments.
 */
 
+const strip = require("strip-comments");
 const message =
   "ServiceNow UI Scripts, at least when loaded as *.jsdbx file clobber ${...} references";
 const messageId =  // eslint-disable-next-line prefer-template
@@ -31,7 +29,8 @@ const esLintObj = {
 
     create: context => { return {
         Program: node => {
-            if (context.getSourceCode().getText().includes('${')) context.report({node, messageId});
+            if (strip(context.getSourceCode().getText()).includes('${'))
+                context.report({node, messageId});
         },
     }; }
 };

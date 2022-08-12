@@ -6,6 +6,7 @@ const { AppErr, conciseCatcher, conciseErrorHandler, getAppVersion, isPlainObjec
   require("@admc.com/apputil");
 const { validate } = require("@admc.com/bycontract-plus");
 const joi = require("joi");
+const strip = require("strip-comments");
 
 const RCFILE = "sneslintrc.json";
 const fs = require("fs");
@@ -139,10 +140,8 @@ function lintFile(file, table, alt, readStdin=false) {
     if (table === "sp_widget.client_script") {
         // For widget client scripts, allow non-invoked anonymous function definition, if
         // it's the first thing in the scriptlet.
-        const deCommented = content.replace(/\r/g, "").
-          replace(/^[ \t]*[/][*][\S\s]*?[*][/]/mg, "").
-          replace(/^[ \t]*[/][/][^\n]*\n/mg, "").replace(/^[ \t]*\n/mg, "");
-        if (ANGULAR_RAWFN_TEST_PAT.test(deCommented))  // eslint-disable-next-line prefer-template
+        if (ANGULAR_RAWFN_TEST_PAT.test(strip(content)))
+            // eslint-disable-next-line prefer-template
             content = content.replace(ANGULAR_RAWFN_SUB_PAT, "api._dummy=function(") + ";";
     } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
         /* eslint-disable prefer-template */
