@@ -99,7 +99,8 @@ To get invocation syntax help:
     npm exec snLint -- -h    # with local project installation
 ```
 Do read the brief output from this command for essential information about specifying files,
-target tables, and alts.
+target tables, and alts.  The switch list in the output provides a concise list of the many
+features.
 
 ### Color Output Work-around
 As a work-around for a mingw or git-for-windows glitch, if Node.js can't determine tty interactivity

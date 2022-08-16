@@ -22,11 +22,11 @@ const yargs = require("yargs")(process.argv.slice(2)).
   }).
   strictOptions().
   usage(`SYNTAX:
-$0 [-cdHqv] [-t sntbl] [-a scopealt] [-L '(-eslint-switches)'] dir/or/file.js...
+$0 [-cdHIqrv] [-t sntbl] [-a scopealt] [-L '(-eslint-swit)'] dir/or/file.js...
   OR
-$0 [-cdHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
+$0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
   OR
-... > $0 [-cdHqv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
+... > $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
   OR     $0 -h|-s|-g
 
 The most important differences from invoking 'eslint' directly are:
@@ -62,6 +62,12 @@ Directories are searched recursively for *.js files, with exclusions, like
       describe: "output HTML instead of plain text report",
       type: "boolean",
   }).
+  option("I", {
+      describe:
+      "output Integer strings to stdout instead of text report.  Errors, Warnings, Code lines.  " +
+        "Code lines omit blank lines and comment-only lines.",
+      type: "boolean",
+  }).
   option("a", {
       describe: "optional scope-alternative, such as 'global' or 'scoped' for server scripts, "
         + "or 'iso' or 'noniso' for client scripts.  Defaults to the default alt for the table.",
@@ -69,7 +75,7 @@ Directories are searched recursively for *.js files, with exclusions, like
   }).
   option("c", {
       describe: "return code will be Count of rule failures rather than number of errored files.  "
-        + "this switch is implied by -p switch",
+        + "This switch is implied by -p switch.  The count includes warnings if -r also given.",
       type: "boolean",
   }).
   option("d", { describe: "Debug logging", type: "boolean", }).
@@ -92,6 +98,10 @@ Quote, parenthesize, and comma-delimite all the Lint args like so:  `
         "Specified single file path is used for labelling and table determination (if no -t)",
       type: "boolean",
   }).
+  option("r", {
+      describe: "stRict mode.  Exit value counts tests with warnings as failures",
+      type: "boolean",
+  }).
   option("s", {
       describe: "write template 'sneslintrc.json' Sample file into current directory",
       type: "boolean",
@@ -111,20 +121,24 @@ if (yargsDict.q) console.debug = console.log = console.info = () => {};
 
 let passThruArgs;
 let errorCount = 0;
+let warnCount = 0;
+let lineCount = 0;
 let fileFailureCount = 0;
 let allTables;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const ALLOW_DEFINE_CMT = "/* eslint-disable-line no-redeclare, no-unused-vars, max-len */";
-const ANGULAR_RAWFN_TEST_PAT = /^\s*function\s*[(]/;  // We strip comments before this test
+const ANGULAR_RAWFN_TEST_PAT = /^function\s*[(]/;  // We strip comments and ws before this test
 const ANGULAR_RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before for substitution
+const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
 /**
- * Returns the number of rule errors for specified script
+ * Returns the number of rule errors for specified script,
+ * or number of rule errors and warnings if strict (r) mode set
  */
 function lintFile(file, table, alt, readStdin=false) {
     validate(arguments, ["string", "string", "string=", "boolean="]);
-    let stdout, thisErrorCount = 0;
+    let stdout, thisErrorCount = 0, thisWarnCount = 0;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     const baseName = path.basename(file);
     const objName = baseName.replace(/[.][^.]+$/, "");
@@ -137,12 +151,16 @@ function lintFile(file, table, alt, readStdin=false) {
         throw new AppErr(`'${alt}' not among table ${table} alts: ${allTables[table]}`);
     const pseudoPath = path.join(table, alt, baseName);
     console.debug(`pseudoPath: ${pseudoPath}`);
+    const justCode = strip(content.replace(/\r/g, "").trim().replace(RM_WHITESPACE_RE, ""));
+    lineCount += justCode.split("\n").length;
     if (table === "sp_widget.client_script") {
         // For widget client scripts, allow non-invoked anonymous function definition, if
         // it's the first thing in the scriptlet.
-        if (ANGULAR_RAWFN_TEST_PAT.test(strip(content)))
+        if (ANGULAR_RAWFN_TEST_PAT.test(justCode)) {
             // eslint-disable-next-line prefer-template
             content = content.replace(ANGULAR_RAWFN_SUB_PAT, "api._dummy=function(") + ";";
+            console.warn("Inserted dummy assignment before Angular anonymous function");
+        }
     } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
         /* eslint-disable prefer-template */
         if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
@@ -163,11 +181,13 @@ function lintFile(file, table, alt, readStdin=false) {
         "sneslintrc.json",
         "--no-eslintrc",
         "--resolve-plugins-relative-to", path.join(__dirname, ".."),  // reqd for global installs
+        "--exit-on-fatal-error",
         "--stdin",
         "--stdin-filename",
         pseudoPath,
     );
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
+    if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "1");
     console.debug('eslint invocation args', eslintArgs);
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
         input:
@@ -192,15 +212,18 @@ function lintFile(file, table, alt, readStdin=false) {
         stdout = pObj.stdout.toString("utf8").  // eslint-disable-next-line prefer-template
           replace(new RegExp("(\u001b...|\\n)" + escapedCwd, "g"), "$1");
     }
-    if (pObj.status !== 0) {
-        fileFailureCount++;
-        const errMatches = /\d problem.*[(](\d+) errors?,/.exec(stdout);
-        if (!errMatches) throw new Error(`We could find no error counts in the output: ${stdout}`);
-        thisErrorCount += parseInt(errMatches[1]);
+    if (pObj.status !== 0) fileFailureCount++;
+    if (stdout) {
+        const probMatches = /\d problem.*[(](\d+) errors?, (\d+) warning/.exec(stdout);
+        if (!probMatches)
+            throw new Error(`We couldn't find problem counts in the output: ${stdout}`);
+        thisErrorCount += parseInt(probMatches[1]);
+        thisWarnCount += parseInt(probMatches[2]);
         errorCount += thisErrorCount;
+        warnCount += thisWarnCount;
+        if (!yargsDict.I) process.stdout.write(stdout);
     }
-    process.stdout.write(stdout);
-    return thisErrorCount;
+    return yargsDict.r ? thisWarnCount + thisErrorCount : thisErrorCount;
 }
 
 /**
@@ -251,6 +274,11 @@ conciseCatcher(async function() {
     }
     if (yargsDict._.length < 1) {
         console.error("You must specify a 'filepath.js' param unless using a -g, -h, or -s switch");
+        yargs.showHelp();
+        process.exit(255);
+    }
+    if (yargsDict.H && yargsDict.I) {
+        console.error("Switches -H and -I are mutually exclusive");
         yargs.showHelp();
         process.exit(255);
     }
@@ -339,10 +367,14 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
                 /* eslint-enable max-depth */
         }
     }
-    if (yargsDict.p)
-        process.exit(lintFile(yargsDict._[0],
+    if (yargsDict.p) {
+        const retVal = lintFile(yargsDict._[0],
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(yargsDict._[0])),
-          yargsDict.a, true));
+          yargsDict.a, true);
+        if (yargsDict.I)
+            process.stdout.write(`${errorCount}\n${warnCount}\n${lineCount}\n`);
+        process.exit(retVal);
+    }
 
     const files = [];
     yargsDict._.forEach(inputNode => {
@@ -365,5 +397,7 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
         lintFile(srcFilePath,
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath)), yargsDict.a);
     });
-    process.exit(yargsDict.c ? errorCount : fileFailureCount);
+    if (yargsDict.I) process.stdout.write(`${errorCount}\n${warnCount}\n${lineCount}\n`);
+    process.exit(yargsDict.c ?
+      (yargsDict.r ? warnCount + errorCount : errorCount) : fileFailureCount);
 }, 254)().catch(e0=>conciseErrorHandler(e0, 253));
