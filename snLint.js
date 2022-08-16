@@ -221,8 +221,8 @@ function lintFile(file, table, alt, readStdin=false) {
         thisWarnCount += parseInt(probMatches[2]);
         errorCount += thisErrorCount;
         warnCount += thisWarnCount;
-        if (!yargsDict.I) process.stdout.write(stdout);
     }
+    if (stdout && !yargsDict.I) process.stdout.write(stdout);
     return yargsDict.r ? thisWarnCount + thisErrorCount : thisErrorCount;
 }
 
