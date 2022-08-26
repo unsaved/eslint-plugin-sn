@@ -306,7 +306,7 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
     let customRC;
 
     if (!fs.existsSync(RCFILE) || !fs.statSync(RCFILE).isFile(RCFILE))
-        throw new AppErr(`'${RCFILE}' does not exists or is not a file`);
+        throw new AppErr(`'${RCFILE}' does not exist or is not a file`);
     const snesExports = require("./exports");
     if (!snesExports || !isPlainObject(snesExports))
         throw new AppErr("eslint-plugin-rc does not have valid 'exports.js'");
@@ -378,7 +378,7 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
 
     const files = [];
     yargsDict._.forEach(inputNode => {
-        if (!fs.existsSync(inputNode)) throw new AppErr(`'${inputNode}' does not exists`);
+        if (!fs.existsSync(inputNode)) throw new AppErr(`'${inputNode}' does not exist`);
         if (fs.statSync(inputNode).isDirectory(inputNode)) {
             Array.prototype.push.apply(files, jsFilesInBranch(fs.opendirSync(inputNode)));
         } else {
