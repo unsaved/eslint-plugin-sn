@@ -187,7 +187,7 @@ function lintFile(file, table, alt, readStdin=false) {
         pseudoPath,
     );
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
-    if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "1");
+    if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
         input:
