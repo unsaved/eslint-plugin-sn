@@ -1,3 +1,5 @@
+Add sn_ws to appropriate globals list.  Check why not already in one of the *APIs*.txt files.
+
 Fork or enhance "mergeEslintHtml.js" to take input HTML strings instead of files.
 Then snLint can support multiple HTML files directly.
 
