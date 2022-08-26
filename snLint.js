@@ -398,6 +398,6 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
           yargsDict.t ? yargsDict.t : path.basename(path.dirname(srcFilePath)), yargsDict.a);
     });
     if (yargsDict.I) process.stdout.write(`${errorCount}\n${warnCount}\n${lineCount}\n`);
-    process.exit(yargsDict.c ?
+    process.exit(yargsDict.c ?  // eslint-disable-next-line no-extra-parens
       (yargsDict.r ? warnCount + errorCount : errorCount) : fileFailureCount);
 }, 254)().catch(e0=>conciseErrorHandler(e0, 253));

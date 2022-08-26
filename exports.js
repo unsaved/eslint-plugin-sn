@@ -81,7 +81,7 @@ function ruleConfigs(mapVal, ruleNames) {
 }
 
 const clientRules = ruleConfigs("error", ["no-console-info"]);
-const serverGlobalsCommon = globalsFromFiles("coreServerObjects", "SIScopes");
+const serverGlobalsCommon = globalsFromFiles("coreServerObjects", "SIScopes", "scopedNSs");
 const clientGlobalsCommon =
   globalsFromFiles("client-commonForm", "client-commonList-only", "windowMembers");
 
@@ -165,6 +165,31 @@ const overrides = [
     }, {
         files: ["**/sys_script_validator/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^validate$", }] },
+    }, {
+        files: ["**/@(sys_web_service|sys_ws_operation/*/*.js"],
+        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^(request|response)$", }] },
+    }, {
+        files: ["**/sys_script/*/*.js"],
+        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^(g_scratchpad|action)$", }] },
+    }, {
+        files: ["**/sys_processor/*/*.js"],
+        rules: { "no-unused-vars":
+                 ["error", { varsIgnorePattern: "^g_(request|response_processor$", }] },
+    }, {
+        files: ["**/sys_script_email/*/*.js"],
+        rules: { "no-unused-vars":
+               ["error", { varsIgnorePattern: "^(current|template|email|email_action|event$", }] },
+    }, {
+        files: ["**/sys_transform_map/*/*.js"],
+        rules: { "no-unused-vars":
+               ["error", { varsIgnorePattern: "^(source|target|map|log|isUpdate)$", }] },
+    }, {
+        files: ["**/sys_transform_script/*/*.js"],
+        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^(source|map|log|target)$", }] },
+    }, {
+        files: ["**/sp_widget.script/*/*.js"],
+        rules: { "no-unused-vars":
+               ["error", { varsIgnorePattern: "^(options|input|data|[$]sp)$", }] },
     },
 ];
 

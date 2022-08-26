@@ -4,7 +4,7 @@
 
 /* eslint-disable strict, prefer-template, no-var */
 /* global GlideAggregate, gs */
-const gatherScoped = false;  // TODO:  Set this to true to gather globals; to false for scoped
+const gatherScoped = false;  // TODO:  Set this to true to gather scoped; to false for global
 var n;
 const ga = new GlideAggregate("sys_script_include");
 ga.addQuery("sys_scope.scope", gatherScoped ? "!=" : "=", "global");

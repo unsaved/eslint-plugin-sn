@@ -211,7 +211,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |no-init-emptystring         |warn   |all              |For rare cases where the value is to really be used as a string (not just tested) this is ok.  Normally the system default of undefined works great.
 |no-log-global               |error  |server scoped    |Scoped app scripts should use the scoped logging API
 |no-log-scoped               |error  |server global    |Global scope scripts should use the global logging API
-|no-sysid                    |error, warn[^3]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.
+|no-sysid                    |error, warn[^3]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.  This actually matches for all 32 character hex strings, so you will need to disable for valid non-sysid strings such as MD5 checksums.
 |no-uiscript-curlref         |warn   |sys_ui_scripts   |References like ${this} get clobbered by the platform, at least if you load the UI script via \*.jsdbx file.
 |no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues

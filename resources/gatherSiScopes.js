@@ -6,7 +6,7 @@
 /* global GlideAggregate, gs */
 const ga = new GlideAggregate("sys_script_include");
 ga.addQuery("sys_scope.scope", "!=", "global");
-ga.addQuery("access", "public");
+//ga.addQuery("access", "public");  scripts shouldn't NEED to specify the scope, but they can
 ga.addQuery("active", true);  // Comment out statement to allow for enabling active==false's
 ga.orderBy("sys_scope.scope");
 ga._query();
