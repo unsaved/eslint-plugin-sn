@@ -174,11 +174,11 @@ const overrides = [
     }, {
         files: ["**/sys_processor/*/*.js"],
         rules: { "no-unused-vars":
-                 ["error", { varsIgnorePattern: "^g_(request|response_processor$", }] },
+                 ["error", { varsIgnorePattern: "^g_(request|response_processor)$", }] },
     }, {
         files: ["**/sys_script_email/*/*.js"],
         rules: { "no-unused-vars":
-               ["error", { varsIgnorePattern: "^(current|template|email|email_action|event$", }] },
+               ["error", { varsIgnorePattern: "^(current|template|email|email_action|event)$", }] },
     }, {
         files: ["**/sys_transform_map/*/*.js"],
         rules: { "no-unused-vars":
