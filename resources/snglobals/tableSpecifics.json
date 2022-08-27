@@ -33,7 +33,7 @@
     "writable": ["answer", "ignore", "error", "error_message", "status_message"],
     "readable": ["source", "target", "map", "log", "action"]
   },
-  "sys_security_acl": { "writable": ["answer"] },
+  "sys_security_acl": { "writable": ["answer"], "readable": ["previous"] },
   "sp_widget.client_script": ["api"],
   "sp_widget.script": { "iifeParams": [], "readable": ["options", "input", "data", "$sp"] }
   /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because the globals
