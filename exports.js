@@ -161,7 +161,10 @@ const overrides = [
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
     }, {
         files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
-        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
+        rules: { "no-unused-vars": ["error", {
+            varsIgnorePattern: "^answer$",
+            argsIgnorePattern: "^source$",
+        }] },
     }, {
         files: ["**/sys_script_validator/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^validate$", }] },
