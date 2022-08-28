@@ -160,7 +160,10 @@ const overrides = [
         files: ["**/@(sys|catalog)_ui_policy.script_@(true|false)/*/*.js"],
         rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
     }, {
-        files: ["**/sys_@(security_acl|transform_entry)/*/*.js"],
+        files: ["**/sys_security_acl/*/*.js"],
+        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
+    }, {
+        files: ["**/sys_transform_entry/*/*.js"],
         rules: { "no-unused-vars": ["error", {
             varsIgnorePattern: "^answer$",
             argsIgnorePattern: "^source$",
@@ -173,7 +176,10 @@ const overrides = [
         rules: { "no-unused-vars": ["error", { argsIgnorePattern: "^(request|response)$", }] },
     }, {
         files: ["**/sys_script/*/*.js"],
-        rules: { "no-unused-vars": ["error", { argsIgnorePattern: "^(g_scratchpad|action)$", }] },
+        rules: { "no-unused-vars": ["error", {
+            varsIgnorePattern: "^(g_scratchpad|action)$",
+            argsIgnorePattern: "^(current|previous)$",
+        }] },
     }, {
         files: ["**/sys_processor/*/*.js"],
         rules: { "no-unused-vars":
