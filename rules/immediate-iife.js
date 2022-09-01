@@ -38,13 +38,14 @@ const esLintObj = {
                 const prevAst = node.parent.parent.body[prevBodIndex];
                 switch (prevAst.type) {
                     case "FunctionDeclaration":
-                        if (prevAst.id.name === node.callee.name) context.report({node, messageId});
+                        if (prevAst.id.name === node.callee.name)
+                            context.report({node, messageId, data: { name: node.callee.name }});
                         break;
                     case "VariableDeclaration":
                         if (prevAst.declarations && prevAst.declarations.length === 1
                           && prevAst.declarations[0].id
                           && prevAst.declarations[0].id.name === node.callee.name)
-                            context.report({node, messageId});
+                            context.report({node, messageId, data: { name: node.callee.name }});
                         break;
                     // purposefully no default
                 }

@@ -1,7 +1,6 @@
 "use strict";
 
-const message =
-  "Use a specific logging level (debug/info/warn/error) rather than console.log";
+const message = "Use a specific logging level (debug/info/warn/error) rather than console.log";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
