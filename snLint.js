@@ -174,6 +174,12 @@ function lintFile(file, table, alt, readStdin=false) {
             console.warn("Inserted comment directives within SI function definition");
         }
         /* eslint-enable prefer-template */
+    } else if (table === "sys_ui_action" && !["global", "scoped"].includes(alt)) {
+        const ex = /^function\s*(\w+)/.exec(justCode);
+        if (ex) {
+            content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife`;
+            console.warn("Appended dummy client function invocation");
+        }
     }
     eslintArgs.splice(0, 0,
         path.join(require.resolve("eslint"), "../../bin/eslint.js"),
