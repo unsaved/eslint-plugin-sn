@@ -177,7 +177,7 @@ function lintFile(file, table, alt, readStdin=false) {
     } else if (table === "sys_ui_action" && !["global", "scoped"].includes(alt)) {
         const ex = /^function\s*(\w+)/.exec(justCode);
         if (ex) {
-            content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife`;
+            content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife\n`;
             console.warn("Appended dummy client function invocation");
         }
     }
