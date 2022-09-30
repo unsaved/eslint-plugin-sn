@@ -174,6 +174,11 @@ function lintFile(file, table, alt, readStdin=false) {
             console.warn("Inserted comment directives within SI function definition");
         }
         /* eslint-enable prefer-template */
+    } else if (["catalog_script_client", "sys_script_client"].includes(table)
+      && /\bfunction\s+on[A-Z]\w+\s*[(]/.test(content)) {
+        content = content.replace(
+          /\bfunction\s+on[A-Z]\w+\s*[(]/, function(m) { return m + ALLOW_DEFINE_CMT; });
+        console.warn("Inserted comment directives within client function definition");
     } else if (table === "sys_ui_action" && !["global", "scoped"].includes(alt)) {
         const ex = /^function\s*(\w+)/.exec(justCode);
         if (ex) {
