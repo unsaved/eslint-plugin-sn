@@ -176,7 +176,7 @@ function lintFile(file, table, alt, readStdin=false) {
         /* eslint-enable prefer-template */
     } else if (["catalog_script_client", "sys_script_client"].includes(table)
       && /\bfunction\s+on[A-Z]\w+\s*[(]/.test(content)) {
-        content = content.replace(
+        content = content.replace(  // eslint-disable-next-line prefer-arrow-callback
           /\bfunction\s+on[A-Z]\w+\s*[(]/, function(m) { return m + ALLOW_DEFINE_CMT; });
         console.warn("Inserted comment directives within client function definition");
     } else if (table === "sys_ui_action" && !["global", "scoped"].includes(alt)) {
