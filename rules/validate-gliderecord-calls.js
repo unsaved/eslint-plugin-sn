@@ -45,7 +45,7 @@ const esLintObj = {
     },
 
     create: context => {
-        grVars = [];
+        grVars = ["current", "previous"];
         return {
             CallExpression: (node) => {
                 /*console.info("CE: " + ((node.callee && node.callee.object
