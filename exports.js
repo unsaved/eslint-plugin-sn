@@ -93,7 +93,7 @@ const overrides = [
         ],
         rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
     }, {
-        files: [ "**/sys_script_fix/@(global|scoped)/*.js" ],
+        files: [ "**/sys_script/@(global|scoped)/*.js" ],
         rules: ruleConfigs("error", ["no-br-current-update"]),
     }, {
         files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
