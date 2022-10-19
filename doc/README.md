@@ -194,7 +194,9 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
+|no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord
 |no-console-info             |error  |client           |Level-specific console logging statements are better because console.info default filtering is inconsistent
+|no-gs-now                   |error  |client           |gs.now() function is unsupported since London release
 |no-init-emptystring         |warn   |all              |For rare cases where the value is to really be used as a string (not just tested) this is ok.  Normally the system default of undefined works great.
 |no-log-global               |error  |server scoped    |Scoped app scripts should use the scoped logging API
 |no-log-scoped               |error  |server global    |Global scope scripts should use the global logging API

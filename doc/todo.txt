@@ -2,3 +2,8 @@ Fork or enhance "mergeEslintHtml.js" to take input HTML strings instead of files
 Then snLint can support multiple HTML files directly.
 
 Add fix capabilities
+
+Consider how to implement these rules.
+Most straight-forward would be to allow trigger-type-specific altscopes.
+  No insert/update in Before sys_scripts
+  No other-GR insert/update in Before sys_transform_scripts

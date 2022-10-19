@@ -91,22 +91,18 @@ const overrides = [
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script)/@(global|scoped)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
         ],
-        rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls"]),
+        rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls", "no-gs-now"]),
     }, {
         files: [ "**/sys_script/@(global|scoped)/*.js" ],
         rules: ruleConfigs("error", ["no-br-current-update"]),
     }, {
         files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
         env: {"@admc.com/sn/sn_server_global": true },
-        rules: {
-          ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"])
-        },
+        rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
     }, {
         files: [ "**/@(scoped|iso_scopedaction|noniso_scopedaction)/*.js" ],
         env: {"@admc.com/sn/sn_server_scoped": true },
-        rules: {
-          ...ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
-        },
+        rules: ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
     }, {
         files: ["**/ecc_agent_script@(|_include)/all/*.js"],
         env: {"@admc.com/sn/sn_mid": true },
@@ -131,7 +127,7 @@ const overrides = [
           "no-unused-private-class-members": "error",
           "no-promise-executor-return": "error",
           ...clientRules,
-          ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls"]),
+          ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls", "no-client-gr"]),
         },
     }, {
         files: ["**/sys_ui_script/*/*.js"],
