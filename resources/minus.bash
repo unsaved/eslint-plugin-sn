@@ -23,7 +23,7 @@ unset QUIET
     shift
 }
 [ $# -ne 2 ] && {
-    echo "SYNTAX_MSG" 1>&2
+    echo "$SYNTAX_MSG" 1>&2
     exit 2
 }
 F1="$1"; shift
