@@ -3,6 +3,7 @@
 # Additions for undocumented APIs
 GlideChoiceList
 GlideEmailAction
+GlideRecordSecure
 
 CertificateEncryption
 FlowScriptAPI
