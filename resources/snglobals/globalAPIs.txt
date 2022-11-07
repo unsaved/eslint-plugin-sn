@@ -5,6 +5,7 @@
 GlideChoiceList
 GlideEmailAction
 XMLDocument2
+GlideRecordSecure
 
 APCHandler
 AbstractDBObject
