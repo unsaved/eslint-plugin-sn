@@ -147,7 +147,7 @@ const overrides = [
     }, {
         // All ui_actions EXCEPT client only iso and noniso:
         files: ["**/sys_ui_action/@(global|scoped|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
-        globals: { action: "readonly" },
+        globals: { action: "readonly", RP: "readonly" },
     }, {
         files: ["**/@(sys|catalog)_script_client/*/*.js"],
         rules: {
