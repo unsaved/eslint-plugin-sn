@@ -1,3 +1,6 @@
+# This one found empirically.  Not documented:
+sn_automation
+
 # Captured from https://developer.servicenow.com/dev.do#!/reference/api/sandiego/server 2022-06-27
 # Contrary to ServiceNow's API Reference, at least some of these are used by SN-provided scripts.
 # sn_ws.RESTMessageV2, for example, is very useful in global scripts and is used in OOTB global.
