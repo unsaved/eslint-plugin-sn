@@ -9,6 +9,8 @@ const joi = require("joi");
 const strip = require("strip-comments");
 
 const RCFILE = "sneslintrc.json";
+const RETAIN_CONST_FILES =  // In addition to *.client_script
+  ["sys_ui_script", "sys_script_validator", "sys_ui_page.processing_script"];
 const fs = require("fs");
 const path = require("path");
 const childProcess = require("child_process");
@@ -202,8 +204,8 @@ function lintFile(file, table, alt, readStdin=false) {
     console.debug('eslint invocation args', eslintArgs);
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
         input:
-          alt === "noniso" || alt === "iso"
-          || ["sys_ui_script", "sys_script_validator", "sp_widget.client_script"].includes(table)
+          alt === "noniso" || alt === "iso" ||
+          table.endsWith(".client_script") || RETAIN_CONST_FILES.includes(table)
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
     process.stderr.write(pObj.stderr.toString("utf8"));

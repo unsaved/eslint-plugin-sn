@@ -198,6 +198,14 @@ const overrides = [
         files: ["**/sp_widget.script/*/*.js"],
         rules: { "no-unused-vars":
                ["error", { argsIgnorePattern: "^(options|input|data|[$]sp)$", }] },
+    }, {
+        // Defined functions may be invoked by Jelly code
+        files: ["**/sys_ui_page.client_script/*/*.js"],
+        rules: { "no-unused-vars": "off" },
+    }, {
+        // Defined functions may be invoked by Jelly code
+        files: ["**/sys_ui_page.processing_script/*/*.js"],
+        rules: { "no-undef": "off" },
     },
 ];
 
