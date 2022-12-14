@@ -170,9 +170,11 @@ Alphabetically
 |sys_web_service                |**global**, scoped
 |sys_ws_operation               |**global**, scoped
 |sys_ui_action                  |**global**, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
-|sys_ui_policy.script_true    |**iso**, noniso
-|sys_ui_policy.script_false   |**iso**, noniso
-|sys_ui_script                |**all**
+|sys_ui_policy.script_true      |**iso**, noniso
+|sys_ui_policy.script_false     |**iso**, noniso
+|sys_ui_page.client_script      |**all**
+|sys_ui_page.processing_script  |**global**, scoped
+|sys_ui_script                  |**all**
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client
 
