@@ -199,11 +199,12 @@ const overrides = [
         rules: { "no-unused-vars":
                ["error", { argsIgnorePattern: "^(options|input|data|[$]sp)$", }] },
     }, {
-        // Defined functions may be invoked by Jelly code
+        // Defined functions may be invoked by Jelly code.
+        // Seems that there's intention to replace core functions such as cancel().
         files: ["**/sys_ui_page.client_script/*/*.js"],
-        rules: { "no-unused-vars": "off" },
+        rules: { "no-unused-vars": "off", "no-redeclare": "off" },
     }, {
-        // Defined functions may be invoked by Jelly code
+        // Somehow these scripts get access to some user-defined variables
         files: ["**/sys_ui_page.processing_script/*/*.js"],
         rules: { "no-undef": "off" },
     },

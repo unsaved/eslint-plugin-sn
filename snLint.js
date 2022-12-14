@@ -226,6 +226,9 @@ function lintFile(file, table, alt, readStdin=false) {
           replace(new RegExp("(\u001b...|\\n)" + escapedCwd, "g"), "$1");
     }
     if (pObj.status !== 0) fileFailureCount++;
+    if (stdout.includes("Using globalsDir '"))
+        // This is the only debug message output by the parser.
+        stdout = stdout.replace(/^Using globalsDir '.*\r?\n/, "");
     if (stdout && (pObj.status !== 0 || !stdout.includes("<span>0 problems</span>"))) {
         const probMatches = /\d problem.*[(](\d+) errors?, (\d+) warning/.exec(stdout);
         if (!probMatches)
