@@ -1,4 +1,4 @@
-Add support for fields sys_ui_page.client_script and sys_ui_page.processing_script
+Add support for ServiceNow CLI for transport.
 
 Fork or enhance "mergeEslintHtml.js" to take input HTML strings instead of files.
 Then snLint can support multiple HTML files directly.

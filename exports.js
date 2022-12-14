@@ -88,7 +88,7 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script)/@(global|scoped)/*.js",  // eslint-disable-line max-len
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script)/@(global|scoped)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
         ],
         rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls", "no-gs-now"]),
@@ -109,7 +109,7 @@ const overrides = [
     }, {
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script)/all/*.js",
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script)/all/*.js",  // eslint-disable-line max-len,
         ],
         parserOptions: { ecmaVersion: 6 },
         rules: {
@@ -138,7 +138,7 @@ const overrides = [
     }, {
         files: [
             "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script)/*/*.js",
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script)/*/*.js",  // eslint-disable-line max-len,
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
@@ -332,6 +332,8 @@ module.exports = {
                   "sys_ui_policy.script_false": ["iso", "noniso"],
                   "sys_ui_script": ["all"],
                   "sp_widget.client_script": ["all"],
+                  "sys_ui_page.client_script": ["all"],
+                  "sys_ui_page.processing_script": ["global", "scoped"],
                 }
             },
             rules: {
