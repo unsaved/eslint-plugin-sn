@@ -177,7 +177,7 @@ function lintFile(file, table, alt, readStdin=false) {
             (m, g1, g2) => {
               jsCodeBlocks.push("function fn" + (jsCodeBlocks.length + 1)
                 + g1.replace(/[^\w]/g, "") + "() { // eslint-disable-line no-unused-vars\n"
-                + g2.replace(/\\"/g, '"') + "\n}\n");
+                + g2.replace(/\\"/g, '"').replace(/\\\\/g, "\\") + "\n}\n");
               return "<DUMMY>";  // Our goal is not to replace anything but to extract
           });
         content = jsCodeBlocks.join("\n");
