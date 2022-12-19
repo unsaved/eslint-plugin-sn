@@ -128,7 +128,7 @@ let lineCount = 0;
 let fileFailureCount = 0;
 let allTables;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
-const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const ALLOW_DEFINE_CMT = "/* eslint-disable-line no-redeclare, no-unused-vars, max-len */";
 const ANGULAR_RAWFN_TEST_PAT = /^function\s*[(]/;  // We strip comments and ws before this test
 const ANGULAR_RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before for substitution
@@ -142,7 +142,14 @@ function lintFile(file, table, alt, readStdin=false) {
     validate(arguments, ["string", "string", "string=", "boolean="]);
     let stdout, thisErrorCount = 0, thisWarnCount = 0;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
-    const baseName = path.basename(file);
+    let baseName = path.basename(file);
+    if (table === "sa_pattern") {
+        // Special filename requirements for transforming custom sa_pattern.ndl format.
+        if (baseName.endsWith(".js")) throw new AppErr("Field sa_pattern.ndl contains a custom "
+          + `format, not JavaScript, but you have specified filename '${baseName}".  `
+          + "Consider using suffix '.txt'");
+        baseName = baseName.slice(0, -"txt".length) + "js";
+    }
     const objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = passThruArgs ? passThruArgs.slice() : [];
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
@@ -163,6 +170,17 @@ function lintFile(file, table, alt, readStdin=false) {
             content = content.replace(ANGULAR_RAWFN_SUB_PAT, "api._dummy=function(") + ";";
             console.warn("Inserted dummy assignment before Angular anonymous function");
         }
+    } else if (table === "sa_pattern") {
+        const jsCodeBlocks = [];
+        content.replace(/\t/g, "    ").replace(/\r/g, "").
+          replace(/^\s*name = "([^"]+)"[\S\s]+?^\s*eval [{]"javascript: (|[\S\s]+?[^\\])"[}]/gm,
+            (m, g1, g2) => {
+              jsCodeBlocks.push("function fn" + (jsCodeBlocks.length + 1)
+                + g1.replace(/[^\w]/g, "") + "() { // eslint-disable-line no-unused-vars\n"
+                + g2.replace(/\\"/g, '"') + "\n}\n");
+              return "<DUMMY>";  // Our goal is not to replace anything but to extract
+          });
+        content = jsCodeBlocks.join("\n");
     } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
         /* eslint-disable prefer-template */
         if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
@@ -237,6 +255,19 @@ function lintFile(file, table, alt, readStdin=false) {
         thisWarnCount += parseInt(probMatches[2]);
         errorCount += thisErrorCount;
         warnCount += thisWarnCount;
+        if (!yargsDict.I && table === "sa_pattern" && thisErrorCount + thisWarnCount > 0) {
+            const generatedCode = content.split("\n").map((cdStr, cdNum) =>
+                `${cdNum+1}:  ${cdStr}`
+            ).join("\n");
+            // Checks show that snLint writes no \r's or \t's:
+            if (yargsDict.H)
+                stdout = stdout.replace(/<[/]table>(\n *)<script\b/,
+                  '</table>\n<pre style="font-size: medium; background-color: silver;">'
+                  + generatedCode.replace(/[$]/g, "$$$$")
+                  + "\n</pre>$1</script");
+            else
+                stdout = "Generated code:\n" + generatedCode + "=".repeat(76) + stdout;
+        }
     }
     if (stdout && !yargsDict.I) process.stdout.write(stdout);
     return yargsDict.r ? thisWarnCount + thisErrorCount : thisErrorCount;

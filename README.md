@@ -150,6 +150,7 @@ Alphabetically
 |ecc_agent_script               |**all**
 |ecc_agent_script_include       |**all**
 |expert_script_client           |**iso**, noniso
+|sa_pattern                     |**all**
 |sa_pattern_prepost_script      |**global**, scoped
 |sc_cat_item_producer           |**global**, scoped
 |sp_widget.script               |**global**, scoped
@@ -184,7 +185,6 @@ In very rough order of priority
 |---                          |---
 |custom fields                |TBD
 |sys_cb_topic                 |TBD
-|sa_pattern                   |probably all
 |mid_limited_resource_script  |**all**
 |sc_cat_item_composer_producer|**global**, scoped
 |sp_header_footer             |**all**

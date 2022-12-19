@@ -104,7 +104,7 @@ const overrides = [
         env: {"@admc.com/sn/sn_server_scoped": true },
         rules: ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
     }, {
-        files: ["**/ecc_agent_script@(|_include)/all/*.js"],
+        files: ["**/@(ecc_agent_script|ecc_agent_script_include|sa_pattern)/all/*.js"],
         env: {"@admc.com/sn/sn_mid": true },
     }, {
         files: [
@@ -343,6 +343,7 @@ module.exports = {
                   "sp_widget.client_script": ["all"],
                   "sys_ui_page.client_script": ["all"],
                   "sys_ui_page.processing_script": ["global", "scoped"],
+                  "sa_pattern": ["all"],
                 }
             },
             rules: {
