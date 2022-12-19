@@ -264,7 +264,7 @@ function lintFile(file, table, alt, readStdin=false) {
                 stdout = stdout.replace(/<[/]table>(\n *)<script\b/,
                   '</table>\n<pre style="font-size: medium; background-color: silver;">'
                   + generatedCode.replace(/[$]/g, "$$$$")
-                  + "\n</pre>$1</script");
+                  + "\n</pre>$1<script");
             else
                 stdout = "Generated code:\n" + generatedCode + "=".repeat(76) + stdout;
         }
