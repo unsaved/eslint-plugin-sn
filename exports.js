@@ -207,6 +207,9 @@ const overrides = [
         // Somehow these scripts get access to some user-defined variables
         files: ["**/sys_ui_page.processing_script/*/*.js"],
         rules: { "no-undef": "off" },
+    }, {
+        files: ["**/sa_pattern/*/*.js"],
+        rules: { "no-unused-expressions": "off" },
     },
 ];
 
