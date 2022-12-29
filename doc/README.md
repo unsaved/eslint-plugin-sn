@@ -157,7 +157,7 @@ Alphabetically
 |sys_transform_script           |**global**, scoped-es5
 |sys_web_service                |**global**, scoped-es5
 |sys_ws_operation               |**global**, scoped-es5
-|sys_ui_action                  |**global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5
+|sys_ui_action                  |[1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5
 |sys_ui_page.client_script      |**all**
 |sys_ui_page.processing_script  |**global**, scoped-es5
 |sys_ui_policy.script_true      |**iso**, noniso
