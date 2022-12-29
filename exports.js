@@ -89,18 +89,18 @@ const overrides = [
     {
         files: [
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script)/@(global|scoped-es5)/*.js",  // eslint-disable-line max-len
-            "**/sys_ui_action/@(iso|noniso)_@(global|scoped-es5)action/*.js",
+            "**/sys_ui_action/@(iso|noniso)_@(global|scoped-es5)/*.js",
         ],
         rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls", "no-gs-now"]),
     }, {
         files: [ "**/sys_script/@(global|scoped-es5)/*.js" ],
         rules: ruleConfigs("error", ["no-br-current-update"]),
     }, {
-        files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
+        files: [ "**/@(global|iso_global|noniso_global)/*.js" ],
         env: {"@admc.com/sn/sn_server_global": true },
         rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
     }, {
-        files: [ "**/@(scoped-es5|iso_scopedaction|noniso_scopedaction)/*.js" ],
+        files: [ "**/@(scoped-es5|iso_scoped-es5|noniso_scoped-es5)/*.js" ],
         env: {"@admc.com/sn/sn_server_scoped": true },
         rules: ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
     }, {
@@ -133,11 +133,11 @@ const overrides = [
         files: ["**/sys_ui_script/*/*.js"],
         rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
     }, {
-        files: [ "**/@(iso|iso_globalaction|iso_scopedaction)/*.js" ],
+        files: [ "**/@(iso|iso_global|iso_scoped-es5)/*.js" ],
         env: {"@admc.com/sn/sn_client_iso": true },
     }, {
         files: [
-            "**/@(noniso|noniso_globalaction|noniso_scopedaction)/*.js",
+            "**/@(noniso|noniso_global|noniso_scoped-es5)/*.js",
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script)/*/*.js",  // eslint-disable-line max-len,
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
@@ -146,7 +146,7 @@ const overrides = [
         rules: clientRules,
     }, {
         // All ui_actions EXCEPT client only iso and noniso:
-        files: ["**/sys_ui_action/@(global|scoped-es5|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
+        files: ["**/sys_ui_action/@(global|scoped-es5|iso_global|iso_scoped-es5|noniso_global|noniso_scoped-es5)/*.js"],  // eslint-disable-line max-len
         globals: { action: "readonly", RP: "readonly" },
     }, {
         files: ["**/@(sys|catalog)_script_client/*/*.js"],
@@ -337,8 +337,8 @@ module.exports = {
                   "sys_web_service": ["global", "scoped-es5"],
                   "sys_ws_operation": ["global", "scoped-es5"],
                   "sys_ui_action": [
-                    "global", "scoped-es5", "iso", "noniso", "iso_globalaction",
-                    "noniso_globalaction", "iso_scopedaction", "noniso_scopedaction"
+                    "global", "scoped-es5", "iso", "noniso", "iso_global",
+                    "noniso_global", "iso_scoped-es5", "noniso_scoped-es5"
                   ],
                   "sys_ui_policy.script_true": ["iso", "noniso"],
                   "sys_ui_policy.script_false": ["iso", "noniso"],
