@@ -71,7 +71,7 @@ Directories are searched recursively for *.js files, with exclusions, like
       type: "boolean",
   }).
   option("a", {
-      describe: "optional scope-alternative, such as 'global' or 'scoped' for server scripts, "
+      describe: "optional scope-alternative, such as 'global' or 'scoped-es5' for server scripts, "
         + "or 'iso' or 'noniso' for client scripts.  Defaults to the default alt for the table.",
       type: "string",
   }).
@@ -148,7 +148,7 @@ function lintFile(file, table, alt, readStdin=false) {
         if (baseName.endsWith(".js")) throw new AppErr("Field sa_pattern.ndl contains a custom "
           + `format, not JavaScript, but you have specified filename '${baseName}".  `
           + "Consider using suffix '.txt'");
-        baseName = baseName.slice(0, -"txt".length) + "js";
+        baseName = baseName.slice(0, -"txt".length) + "js"; // eslint-disable-line prefer-template
     }
     const objName = baseName.replace(/[.][^.]+$/, "");
     const eslintArgs = passThruArgs ? passThruArgs.slice() : [];
@@ -175,6 +175,7 @@ function lintFile(file, table, alt, readStdin=false) {
         content.replace(/\t/g, "    ").replace(/\r/g, "").
           replace(/^\s*name = "([^"]+)"[\S\s]+?^\s*eval [{]"javascript: (|[\S\s]+?[^\\])"[}]/gm,
             (m, g1, g2) => {
+              // eslint-disable-next-line prefer-template
               jsCodeBlocks.push("function fn" + (jsCodeBlocks.length + 1)
                 + g1.replace(/[^\w]/g, "") + "() { // eslint-disable-line no-unused-vars\n"
                 + g2.replace(/\\"/g, '"').replace(/\\\\/g, "\\") + "\n}\n");
@@ -199,7 +200,7 @@ function lintFile(file, table, alt, readStdin=false) {
         content = content.replace(  // eslint-disable-next-line prefer-arrow-callback
           /\bfunction\s+on[A-Z]\w+\s*[(]/, function(m) { return m + ALLOW_DEFINE_CMT; });
         console.warn("Inserted comment directives within client function definition");
-    } else if (table === "sys_ui_action" && !["global", "scoped"].includes(alt)) {
+    } else if (table === "sys_ui_action" && !["global", "scoped-es5"].includes(alt)) {
         const ex = /^function\s*(\w+)/.exec(justCode);
         if (ex) {
             content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife\n`;
@@ -262,10 +263,11 @@ function lintFile(file, table, alt, readStdin=false) {
             // Checks show that snLint writes no \r's or \t's:
             if (yargsDict.H)
                 stdout = stdout.replace(/<[/]table>(\n *)<script\b/,
+                  // eslint-disable-next-line prefer-template
                   '</table>\n<pre style="font-size: medium; background-color: silver;">'
                   + generatedCode.replace(/[$]/g, "$$$$")
                   + "\n</pre>$1<script");
-            else
+            else  // eslint-disable-next-line prefer-template
                 stdout = "Generated code:\n" + generatedCode + "=".repeat(76) + stdout;
         }
     }

@@ -88,19 +88,19 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script)/@(global|scoped)/*.js",  // eslint-disable-line max-len
-            "**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js",
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script)/@(global|scoped-es5)/*.js",  // eslint-disable-line max-len
+            "**/sys_ui_action/@(iso|noniso)_@(global|scoped-es5)action/*.js",
         ],
         rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls", "no-gs-now"]),
     }, {
-        files: [ "**/sys_script/@(global|scoped)/*.js" ],
+        files: [ "**/sys_script/@(global|scoped-es5)/*.js" ],
         rules: ruleConfigs("error", ["no-br-current-update"]),
     }, {
         files: [ "**/@(global|iso_globalaction|noniso_globalaction)/*.js" ],
         env: {"@admc.com/sn/sn_server_global": true },
         rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
     }, {
-        files: [ "**/@(scoped|iso_scopedaction|noniso_scopedaction)/*.js" ],
+        files: [ "**/@(scoped-es5|iso_scopedaction|noniso_scopedaction)/*.js" ],
         env: {"@admc.com/sn/sn_server_scoped": true },
         rules: ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
     }, {
@@ -142,11 +142,11 @@ const overrides = [
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
-        files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped)action/*.js"],
+        files: ["**/sys_ui_action/@(iso|noniso)_@(global|scoped-es5)/*.js"],
         rules: clientRules,
     }, {
         // All ui_actions EXCEPT client only iso and noniso:
-        files: ["**/sys_ui_action/@(global|scoped|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
+        files: ["**/sys_ui_action/@(global|scoped-es5|iso_globalaction|iso_scopedaction|noniso_globalaction|noniso_scopedaction)/*.js"],  // eslint-disable-line max-len
         globals: { action: "readonly", RP: "readonly" },
     }, {
         files: ["**/@(sys|catalog)_script_client/*/*.js"],
@@ -318,26 +318,26 @@ module.exports = {
                   "ecc_agent_script": ["all"],
                   "ecc_agent_script_include": ["all"],
                   "expert_script_client": ["iso", "noniso"],
-                  "sa_pattern_prepost_script": ["global", "scoped"],
-                  "sc_cat_item_producer": ["global", "scoped"],
-                  "sp_widget.script": ["global", "scoped"],
-                  "sysauto_script": ["global", "scoped"],
-                  "sysevent_script_action": ["global", "scoped"],
-                  "sys_processor": ["global", "scoped"],
-                  "sys_script": ["global", "scoped"],
+                  "sa_pattern_prepost_script": ["global", "scoped-es5"],
+                  "sc_cat_item_producer": ["global", "scoped-es5"],
+                  "sp_widget.script": ["global", "scoped-es5"],
+                  "sysauto_script": ["global", "scoped-es5"],
+                  "sysevent_script_action": ["global", "scoped-es5"],
+                  "sys_processor": ["global", "scoped-es5"],
+                  "sys_script": ["global", "scoped-es5"],
                   "sys_script_client": ["iso", "noniso"],
-                  "sys_script_email": ["global", "scoped"],
-                  "sys_script_fix": ["global", "scoped"],
-                  "sys_script_include": ["global", "scoped"],
+                  "sys_script_email": ["global", "scoped-es5"],
+                  "sys_script_fix": ["global", "scoped-es5"],
+                  "sys_script_include": ["global", "scoped-es5"],
                   "sys_script_validator": ["all"],
-                  "sys_security_acl": ["global", "scoped"],
-                  "sys_transform_entry": ["global", "scoped"],
-                  "sys_transform_map": ["global", "scoped"],
-                  "sys_transform_script": ["global", "scoped"],
-                  "sys_web_service": ["global", "scoped"],
-                  "sys_ws_operation": ["global", "scoped"],
+                  "sys_security_acl": ["global", "scoped-es5"],
+                  "sys_transform_entry": ["global", "scoped-es5"],
+                  "sys_transform_map": ["global", "scoped-es5"],
+                  "sys_transform_script": ["global", "scoped-es5"],
+                  "sys_web_service": ["global", "scoped-es5"],
+                  "sys_ws_operation": ["global", "scoped-es5"],
                   "sys_ui_action": [
-                    "global", "scoped", "iso", "noniso", "iso_globalaction",
+                    "global", "scoped-es5", "iso", "noniso", "iso_globalaction",
                     "noniso_globalaction", "iso_scopedaction", "noniso_scopedaction"
                   ],
                   "sys_ui_policy.script_true": ["iso", "noniso"],
@@ -345,7 +345,7 @@ module.exports = {
                   "sys_ui_script": ["all"],
                   "sp_widget.client_script": ["all"],
                   "sys_ui_page.client_script": ["all"],
-                  "sys_ui_page.processing_script": ["global", "scoped"],
+                  "sys_ui_page.processing_script": ["global", "scoped-es5"],
                   "sa_pattern": ["all"],
                 }
             },
