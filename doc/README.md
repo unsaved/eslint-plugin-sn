@@ -157,14 +157,14 @@ Alphabetically
 |sys_transform_script           |**global**, scoped-es5
 |sys_web_service                |**global**, scoped-es5
 |sys_ws_operation               |**global**, scoped-es5
-|sys_ui_action                  |[1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5
+|sys_ui_action                  |[^1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5
 |sys_ui_page.client_script      |**all**
 |sys_ui_page.processing_script  |**global**, scoped-es5
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
 
-[1]: The listed altscope constants are for versions 3.*.*.
+[^1]: The listed altscope constants are for versions 3.*.*.
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
      of the sys_ui_action _*_ contants:  ``iso_globalaction``, ``noniso_globalaction``,
      ``iso_scopedaction``, ``noniso_scopedaction``.
