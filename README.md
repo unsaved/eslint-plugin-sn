@@ -32,7 +32,8 @@ This plugin handles the global-object and rule variants by switching ESLint envi
 based on the ServiceNow table and usually an _alt_.
 "alt" is our term for distinguishing between _alt_-ernate JavaScript environments for the same
 scriptlet field.
-For example, linting of field sys_script.script must specify alt of either ``global`` or ``scoped``;
+For example, linting of field sys_script.script must specify alt of either ``global`` or
+``scoped-es5``;
 and linting of field sys_script_client.script must specify alt of either ``iso`` or ``noniso``.
 
 The provided config generator uses alts in overrides/files entries, and you can add or
@@ -151,33 +152,38 @@ Alphabetically
 |ecc_agent_script_include       |**all**
 |expert_script_client           |**iso**, noniso
 |sa_pattern                     |**all**
-|sa_pattern_prepost_script      |**global**, scoped
-|sc_cat_item_producer           |**global**, scoped
-|sp_widget.script               |**global**, scoped
+|sa_pattern_prepost_script      |**global**, scoped-es5
+|sc_cat_item_producer           |**global**, scoped-es5
+|sp_widget.script               |**global**, scoped-es5
 |sp_widget.client_script        |**all**
-|sysauto_script                 |**global**, scoped
-|sysevent_script_action         |**global**, scoped
-|sys_processor                  |**global**, scoped
-|sys_script                     |**global**, scoped
+|sysauto_script                 |**global**, scoped-es5
+|sysevent_script_action         |**global**, scoped-es5
+|sys_processor                  |**global**, scoped-es5
+|sys_script                     |**global**, scoped-es5
 |sys_script_client              |**iso**, noniso
-|sys_script_email               |**global**, scoped
-|sys_script_fix                 |**global**, scoped
-|sys_script_include             |**global**, scoped
+|sys_script_email               |**global**, scoped-es5
+|sys_script_fix                 |**global**, scoped-es5
+|sys_script_include             |**global**, scoped-es5
 |sys_script_validator           |**all**
-|sys_security_acl               |**global**, scoped
-|sys_transform_entry            |**global**, scoped
-|sys_transform_map              |**global**, scoped
-|sys_transform_script           |**global**, scoped
-|sys_web_service                |**global**, scoped
-|sys_ws_operation               |**global**, scoped
-|sys_ui_action                  |[^2]**global**, scoped, iso, noniso, iso_globalaction, noniso_globalaction, iso_scopedaction, noniso_scopedaction
+|sys_security_acl               |**global**, scoped-es5
+|sys_transform_entry            |**global**, scoped-es5
+|sys_transform_map              |**global**, scoped-es5
+|sys_transform_script           |**global**, scoped-es5
+|sys_web_service                |**global**, scoped-es5
+|sys_ws_operation               |**global**, scoped-es5
+|sys_ui_action                  |**global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5
 |sys_ui_page.client_script      |**all**
-|sys_ui_page.processing_script  |**global**, scoped
+|sys_ui_page.processing_script  |**global**, scoped-es5
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
 
-[^2]: The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client
+[1]: The listed altscope constants are for versions 3.*.*.
+     For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
+     of the sys_ui_action _*_ contants:  ``iso_globalaction``, ``noniso_globalaction``,
+     ``iso_scopedaction``, ``noniso_scopedaction``.
+
+The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
 ### Planned
 In very rough order of priority
@@ -186,7 +192,7 @@ In very rough order of priority
 |custom fields                |TBD
 |sys_cb_topic                 |TBD
 |mid_limited_resource_script  |**all**
-|sc_cat_item_composer_producer|**global**, scoped
+|sc_cat_item_composer_producer|**global**, scoped-es5
 |sp_header_footer             |**all**
 
 ## Development
@@ -207,23 +213,23 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |invalid-table-alt           |error  |Unsupported      |Invalid table/alt combination
 |legacy-use-this             |error  |all              |Same as OOTB ESLint rule [class-methods-use-this](https://eslint.org/docs/latest/rules/class-methods-use-this) but for pre-ES6
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
-|log-scoped-varargs          |error  |server scoped    |ServiceNow scoped logging statements should only have more than one param if using varargs
+|log-scoped-varargs          |error  |server scoped*   |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
 |no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord
 |no-console-info             |error  |client           |Level-specific console logging statements are better because console.info default filtering is inconsistent
 |no-gs-now                   |error  |client           |gs.now() function is unsupported since London release
 |no-init-emptystring         |warn   |all              |For rare cases where the value is to really be used as a string (not just tested) this is ok.  Normally the system default of undefined works great.
-|no-log-global               |error  |server scoped    |Scoped app scripts should use the scoped logging API
+|no-log-global               |error  |server scoped*   |Scoped app scripts should use the scoped logging API
 |no-log-scoped               |error  |server global    |Global scope scripts should use the global logging API
-|no-sysid                    |error, warn[^3]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.  This actually matches for all 32 character hex strings, so you will need to disable for valid non-sysid strings such as MD5 checksums.
+|no-sysid                    |error, warn[^2]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.  This actually matches for all 32 character hex strings, so you will need to disable for valid non-sysid strings such as MD5 checksums.
 |no-uiscript-curlref         |warn   |sys_ui_scripts   |References like ${this} get clobbered by the platform, at least if you load the UI script via \*.jsdbx file.
 |no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
-|sn-workaround-iife          |error  |some server[^4]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
-|validate-gliderecord-calls  |error, warn[^3]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
+|sn-workaround-iife          |error  |some server[^3]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
+|validate-gliderecord-calls  |error, warn[^2]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
 
-[^3]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for
-[^4]: The sn-workaround-iife rule is applied to some specific server tables
+[^2]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for
+[^3]: The sn-workaround-iife rule is applied to some specific server tables
 client-side scriptlets
 
