@@ -178,11 +178,11 @@ Alphabetically
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
 
-[^1]: The listed altscope constants are for versions 3.*.*.
+[^1]: The listed altscope constants are for version series 3.
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
      of the sys_ui_action _*_ contants:  ``iso_globalaction``, ``noniso_globalaction``,
      ``iso_scopedaction``, ``noniso_scopedaction``.
-[^m]: Alt scopes *scoped-es12* were added with version 3.0.5.
+[^m]: Alt scopes *scoped-es12* were added with version series 3.1.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
