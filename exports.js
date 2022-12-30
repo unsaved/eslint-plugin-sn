@@ -111,7 +111,9 @@ const overrides = [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script)/all/*.js",  // eslint-disable-line max-len,
         ],
-        parserOptions: { ecmaVersion: 6, ecmaFeatures: { impliedStrict: true } },
+        // Looks like impliedStrict parser option is only useful if the runtime interpreter
+        // really applies strict implicitly.
+        parserOptions: { ecmaVersion: 6 },
         rules: {
           "strict": ["warn", "safe"],
           "prefer-exponentiation-operator": "error",
@@ -131,7 +133,9 @@ const overrides = [
         },
     }, {
         files: [ "**/scoped-es12/*.js" ],
-        parserOptions: { ecmaVersion: 12, ecmaFeatures: { impliedStrict: true } },
+        // Looks like impliedStrict parser option is only useful if the runtime interpreter
+        // really applies strict implicitly.
+        parserOptions: { ecmaVersion: 12 },
         rules: {
           "strict": ["warn", "global"],
           "prefer-exponentiation-operator": "error",
