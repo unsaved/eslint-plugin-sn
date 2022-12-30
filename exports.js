@@ -130,7 +130,6 @@ const overrides = [
           ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls", "no-client-gr"]),
         },
     }, {
-    }, {
         files: [ "**/scoped-es12/*.js" ],
         parserOptions: { ecmaVersion: 12, ecmaFeatures: { impliedStrict: true } },
         rules: {
