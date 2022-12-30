@@ -223,7 +223,7 @@ function lintFile(file, table, alt, readStdin=false) {
     console.debug('eslint invocation args', eslintArgs);
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
         input:
-          alt === "noniso" || alt === "iso" ||
+          ["noniso", "iso", "scoped-es12"].includes(alt) ||
           table.endsWith(".client_script") || RETAIN_CONST_FILES.includes(table)
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });

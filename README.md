@@ -152,28 +152,28 @@ Alphabetically
 |ecc_agent_script_include       |**all**
 |expert_script_client           |**iso**, noniso
 |sa_pattern                     |**all**
-|sa_pattern_prepost_script      |**global**, scoped-es5
-|sc_cat_item_producer           |**global**, scoped-es5
-|sp_widget.script               |**global**, scoped-es5
+|sa_pattern_prepost_script      |**global**, scoped-es5[^1], scoped-es12[^m]
+|sc_cat_item_producer           |**global**, scoped-es5[^1], scoped-es12[^m]
+|sp_widget.script               |**global**, scoped-es5[^1], scoped-es12[^m]
 |sp_widget.client_script        |**all**
-|sysauto_script                 |**global**, scoped-es5
-|sysevent_script_action         |**global**, scoped-es5
-|sys_processor                  |**global**, scoped-es5
-|sys_script                     |**global**, scoped-es5
+|sysauto_script                 |**global**, scoped-es5[^1], scoped-es12[^m]
+|sysevent_script_action         |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_processor                  |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_script                     |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_script_client              |**iso**, noniso
-|sys_script_email               |**global**, scoped-es5
-|sys_script_fix                 |**global**, scoped-es5
-|sys_script_include             |**global**, scoped-es5
+|sys_script_email               |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_script_fix                 |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_script_include             |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_script_validator           |**all**
-|sys_security_acl               |**global**, scoped-es5
-|sys_transform_entry            |**global**, scoped-es5
-|sys_transform_map              |**global**, scoped-es5
-|sys_transform_script           |**global**, scoped-es5
-|sys_web_service                |**global**, scoped-es5
-|sys_ws_operation               |**global**, scoped-es5
-|sys_ui_action                  |[^1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5
+|sys_security_acl               |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_transform_entry            |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_transform_map              |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_transform_script           |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_web_service                |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_ws_operation               |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_ui_action                  |[^1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^m], noniso_scoped-es12[^m]
 |sys_ui_page.client_script      |**all**
-|sys_ui_page.processing_script  |**global**, scoped-es5
+|sys_ui_page.processing_script  |**global**, scoped-es5[^1]
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
@@ -182,6 +182,7 @@ Alphabetically
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
      of the sys_ui_action _*_ contants:  ``iso_globalaction``, ``noniso_globalaction``,
      ``iso_scopedaction``, ``noniso_scopedaction``.
+[^m]: Alt scopes *scoped-es12* were added with version 3.0.5.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
