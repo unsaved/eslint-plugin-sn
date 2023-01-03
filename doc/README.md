@@ -170,7 +170,7 @@ Alphabetically
 
 [^1]: The listed altscope constants are for version series 3.
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
-     of the sys_ui_action \*\_\* contants:  ``iso_globalaction``, ``noniso_globalaction``,
+     of the sys_ui_action \*\_\* constants:  ``iso_globalaction``, ``noniso_globalaction``,
      ``iso_scopedaction``, ``noniso_scopedaction``.
 [^m]: Alt scopes *scoped-es12* were added with version series 3.1.
 
