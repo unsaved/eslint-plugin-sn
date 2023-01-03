@@ -132,7 +132,7 @@ const overrides = [
           ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls", "no-client-gr"]),
         },
     }, {
-        files: [ "**/scoped-es12/*.js" ],
+        files: [ "**/scoped-es12/*.js", "**/*es12/*-condition.js" ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
         parserOptions: { ecmaVersion: 12 },
@@ -153,8 +153,9 @@ const overrides = [
         },
     }, {
         files: [
-            "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script)/scoped-es12/*.js",  // eslint-disable-line max-len
-            "**/sys_ui_action/@(iso|noniso)_scoped-es12/*.js",
+          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script)/scoped-es12/*.js",  // eslint-disable-line max-len
+          "**/sys_ui_action/@(iso|noniso)_scoped-es12/*.js",
+          "**/*es12/*-condition.js",
         ],
         rules: { "strict": ["warn", "function"] }  // Overridding for ES12 IIFE scriptlets
     }, {
@@ -238,7 +239,16 @@ const overrides = [
     }, {
         files: ["**/sa_pattern/*/*.js"],
         rules: { "no-unused-expressions": "off" },
-    },
+    }, {
+      files: [ "**/*-condition.js"],
+      rules: {  // Allow these for conciseness
+        "comma-spacing": "off",
+        "func-call-spacing": "off",
+        "keyword-spacing": "off",
+        "max-len": "off",
+        // Can't use ES6 spread operator in any condition script
+      }
+    }
 ];
 
 let entry, writables, readables, iifeParams, overridesEntry, overridesFiles,
