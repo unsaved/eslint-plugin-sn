@@ -239,15 +239,17 @@ const overrides = [
     }, {
         files: ["**/sa_pattern/*/*.js"],
         rules: { "no-unused-expressions": "off" },
+    /* Custom overriders who enable any of the following rules will need a late-position 
+     * override like this to allow for concise syntax in condition scripts:
     }, {
-      files: [ "**/*-condition.js"],
+      files: [ "**SLASH*-condition.js"],
       rules: {  // Allow these for conciseness
         "comma-spacing": "off",
         "func-call-spacing": "off",
         "keyword-spacing": "off",
         "max-len": "off",
         // Can't use ES6 spread operator in any condition script
-      }
+      }*/
     }
 ];
 
