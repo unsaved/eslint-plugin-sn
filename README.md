@@ -36,6 +36,10 @@ For example, linting of field sys_script.script must specify alt of either ``glo
 ``scoped-es5``;
 and linting of field sys_script_client.script must specify alt of either ``iso`` or ``noniso``.
 
+From version 3.1.5 if you end logical file names with ``-condition.js`` then the specified scope
+is altered to accommodate the server-side condition scriptlet.  This has not been tested
+comprehensively yet.
+
 The provided config generator uses alts in overrides/files entries, and you can add or
 customize with overrides/file entries in your own "sneslintrc.json" file.
 Our design leverages ESLint override/files entries.
@@ -180,7 +184,7 @@ Alphabetically
 
 [^1]: The listed altscope constants are for version series 3.
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
-     of the sys_ui_action _*_ contants:  ``iso_globalaction``, ``noniso_globalaction``,
+     of the sys_ui_action \_\*\_ contants:  ``iso_globalaction``, ``noniso_globalaction``,
      ``iso_scopedaction``, ``noniso_scopedaction``.
 [^m]: Alt scopes *scoped-es12* were added with version series 3.1.
 
