@@ -1,0 +1,20 @@
+These tables require IIFEs.
+I derived this list by checking SN-provided scripts for all table scriptlet fields and I see
+that ServiceNow only consistently wraps these scriptlets in IIFEs.
+Based on that practice, I think it's clear that the scope is shared for other purposes
+(thereby allowing for variable scope bleed that can be worked around with IIFEs).
+If a scope is shared then using global-level "use strict" would either have no effect or could have
+potentially disastrous side-effects.
+Therefore, eslint-plugin-sn advises that users use IIFEs for these scriptlets (as does ServiceNow)
+and we advise to use function-level "use script" when the ECMA level allows for use script.
+For all other scriptlets we recommend global-level "use script" when the ECMA level allows for use
+script.
+
+sp_widget.script
+sys_processor
+sys_script
+sys_script_email
+sys_transform_map
+sys_transform_script
+sys_web_service
+sys_ws_operation

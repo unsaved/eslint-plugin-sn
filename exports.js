@@ -115,7 +115,7 @@ const overrides = [
         // really applies strict implicitly.
         parserOptions: { ecmaVersion: 6 },
         rules: {
-          "strict": ["warn", "safe"],
+          "strict": ["warn", "function"],
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
           "prefer-arrow-callback": "warn",
@@ -137,7 +137,7 @@ const overrides = [
         // really applies strict implicitly.
         parserOptions: { ecmaVersion: 12 },
         rules: {
-          "strict": ["warn", "global"],
+          "strict": ["warn", "global"],  // For non-IIFE scriptlet.  Overridden for IIFEs below.
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
           "prefer-arrow-callback": "warn",
@@ -151,6 +151,12 @@ const overrides = [
           "no-unused-private-class-members": "error",
           "no-promise-executor-return": "error",
         },
+    }, {
+        files: [
+            "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script)/scoped-es12/*.js",  // eslint-disable-line max-len
+            "**/sys_ui_action/@(iso|noniso)_scoped-es12/*.js",
+        ],
+        rules: { "strict": ["warn", "function"] }  // Overridding for ES12 IIFE scriptlets
     }, {
         files: ["**/sys_ui_script/*/*.js"],
         rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
