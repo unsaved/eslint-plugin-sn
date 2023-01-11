@@ -122,6 +122,7 @@ GlideSPSearchAnalytics
 GlideScopedEvaluator
 GlideSecurityUtils
 GlideStringUtil
+GlideSysAttachment
 GlideSession
 GlideSystem
 #GlideSystemRunLevel API  has a space???
