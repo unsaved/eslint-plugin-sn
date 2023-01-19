@@ -4,6 +4,8 @@ const baseName = require("path").basename(__filename).replace(/-test[.]js$/, "")
 const messageId = (baseName + "_msg").toUpperCase();  // eslint-disable-line prefer-template
 new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}`), {
     valid: [
+        // no IIFE
+        'console.info("V-1");',
         // good IIFE
         '(function() { console.info("V0"); })();',
         // root-level assignment, but separated by other statement
@@ -18,6 +20,12 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
         // block-level traditional, but separated by other statement
         'var x=0;\nif (true) {\n    function afn() { console.info("V4"); }\n' +
           '    if (x === 0) console.warn("It stil zero");\n    afn(x);}',
+        // no IIFE.  This was choking system:
+        'AClaz.getClassHierarchy = function() {\n' +
+          '    function addDirectSubs(cName, cSup) {\n' +
+          '        while (gr._next()) addDirectSubs(gr.getValue("name"), cName);\n' +
+          '    }\n' +
+          '};',
     ],
     invalid: [
         { // root-level assignment

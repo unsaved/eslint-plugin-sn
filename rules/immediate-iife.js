@@ -32,6 +32,7 @@ const esLintObj = {
                 const esAst = node.parent;
                 if (esAst.type !== "ExpressionStatement") return;
                 if (!node.parent.parent.body) return;
+                if (!Array.isArray(node.parent.parent.body)) return;
                 const prevBodIndex =
                   node.parent.parent.body.findIndex(bodElAst => bodElAst === esAst) - 1;
                 if (prevBodIndex < 0) return;
