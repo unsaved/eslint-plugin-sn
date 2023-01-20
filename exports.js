@@ -135,7 +135,7 @@ const overrides = [
         files: [ "**/scoped-es12/*.js", "**/*es12/*-condition.js" ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
-        parserOptions: { ecmaVersion: 12 },
+        parserOptions: { ecmaVersion: 13 },
         rules: {
           "strict": ["warn", "global"],  // For non-IIFE scriptlet.  Overridden for IIFEs below.
           "prefer-exponentiation-operator": "error",
