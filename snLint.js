@@ -194,9 +194,13 @@ function lintFile(file, table, alt, readStdin=false) {
                 `function$1${objName} ${ALLOW_DEFINE_CMT}$2(`);
             console.warn("Inserted comment directives within SI function definition");
         } else if (new RegExp("\\bclass\\s+" + objName + "\\s*[{]").test(content)) {
-            content = content.replace(
-              new RegExp("\\bclass(\\s+)" + objName + "(\\s*)[{]"),
+            content = content.replace(new RegExp("\\bclass(\\s+)" + objName + "(\\s*)[{]"),
                 `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
+            console.warn("Inserted comment directives within SI function definition");
+        } else if (new RegExp("\\bclass\\s+" + objName
+          + "\\s+extends\\s+\\S+\\s*[{]").test(content)) {
+            content = content.replace(new RegExp("\\bclass(\\s+)" + objName
+              + "(\\s+extends\\s+\\S+\\s*)[{]"), `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
             console.warn("Inserted comment directives within SI function definition");
         }
         /* eslint-enable prefer-template */
