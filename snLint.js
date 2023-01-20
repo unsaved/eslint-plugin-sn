@@ -193,6 +193,11 @@ function lintFile(file, table, alt, readStdin=false) {
               new RegExp("\\bfunction(\\s+)" + objName + "(\\s*)[(]"),
                 `function$1${objName} ${ALLOW_DEFINE_CMT}$2(`);
             console.warn("Inserted comment directives within SI function definition");
+        } else if (new RegExp("\\bclass\\s+" + objName + "\\s*[{]").test(content)) {
+            content = content.replace(
+              new RegExp("\\bclass(\\s+)" + objName + "(\\s*)[{]"),
+                `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
+            console.warn("Inserted comment directives within SI function definition");
         }
         /* eslint-enable prefer-template */
     } else if (["catalog_script_client", "sys_script_client"].includes(table)

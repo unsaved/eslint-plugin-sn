@@ -239,7 +239,7 @@ const overrides = [
     }, {
         files: ["**/sa_pattern/*/*.js"],
         rules: { "no-unused-expressions": "off" },
-    /* Custom overriders who enable any of the following rules will need a late-position 
+    /* Custom overriders who enable any of the following rules will need a late-position
      * override like this to allow for concise syntax in condition scripts:
     }, {
       files: [ "**SLASH*-condition.js"],
