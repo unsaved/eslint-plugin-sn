@@ -122,8 +122,8 @@ GlideSPSearchAnalytics
 GlideScopedEvaluator
 GlideSecurityUtils
 GlideStringUtil
-GlideSysAttachment
 GlideSession
+GlideSysAttachment
 GlideSystem
 #GlideSystemRunLevel API  has a space???
 GlideTimeline

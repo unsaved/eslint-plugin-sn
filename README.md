@@ -164,7 +164,7 @@ Alphabetically
 |sysevent_script_action         |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_processor                  |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_script                     |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_script_client              |**iso**, noniso
+|sys_script_client.script       |**iso**, noniso
 |sys_script_email               |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_script_fix                 |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_script_include             |**global**, scoped-es5[^1], scoped-es12[^m]
@@ -175,18 +175,21 @@ Alphabetically
 |sys_transform_script           |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_web_service                |**global**, scoped-es5[^1], scoped-es12[^m]
 |sys_ws_operation               |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_ui_action                  |[^1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^m], noniso_scoped-es12[^m]
+|sys_ui_action.script           |[^1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^m], noniso_scoped-es12[^m]
+|sys_ui_action.client_script_v2 |**all**[^n]
 |sys_ui_page.client_script      |**all**
 |sys_ui_page.processing_script  |**global**, scoped-es5[^1]
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
 
-[^1]: The listed altscope constants are for version series 3.
+[^1]: The listed altscope constants are for major version 3.
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
      of the sys_ui_action \*\_\* constants:  ``iso_globalaction``, ``noniso_globalaction``,
      ``iso_scopedaction``, ``noniso_scopedaction``.
-[^m]: Alt scopes *scoped-es12* were added with version series 3.1.
+[^m]: Alt scopes *scoped-es12* were added with minor version 3.1.
+[^n]: sys_ui_action (supporting only 'script' field) was split into .script
+      and .client_script_v2 with minor version 3.2.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
