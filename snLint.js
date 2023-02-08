@@ -209,7 +209,7 @@ function lintFile(file, table, alt, readStdin=false) {
         content = content.replace(  // eslint-disable-next-line prefer-arrow-callback
           /\bfunction\s+on[A-Z]\w+\s*[(]/, function(m) { return m + ALLOW_DEFINE_CMT; });
         console.warn("Inserted comment directives within client function definition");
-    } else if (table === "sys_ui_action" && !["global", "scoped-es5"].includes(alt)) {
+    } else if (table.startsWith("sys_ui_action.") && !["global", "scoped-es5"].includes(alt)) {
         const ex = /^function\s*(\w+)/.exec(justCode);
         if (ex) {
             content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife\n`;
@@ -234,7 +234,7 @@ function lintFile(file, table, alt, readStdin=false) {
         input:
           ["noniso", "iso", "scoped-es12"].includes(alt) ||
           alt.includes("es12") && baseName.endsWith("-condition.js") ||
-          table.endsWith(".client_script") || RETAIN_CONST_FILES.includes(table)
+          table.includes(".client_script") || RETAIN_CONST_FILES.includes(table)
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
     process.stderr.write(pObj.stderr.toString("utf8"));
