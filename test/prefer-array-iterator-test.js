@@ -13,7 +13,9 @@ new (require("eslint").RuleTester)().run(baseName, require(`../rules/${baseName}
       'var ar = ["a", "b", "c"]; for (i = ar.length - 1; i >= 0; i--)\nconsole.info(ar[i]);',
       // Non-entire iteration not so easy with Array iterators
       'var ar = ["a", "b", "c"]; for (i = 0; ar.length - 1 > i; i++)\nconsole.info(ar[i]);',
-      'var ar = ["a", "b", "c"]; for (i = ar.length - 1; 0 <= i; i--)\nconsole.info(ar[i]);'
+      'var ar = ["a", "b", "c"]; for (i = ar.length - 1; 0 <= i; i--)\nconsole.info(ar[i]);',
+      // No initialization clause
+      'var ar = ["a", "b", "c"]; i = 0; for (; i < ar.length; i++); console.info(ar[i]);',
     ],
     invalid: [
         {

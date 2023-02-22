@@ -30,7 +30,7 @@ const esLintObj = {
 
     create: context => { return {
         ForStatement: node => {
-            if (!node.init.right) return;
+            if (node.init === null || !node.init.right) return;
             /* LHS harder to use than the other segments, because it may be a VariableDeclaration
              * or an AssigmentExpression.
             if (node.init.type !== "AssignmentExpression" || node.init.operator !== "=") return; */
