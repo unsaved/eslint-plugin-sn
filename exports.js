@@ -107,13 +107,16 @@ const overrides = [
         files: ["**/@(ecc_agent_script|ecc_agent_script_include|sa_pattern)/all/*.js"],
         env: {"@admc.com/sn/sn_mid": true },
     }, {
+        // Regular SN client scripts, both iso and non-iso
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script|sys_ui_action.client_script_v2)/all/*.js",  // eslint-disable-line max-len,
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
-        parserOptions: { ecmaVersion: 6 },
+        // ServiceNow requires just 2 versions back for Edge and Chrome, so the limiting browser
+        // is Safari 12.0 which is supports ES2018.
+        env: { es2018: true },
         rules: {
           "strict": ["warn", "function"],
           "prefer-exponentiation-operator": "error",
@@ -132,10 +135,11 @@ const overrides = [
           ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls", "no-client-gr"]),
         },
     }, {
+        // ES12 server-side
         files: [ "**/scoped-es12/*.js", "**/*es12/*-condition.js" ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
-        parserOptions: { ecmaVersion: 13 },
+        env: { es2022: true },
         rules: {
           "strict": ["warn", "global"],  // For non-IIFE scriptlet.  Overridden for IIFEs below.
           "prefer-exponentiation-operator": "error",
@@ -162,12 +166,14 @@ const overrides = [
         files: ["**/sys_ui_script/*/*.js"],
         rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
     }, {
+        // iso SN client scripts
         files: [
             "**/@(iso|iso_global|iso_scoped-es5|iso_scoped-es12)/*.js",
             "**/sys_ui_action.client_script_v2/all/*.js",
         ],
         env: {"@admc.com/sn/sn_client_iso": true },
     }, {
+        // Non-iso SN client scripts
         files: [
             "**/@(noniso|noniso_global|noniso_scoped-es5|noniso_scoped-es12)/*.js",
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script)/*/*.js",  // eslint-disable-line max-len,
