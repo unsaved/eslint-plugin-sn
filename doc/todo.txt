@@ -1,4 +1,7 @@
-Add support for ServiceNow CLI for transport.
+Support fields:
+sys_ux_client_script.script  function evaluateProperty({api, helpers})
+user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.
+                      Don't use 'current', 'gs.getUser()', gs.getUserID(); so use user_id (a sys_id)
 
 Fork or enhance "mergeEslintHtml.js" to take input HTML strings instead of files.
 Then snLint can support multiple HTML files directly.
