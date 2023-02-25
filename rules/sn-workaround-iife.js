@@ -35,7 +35,7 @@ const arraysEq = (a1, a2, ordered=true) => {
  */
 const hasFnAncestor = ctx =>
     ctx.getAncestors().some(node =>
-        node.type === "FunctionExpression" || node.type === "FunctionDeclaration"
+        ["FunctionExpression", "FunctionDeclaration", "ArrowFunctionExpression"].includes(node.type)
     );
 
 const message =
@@ -80,7 +80,8 @@ const esLintObj = {
         return {
             CallExpression: node => {
                 const callee = node.callee;
-                if (callee.type !== "FunctionExpression") return;
+                if (!["FunctionExpression", "ArrowFunctionExpression"].includes(callee.type))
+                    return;
                 const rtParams = node.arguments.map(p=>p.name);
                 //console.debug(context.getSourceCode().getText(node.callee.body));
                 if (node.parent.parent.type !== "Program") return;  // not at block level 0/root

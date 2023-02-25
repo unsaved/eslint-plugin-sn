@@ -1,5 +1,3 @@
-Support arrow-function IIFEs
-
 Support fields:
 sys_ux_client_script.script  function evaluateProperty({api, helpers})
 user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.
