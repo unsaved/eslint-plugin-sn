@@ -88,7 +88,7 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script)/@(global|scoped-es5|scoped-es12)/*.js",  // eslint-disable-line max-len
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition)/@(global|scoped-es5|scoped-es12)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
         ],
         rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls", "no-gs-now"]),
@@ -136,7 +136,7 @@ const overrides = [
         },
     }, {
         // ES12 server-side
-        files: [ "**/scoped-es12/*.js", "**/*es12/*-condition.js" ],
+        files: [ "**/scoped-es12/*.js" ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
         env: { es2022: true },
@@ -156,10 +156,10 @@ const overrides = [
           "no-promise-executor-return": "error",
         },
     }, {
+        // ES12 IIFEs
         files: [
           "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script)/scoped-es12/*.js",  // eslint-disable-line max-len
           "**/sys_ui_action.script/@(iso|noniso)_scoped-es12/*.js",
-          "**/*es12/*-condition.js",
         ],
         rules: { "strict": ["warn", "function"] }  // Overridding for ES12 IIFE scriptlets
     }, {
@@ -184,7 +184,8 @@ const overrides = [
         rules: clientRules,
     }, {
         // All ui_actions EXCEPT client-only iso and noniso:
-        files: ["**/sys_ui_action.script/@(global|scoped-es5|scoped-es12|iso_global|iso_scoped-es5|iso_scoped-es12|noniso_global|noniso_scoped-es5)/*.js"],  // eslint-disable-line max-len
+        files: ["**/sys_ui_action.script/@(global|scoped-es5|scoped-es12|iso_global|iso_scoped-es5|iso_scoped-es12|noniso_global|noniso_scoped-es5)/*.js",  // eslint-disable-line max-len
+          "**/sys_ui_action.condition/*/*.js"],
         globals: { action: "readonly", RP: "readonly" },
     }, {
         files: ["**/@(sys|catalog)_script_client/*/*.js"],
@@ -215,7 +216,7 @@ const overrides = [
         files: ["**/@(sys_web_service|sys_ws_operation/*/*.js"],
         rules: { "no-unused-vars": ["error", { argsIgnorePattern: "^(request|response)$", }] },
     }, {
-        files: ["**/sys_script/*/*.js"],
+        files: ["**/sys_script/*/*.js", "**/sys_script.condition/*/*.js"],
         rules: { "no-unused-vars": ["error", {
             varsIgnorePattern: "^(g_scratchpad|action)$",
             argsIgnorePattern: "^(current|previous)$",
@@ -251,17 +252,13 @@ const overrides = [
     }, {
         files: ["**/sa_pattern/*/*.js"],
         rules: { "no-unused-expressions": "off" },
-    /* Custom overriders who enable any of the following rules will need a late-position
-     * override like this to allow for concise syntax in condition scripts:
     }, {
-      files: [ "**SLASH*-condition.js"],
-      rules: {  // Allow these for conciseness
-        "comma-spacing": "off",
-        "func-call-spacing": "off",
-        "keyword-spacing": "off",
-        "max-len": "off",
-        // Can't use ES6 spread operator in any condition script
-      }*/
+        files: [ "**/*.condition/*/*.js"],
+        rules: {
+            "strict": "off",
+            "no-unused-expressions": "off",
+            "semi": "off",
+        },
     }
 ];
 
@@ -374,15 +371,18 @@ module.exports = {
                   "sc_cat_item_producer": ["global", "scoped-es5", "scoped-es12"],
                   "sp_widget.script": ["global", "scoped-es5", "scoped-es12"],
                   "sysauto_script": ["global", "scoped-es5", "scoped-es12"],
+                  "sysauto_script.condition": ["global", "scoped-es5", "scoped-es12"],
                   "sysevent_script_action": ["global", "scoped-es5", "scoped-es12"],
                   "sys_processor": ["global", "scoped-es5", "scoped-es12"],
                   "sys_script": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_script.condition": ["global", "scoped-es5", "scoped-es12"],
                   "sys_script_client": ["iso", "noniso"],
                   "sys_script_email": ["global", "scoped-es5", "scoped-es12"],
                   "sys_script_fix": ["global", "scoped-es5", "scoped-es12"],
                   "sys_script_include": ["global", "scoped-es5", "scoped-es12"],
                   "sys_script_validator": ["all"],
                   "sys_security_acl": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_security_acl.condition": ["global", "scoped-es5", "scoped-es12"],
                   "sys_transform_entry": ["global", "scoped-es5", "scoped-es12"],
                   "sys_transform_map": ["global", "scoped-es5", "scoped-es12"],
                   "sys_transform_script": ["global", "scoped-es5", "scoped-es12"],
@@ -394,6 +394,7 @@ module.exports = {
                     "noniso_scoped-es5", "noniso_scoped-es12",
                   ],
                   "sys_ui_action.client_script_v2": ["all"],
+                  "sys_ui_action.condition": ["global", "scoped-es5", "scoped-es12"],
                   "sys_ui_policy.script_true": ["iso", "noniso"],
                   "sys_ui_policy.script_false": ["iso", "noniso"],
                   "sys_ui_script": ["all"],
