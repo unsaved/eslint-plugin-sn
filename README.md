@@ -97,6 +97,12 @@ With local project installation
     npm exec snLint -- -g
 ```
 
+ServiceNow has several very poor sys_script_validator records which will prevent you from
+using modern JavaScript constructs from web editor, for .condition fields and fields of
+types 'Script' and 'Script (Plain)'.
+See directory resources/sys_script_validator for suggested sys_script_validator replacement
+scriptlets, and I recommend that you deactivate the record for type 'Condition String'.
+
 ## Usage
 To get invocation syntax help:
 ```
@@ -106,6 +112,14 @@ To get invocation syntax help:
 Do read the brief output from this command for essential information about specifying files,
 target tables, and alts.  The switch list in the output provides a concise list of the many
 features.
+
+Single-line scriptlet fields (most importantly .condition fields) may indeed hold newlines, but
+the newlines are hidden whenever displayed in web UI, even when using 'Show XML'.  They aren't
+normalized to a single space, they are completely skipped.  In ServiceNow, a single-line scriptlet
+is any string field with max length set to less than 256, as well as fields of type 'Condition
+String'.  Using newlines is useful only here if you edit these scriptlets externally, in which
+case it can greatly reduce mess of larger scriptlets if you use newlines.
+Especially useful to use IIFEs and/or try/catch blocks in condition scriptlets.
 
 ### Color Output Work-around
 As a work-around for a mingw or git-for-windows glitch, if Node.js can't determine tty interactivity
@@ -156,40 +170,45 @@ Alphabetically
 |ecc_agent_script_include       |**all**
 |expert_script_client           |**iso**, noniso
 |sa_pattern                     |**all**
-|sa_pattern_prepost_script      |**global**, scoped-es5[^1], scoped-es12[^m]
-|sc_cat_item_producer           |**global**, scoped-es5[^1], scoped-es12[^m]
-|sp_widget.script               |**global**, scoped-es5[^1], scoped-es12[^m]
+|sa_pattern_prepost_script      |**global**, scoped-es5[^a], scoped-es12[^b]
+|sc_cat_item_producer           |**global**, scoped-es5[^a], scoped-es12[^b]
+|sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sp_widget.client_script        |**all**
-|sysauto_script                 |**global**, scoped-es5[^1], scoped-es12[^m]
-|sysevent_script_action         |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_processor                  |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_script                     |**global**, scoped-es5[^1], scoped-es12[^m]
+|sysauto_script                 |**global**, scoped-es5[^a], scoped-es12[^b]
+|sysauto_script.condition       |**global**, scoped-es5, scoped-es12[^d]
+|sysevent_script_action         |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_processor                  |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_script                     |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_script.condition           |**global**, scoped-es5, scoped-es12[^d]
 |sys_script_client.script       |**iso**, noniso
-|sys_script_email               |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_script_fix                 |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_script_include             |**global**, scoped-es5[^1], scoped-es12[^m]
+|sys_script_email               |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_script_fix                 |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_script_include             |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_validator           |**all**
-|sys_security_acl               |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_transform_entry            |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_transform_map              |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_transform_script           |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_web_service                |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_ws_operation               |**global**, scoped-es5[^1], scoped-es12[^m]
-|sys_ui_action.script           |[^1] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^m], noniso_scoped-es12[^m]
-|sys_ui_action.client_script_v2 |**all**[^n]
+|sys_security_acl               |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_security_acl.condition     |**global**, scoped-es5, scoped-es12[^d]
+|sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12[^b]
+|sys_ui_action.client_script_v2 |**all**[^c]
+|sys_ui_action.condition        |**global**, scoped-es5, scoped-es12[^d]
 |sys_ui_page.client_script      |**all**
-|sys_ui_page.processing_script  |**global**, scoped-es5[^1]
+|sys_ui_page.processing_script  |**global**, scoped-es5[^a]
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
+|sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
 
-[^1]: The listed altscope constants are for major version 3.
+[^a]: The listed altscope constants are for major version 3.
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
      of the sys_ui_action \*\_\* constants:  ``iso_globalaction``, ``noniso_globalaction``,
      ``iso_scopedaction``, ``noniso_scopedaction``.
-[^m]: Alt scopes *scoped-es12* were added with minor version 3.1.
-[^n]: sys_ui_action (supporting only 'script' field) was split into .script
+[^b]: Alt scopes *scoped-es12* were added with minor version 3.1.
+[^c]: sys_ui_action (supporting only 'script' field) was split into .script
       and .client_script_v2 with minor version 3.2.
+[^d]: .condition fields were added with minor version 3.3.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
