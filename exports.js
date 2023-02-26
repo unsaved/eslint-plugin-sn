@@ -161,7 +161,7 @@ const overrides = [
           "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script)/scoped-es12/*.js",  // eslint-disable-line max-len
           "**/sys_ui_action.script/@(iso|noniso)_scoped-es12/*.js",
         ],
-        rules: { "strict": ["warn", "function"] }  // Overridding for ES12 IIFE scriptlets
+        rules: { "strict": ["warn", "function"] }  // Overriding for ES12 IIFE scriptlets
     }, {
         files: ["**/sys_ui_script/*/*.js"],
         rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
@@ -253,7 +253,7 @@ const overrides = [
         files: ["**/sa_pattern/*/*.js"],
         rules: { "no-unused-expressions": "off" },
     }, {
-        files: [ "**/*.condition/*/*.js"],
+        files: ["**/*.condition/*/*.js"],
         rules: {
             "strict": "off",
             "no-unused-expressions": "off",
