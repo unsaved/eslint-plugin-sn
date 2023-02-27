@@ -134,9 +134,9 @@ const RAWFN_TEST_PAT = /^\s*function\s*[(]/;  // We strip comments and ws before
 const RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before substitution
 const RAWFNCMT_SUB_PAT = /\bfunction\s*[(].*/;  // Allow for comments before substitution
 const ENTIREFN_TEST_PAT = /^\s*function\s*[(][\s\S]+[}]\s*$/;  // We strip comments and ws before
-const UNUSEDFNEXPR_TEST_PAT = /^\s*[(]\s*function\s*[(][\s\S]+[)]\s*;\s*$/;
+const UNUSEDFNEXPR_TEST_PAT = /^\s*[(]\s*function\s*[(][\s\S]+[)]\s*$/;
 const UNUSEDFNEXPR_SUB_PAT = /[(]\s*function\s*[(].*/;
-const UNUSEDAREXPR_TEST_PAT = /^\s*[(]\s*[{].*=>[\s\S]+[}]\s*;\s*$/;
+const UNUSEDAREXPR_TEST_PAT = /^\s*[(]\s*[{].*=>[\s\S]+[}]\s*$/;
 const UNUSEDAREXPR_SUB_PAT = /[(]\s*[{].*=>.*/;
 const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
