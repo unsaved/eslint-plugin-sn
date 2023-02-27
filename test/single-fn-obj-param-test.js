@@ -40,7 +40,7 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
     ],
     invalid: [
         {
-            code: '({a, b}) => { gs.info("word");}\nlet x = 3;',
+            code: 'let x = 3;\n({a, b}) => { gs.info("word");}',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         },
@@ -61,7 +61,7 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         }, {
-            code: 'if (true) (function({a}) { gs.info("Hea"); });',
+            code: 'if (true) (function({a}) { gs.info("word"); })',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         }, {
@@ -77,7 +77,15 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         }, {
+            code: 'let x',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }, {
             code: 'let x;',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }, {
+            code: '// comment\nlet x;',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         },
@@ -105,6 +113,10 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             errors: [{messageId}],
         }, {
             code: '(a) => { gs.info("word"); }',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }, {  // just a trailing ;
+            code:'function fn({x, y}) { return x + x; };',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         }, {  // just a trailing ;
