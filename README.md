@@ -216,6 +216,12 @@ The 8 alt variants for the sys_ui_action script are necessary to support the dif
 In very rough order of priority
 |Table                        |Alts
 |---                          |---
+|sys_ux_client_script.script  |**all**
+|user_criteria.script         |TBD
+|sys_ui_context_menu.condition|TBD
+|sys_ui_context_menu.dynamic_actions_script|TBD
+|sys_ui_context_menu.on_show_script|TBD
+|sys_ui_context_menu.action_script|TBD
 |custom fields                |TBD
 |sys_cb_topic                 |TBD
 |mid_limited_resource_script  |**all**

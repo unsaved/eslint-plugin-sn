@@ -22,23 +22,19 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             options: [{table: "table_for_message", paramCallVars: ["a", "b", "c"]}],
         },
         { // Good IIFE with isolated declaration
-            code:
-              'gs.log("a msg", "src");\n(function(x,y,z){//V2\nvar x = 3; })(b, a);',
+            code: 'gs.log("a msg", "src");\n(function(x,y,z){//V2\nvar x = 3; })(b, a);',
             options: [{table: "msg_tbl1", paramCallVars: ["a", "b"]}],
         },
         { // Good IIFE with isolated assignment
-            code:
-              'gs.log("a msg", "src");\n(function(x,y,z){//V3\nx = 3; })(b, a);',
+            code: 'gs.log("a msg", "src");\n(function(x,y,z){//V3\nx = 3; })(b, a);',
             options: [{table: "msg_tbl1", paramCallVars: ["a", "b"]}],
         },
         { // Good 0-param IIFE with isolated declaration
-            code:
-              'gs.log("a msg", "src");\n(function(x,y,z){//V7\nvar x = 3; })();',
+            code: 'gs.log("a msg", "src");\n(function(x,y,z){//V7\nvar x = 3; })();',
             options: [{table: "msg_tbl1", paramCallVars: []}],
         },
         { // Good unused-params IIFE with isolated declaration
-            code:
-              'gs.log("a msg", "src");\n(function(){//V8\nvar x = 3; })(b, a);',
+            code: 'gs.log("a msg", "src");\n(function(){//V8\nvar x = 3; })(b, a);',
             options: [{table: "msg_tbl1", paramCallVars: ["a", "b"]}],
         },
         {  // SN-provided sys_script script template
@@ -64,13 +60,11 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             options: [{table: "msg_tbl1", paramCallVars: ["a", "b"]}],
         },
         { // Good unused-params arrow IIFE with isolated declaration
-            code:
-              'gs.log("a msg", "src");\n(()=>{//V9\nvar x = 3; })(b, a);',
+            code: 'gs.log("a msg", "src");\n(()=>{//V9\nvar x = 3; })(b, a);',
             options: [{table: "msg_tbl1", paramCallVars: ["a", "b"]}],
         },
         { // Good single-statement unused-params arrow IIFE with isolated declaration
-            code:
-              'gs.log("a msg", "src");\n(()=>//V10\nx = 3)(b, a);',
+            code: 'gs.log("a msg", "src");\n(()=>//V10\nx = 3)(b, a);',
             options: [{table: "msg_tbl1", paramCallVars: ["a", "b"]}],
         },
     ],
