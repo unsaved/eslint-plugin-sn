@@ -132,8 +132,12 @@ const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, "\\
 const ALLOW_DEFINE_CMT = "/* eslint-disable-line no-redeclare, no-unused-vars, max-len */";
 const RAWFN_TEST_PAT = /^\s*function\s*[(]/;  // We strip comments and ws before this test
 const RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before substitution
+const RAWFNCMT_SUB_PAT = /\bfunction\s*[(].*/;  // Allow for comments before substitution
 const ENTIREFN_TEST_PAT = /^\s*function\s*[(][\s\S]+[}]\s*$/;  // We strip comments and ws before
-const INCOMPFN_SUB_PAT = /[(]\s*function\s*[(].*/;
+const UNUSEDFNEXPR_TEST_PAT = /^\s*[(]\s*function\s*[(][\s\S]+[}]\s*$/;
+const UNUSEDFNEXPR_SUB_PAT = /[(]\s*function\s*[(].*/;
+const UNUSEDAREXPR_TEST_PAT = /^\s*[(]\s*[{].*=>[\s\S]+[}]\s*;\s*$/;
+const UNUSEDAREXPR_SUB_PAT = /[(]\s*[{].*=>.*/;
 const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
 /**
@@ -221,13 +225,18 @@ function lintFile(file, table, alt, readStdin=false) {
         // For widget client scripts, allow incomplete traditional anonymous function definition,
         // if it's the first thing in the scriptlet.
         if (ENTIREFN_TEST_PAT.test(justCode)) { /* eslint-disable-next-line prefer-template */
-            content = content.replace(RAWFN_SUB_PAT, "(function(") + "\n);\n";
+            content = content.replace(RAWFNCMT_SUB_PAT,
+              "($&  // eslint-disable-line no-unused-expressions, max-len") + "\n);\n";
             console.warn("Wrapped incomplete anonymous function");
-        }
-        if (INCOMPFN_SUB_PAT.test(content)) {
+        } else if (UNUSEDFNEXPR_TEST_PAT.test(justCode)) {
             content = content.replace(
-              INCOMPFN_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions");
+              UNUSEDFNEXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len");
             console.warn("Inserted unused-expr comment directive within anony function def.");
+        }
+        if (UNUSEDAREXPR_TEST_PAT.test(justCode)) {
+            content = content.replace(
+              UNUSEDAREXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len");
+            console.warn("Inserted unused-expr comment directive within anony arrow fn def.");
         }
     }
     eslintArgs.splice(0, 0,
