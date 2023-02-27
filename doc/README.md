@@ -184,6 +184,7 @@ Alphabetically
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
+|sys_ux_client_script.script    |**all**[^e]
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
 
@@ -195,6 +196,7 @@ Alphabetically
 [^c]: sys_ui_action (supporting only 'script' field) was split into .script
       and .client_script_v2 with minor version 3.2.
 [^d]: .condition fields were added with minor version 3.3.
+[^d]: sys_ux_client_script table added with minor version 3.4.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
@@ -202,7 +204,6 @@ The 8 alt variants for the sys_ui_action script are necessary to support the dif
 In very rough order of priority
 |Table                        |Alts
 |---                          |---
-|sys_ux_client_script.script  |**all**
 |user_criteria.script         |TBD
 |sys_ui_context_menu.condition|TBD
 |sys_ui_context_menu.dynamic_actions_script|TBD
