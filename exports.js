@@ -171,6 +171,7 @@ const overrides = [
             "**/@(iso|iso_global|iso_scoped-es5|iso_scoped-es12)/*.js",
             "**/sys_ui_action.client_script_v2/all/*.js",
             "**/sys_ui_client_script/all/*.js",
+            "**/sys_ux_client_script/all/*.js",
         ],
         env: {"@admc.com/sn/sn_client_iso": true },
     }, {
@@ -262,7 +263,10 @@ const overrides = [
         },
     }, {
         files: ["**/sys_ux_client_script/all/*.js"],
-        rules: { "@admc.com/sn/single-fn-obj-param": ["error", { table: "sys_ux_client_script" }] },
+        rules: {
+            "@admc.com/sn/single-fn-obj-param": ["error", { table: "sys_ux_client_script" }],
+            strict: "off",
+        },
     }
 ];
 

@@ -54,7 +54,7 @@ const esLintObj = {
                         otherCount,
                         table: context.options[0].table,
                     } });
-                else console.info(`${fnCount} + ${otherCount}`);
+                //else console.info(`${fnCount} + ${otherCount}`);
             }
         };
     }

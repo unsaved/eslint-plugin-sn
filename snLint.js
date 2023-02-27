@@ -130,8 +130,10 @@ let allTables;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const ALLOW_DEFINE_CMT = "/* eslint-disable-line no-redeclare, no-unused-vars, max-len */";
-const ANGULAR_RAWFN_TEST_PAT = /^function\s*[(]/;  // We strip comments and ws before this test
-const ANGULAR_RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before for substitution
+const RAWFN_TEST_PAT = /^\s*function\s*[(]/;  // We strip comments and ws before this test
+const RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before substitution
+const ENTIREFN_TEST_PAT = /^\s*function\s*[(][\s\S]+[}]\s*$/;  // We strip comments and ws before
+const INCOMPFN_SUB_PAT = /[(]\s*function\s*[(].*/;
 const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
 /**
@@ -165,9 +167,9 @@ function lintFile(file, table, alt, readStdin=false) {
     if (table === "sp_widget.client_script") {
         // For widget client scripts, allow non-invoked anonymous function definition, if
         // it's the first thing in the scriptlet.
-        if (ANGULAR_RAWFN_TEST_PAT.test(justCode)) {
+        if (RAWFN_TEST_PAT.test(justCode)) {
             // eslint-disable-next-line prefer-template
-            content = content.replace(ANGULAR_RAWFN_SUB_PAT, "api._dummy=function(") + ";";
+            content = content.replace(RAWFN_SUB_PAT, "api._dummy=function(") + ";";
             console.warn("Inserted dummy assignment before Angular anonymous function");
         }
     } else if (table === "sa_pattern") {
@@ -208,12 +210,24 @@ function lintFile(file, table, alt, readStdin=false) {
       && /\bfunction\s+on[A-Z]\w+\s*[(]/.test(content)) {
         content = content.replace(  // eslint-disable-next-line prefer-arrow-callback
           /\bfunction\s+on[A-Z]\w+\s*[(]/, function(m) { return m + ALLOW_DEFINE_CMT; });
-        console.warn("Inserted comment directives within client function definition");
+        console.warn("Inserted arrow comment directives within client function definition");
     } else if (table.startsWith("sys_ui_action.") && !["global", "scoped-es5"].includes(alt)) {
         const ex = /^function\s*(\w+)/.exec(justCode);
         if (ex) {
             content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife\n`;
             console.warn("Appended dummy client function invocation");
+        }
+    } else if (table === "sys_ux_client_script") {
+        // For widget client scripts, allow incomplete traditional anonymous function definition,
+        // if it's the first thing in the scriptlet.
+        if (ENTIREFN_TEST_PAT.test(justCode)) { /* eslint-disable-next-line prefer-template */
+            content = content.replace(RAWFN_SUB_PAT, "(function(") + "\n);\n";
+            console.warn("Wrapped incomplete anonymous function");
+        }
+        if (INCOMPFN_SUB_PAT.test(content)) {
+            content = content.replace(
+              INCOMPFN_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions");
+            console.warn("Inserted unused-expr comment directive within anony function def.");
         }
     }
     eslintArgs.splice(0, 0,
