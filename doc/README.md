@@ -161,30 +161,30 @@ Alphabetically
 |sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sp_widget.client_script        |**all**
 |sysauto_script                 |**global**, scoped-es5[^a], scoped-es12[^b]
-|sysauto_script.condition       |**global**, scoped-es5, scoped-es12[^d]
+|sysauto_script.condition[^d]   |**global**, scoped-es5, scoped-es12
 |sysevent_script_action         |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_processor                  |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script                     |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_script.condition           |**global**, scoped-es5, scoped-es12[^d]
+|sys_script.condition[^d]       |**global**, scoped-es5, scoped-es12
 |sys_script_client.script       |**iso**, noniso
 |sys_script_email               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_fix                 |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_include             |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_validator           |**all**
 |sys_security_acl               |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_security_acl.condition     |**global**, scoped-es5, scoped-es12[^d]
+|sys_security_acl.condition[^d] |**global**, scoped-es5, scoped-es12
 |sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12[^b]
-|sys_ui_action.client_script_v2 |**all**[^c]
-|sys_ui_action.condition        |**global**, scoped-es5, scoped-es12[^d]
+|sys_ui_action.client_script_v2[^c] |**all**
+|sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12
 |sys_ui_page.client_script      |**all**
 |sys_ui_page.processing_script  |**global**, scoped-es5[^a]
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
-|sys_ux_client_script.script    |**all**[^e]
+|sys_ux_client_script.script[^e]|**all**
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
 
@@ -196,7 +196,7 @@ Alphabetically
 [^c]: sys_ui_action (supporting only 'script' field) was split into .script
       and .client_script_v2 with minor version 3.2.
 [^d]: .condition fields were added with minor version 3.3.
-[^d]: sys_ux_client_script table added with minor version 3.4.
+[^e]: sys_ux_client_script table added with minor version 3.4.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
@@ -242,13 +242,14 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |no-init-emptystring         |warn   |all              |For rare cases where the value is to really be used as a string (not just tested) this is ok.  Normally the system default of undefined works great.
 |no-log-global               |error  |server scoped*   |Scoped app scripts should use the scoped logging API
 |no-log-scoped               |error  |server global    |Global scope scripts should use the global logging API
-|no-sysid                    |error, warn[^2]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.  This actually matches for all 32 character hex strings, so you will need to disable for valid non-sysid strings such as MD5 checksums.
+|no-sysid                    |error, warn[^1]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.  This actually matches for all 32 character hex strings, so you will need to disable for valid non-sysid strings such as MD5 checksums.
 |no-uiscript-curlref         |warn   |sys_ui_scripts   |References like ${this} get clobbered by the platform, at least if you load the UI script via \*.jsdbx file.
 |no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
-|sn-workaround-iife          |error  |some server[^3]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
-|validate-gliderecord-calls  |error, warn[^2]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
+|single-fn-obj-param[^3]     |error  |client (NE)      |Next Experience client scriptlets must implement only a single function declaration (at top level)
+|sn-workaround-iife          |error  |some server[^2]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
+|validate-gliderecord-calls  |error, warn[^1]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
 
-[^2]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for
-[^3]: The sn-workaround-iife rule is applied to some specific server tables
-client-side scriptlets
+[^1]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for client-side scriptlets
+[^2]: The sn-workaround-iife rule is applied to some specific server tables'
+[^3]: Rule 'single-fn-obj-param' introduced with minor version 3.3.
