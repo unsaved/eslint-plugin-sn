@@ -230,11 +230,14 @@ function lintFile(file, table, alt, readStdin=false) {
             console.warn("Wrapped incomplete anonymous function");
         } else if (UNUSEDFNEXPR_TEST_PAT.test(justCode)) {
             content = content.replace(
-              UNUSEDFNEXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len");
+              UNUSEDFNEXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len") +
+              ";\n";
+console.warn(`<${content}>`);
             console.warn("Inserted unused-expr comment directive within anony function def.");
         } else if (UNUSEDAREXPR_TEST_PAT.test(justCode)) {
             content = content.replace(
-              UNUSEDAREXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len");
+              UNUSEDAREXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len") +
+              ";\n";
             console.warn("Inserted unused-expr comment directive within anony arrow fn def.");
         }
     }

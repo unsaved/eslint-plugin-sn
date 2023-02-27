@@ -6,7 +6,8 @@
 
 const message =  // eslint-disable-next-line max-len
   `Scriptlet contains at top level {{fnCount}} single obj-parameter functions + {{otherCount}} other expressions.
-{{table}} scripts require 1 + 0.`;
+{{table}} scripts require 1 + 0.
+Function def should not have a terminating ; (this will count as a spurious extra expression).`;
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -47,7 +48,9 @@ const esLintObj = {
             },
             onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;
-                const otherCount = node.body.length - fnCount;
+                let otherCount = node.body.length - fnCount;
+                if (fnCount === 1 && context.getSourceCode().getLastToken(node).value === ";")
+                    otherCount++;
                 if (fnCount !== 1 || otherCount !== 0)
                     context.report({node, messageId, data: {
                         fnCount,

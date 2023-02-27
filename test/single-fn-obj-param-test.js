@@ -107,6 +107,18 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             code: '(a) => { gs.info("word"); }',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
-        },
+        }, {  // just a trailing ;
+            code: '({a, b}) => { gs.info("word"); };',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }, {  // trailing ; with a comment
+            code: '({a, b}) => { gs.info("word"); }/' + '* a cmt *' + '/\n;',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }, {  // trailing ; with whitespace
+            code: '({a, b}) => { gs.info("word"); }\n;\n',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }
     ]
 });
