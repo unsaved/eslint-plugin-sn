@@ -168,11 +168,11 @@ function lintFile(file, table, alt, readStdin=false) {
     console.debug(`pseudoPath: ${pseudoPath}`);
     const justCode = strip(content.replace(/\r/g, "").trim().replace(RM_WHITESPACE_RE, ""));
     lineCount += justCode.split("\n").length;
+    /* eslint-disable prefer-template */
     if (table === "sp_widget.client_script") {
         // For widget client scripts, allow non-invoked anonymous function definition, if
         // it's the first thing in the scriptlet.
         if (RAWFN_TEST_PAT.test(justCode)) {
-            // eslint-disable-next-line prefer-template
             content = content.replace(RAWFN_SUB_PAT, "api._dummy=function(") + ";";
             console.warn("Inserted dummy assignment before Angular anonymous function");
         }
@@ -181,7 +181,6 @@ function lintFile(file, table, alt, readStdin=false) {
         content.replace(/\t/g, "    ").replace(/\r/g, "").
           replace(/^\s*name = "([^"]+)"[\S\s]+?^\s*eval [{]"javascript: (|[\S\s]+?[^\\])"[}]/gm,
             (m, g1, g2) => {
-              // eslint-disable-next-line prefer-template
               jsCodeBlocks.push("function fn" + (jsCodeBlocks.length + 1)
                 + g1.replace(/[^\w]/g, "") + "() { // eslint-disable-line no-unused-vars\n"
                 + g2.replace(/\\"/g, '"').replace(/\\\\/g, "\\") + "\n}\n");
@@ -189,7 +188,6 @@ function lintFile(file, table, alt, readStdin=false) {
           });
         content = jsCodeBlocks.join("\n");
     } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
-        /* eslint-disable prefer-template */
         if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
             content = content.replace(
               new RegExp("\\b" + objName + "(\\s*=[^~=<>])"), `${objName} ${ALLOW_DEFINE_CMT}$1`);
@@ -209,7 +207,6 @@ function lintFile(file, table, alt, readStdin=false) {
               + "(\\s+extends\\s+\\S+\\s*)[{]"), `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
             console.warn("Inserted comment directives within SI function definition");
         }
-        /* eslint-enable prefer-template */
     } else if (["catalog_script_client", "sys_script_client"].includes(table)
       && /\bfunction\s+on[A-Z]\w+\s*[(]/.test(content)) {
         content = content.replace(  // eslint-disable-next-line prefer-arrow-callback
@@ -224,7 +221,7 @@ function lintFile(file, table, alt, readStdin=false) {
     } else if (table === "sys_ux_client_script") {
         // For widget client scripts, allow incomplete traditional anonymous function definition,
         // if it's the first thing in the scriptlet.
-        if (ENTIREFN_TEST_PAT.test(justCode)) { /* eslint-disable-next-line prefer-template */
+        if (ENTIREFN_TEST_PAT.test(justCode)) {
             content = content.replace(RAWFNCMT_SUB_PAT,
               "($&  // eslint-disable-line no-unused-expressions, max-len") + "\n);\n";
             console.warn("Wrapped incomplete anonymous function");
@@ -232,7 +229,6 @@ function lintFile(file, table, alt, readStdin=false) {
             content = content.replace(
               UNUSEDFNEXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len") +
               ";\n";
-console.warn(`<${content}>`);
             console.warn("Inserted unused-expr comment directive within anony function def.");
         } else if (UNUSEDAREXPR_TEST_PAT.test(justCode)) {
             content = content.replace(
@@ -241,6 +237,7 @@ console.warn(`<${content}>`);
             console.warn("Inserted unused-expr comment directive within anony arrow fn def.");
         }
     }
+    /* eslint-enable prefer-template */
     eslintArgs.splice(0, 0,
         path.join(require.resolve("eslint"), "../../bin/eslint.js"),
         "-c",
@@ -259,7 +256,7 @@ console.warn(`<${content}>`);
         input:
           ["noniso", "iso", "scoped-es12"].includes(alt) ||
           alt.includes("es12") && baseName.endsWith("-condition.js") ||
-          table.includes(".client_script") || RETAIN_CONST_FILES.includes(table)
+          table.includes("client_script") || RETAIN_CONST_FILES.includes(table)
           ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
     process.stderr.write(pObj.stderr.toString("utf8"));

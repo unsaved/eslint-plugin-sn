@@ -112,6 +112,7 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         }, {  // trailing ; with a comment
+            // eslint-disable-next-line no-useless-concat
             code: '({a, b}) => { gs.info("word"); }/' + '* a cmt *' + '/\n;',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
