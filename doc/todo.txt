@@ -1,3 +1,6 @@
+IMMEDIATELY
+Update snLint.js to check for anonymous top-level function definition and wrap it in parens.
+
 Support fields:
 sys_ux_client_script.script  function evaluateProperty({api, helpers})
 user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.

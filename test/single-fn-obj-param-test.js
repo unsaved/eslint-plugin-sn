@@ -9,6 +9,9 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             code: '({a, b}) => { gs.info("word"); }',
             options: [{table: "msg_tbl1"}],
         }, {
+            code:'function fn({x, y}) { return x + x; }',
+            options: [{table: "msg_tbl1"}],
+        }, {
             code:'(function({x, y}) { return x + x; })',
             options: [{table: "msg_tbl1"}],
         }, {
