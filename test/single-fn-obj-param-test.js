@@ -61,6 +61,16 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         },
+
+        {
+            code: '({a, b}, {c, d}) => { gs.info("word"); }',
+            options: [{table: "msg_tbl1", allowAdditionalParams: true}],
+            errors: [{messageId}],
+        }, {
+            code:'(function({x, y}, {a, b}) { return x + x; })',
+            options: [{table: "msg_tbl1", allowAdditionalParams: true}],
+            errors: [{messageId}],
+        }
     ],
     invalid: [
         {

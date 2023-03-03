@@ -23,6 +23,7 @@ const esLintObj = {
             type: "object",
             properties: {
                 table: { type: "string", },
+                allowAdditionalParams: { type: "boolean" },
             },
             additionalProperties: false
         }],
@@ -31,23 +32,27 @@ const esLintObj = {
 
     create: context => {
         let fnCount = 0;
+        const multiParams = !!context.options[0].allowAdditionalParams;
         return {
             FunctionDeclaration: node => {
                 if (node.parent.type !== "Program") return;
-                if (node.params.length === 0
-                  || node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
+                if (node.params.length === 0) { fnCount++; return; }
+                if (node.params[0].type !== "ObjectPattern") return;
+                if (multiParams || node.params.length === 1) fnCount++;
             },
             FunctionExpression: node => {
                 if (node.parent.type !== "ExpressionStatement") return;
                 if (node.parent.parent.type !== "Program") return;
-                if (node.params.length === 0
-                  || node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
+                if (node.params.length === 0) { fnCount++; return; }
+                if (node.params[0].type !== "ObjectPattern") return;
+                if (multiParams || node.params.length === 1) fnCount++;
             },
             ArrowFunctionExpression: node => {
                 if (node.parent.type !== "ExpressionStatement") return;
                 if (node.parent.parent.type !== "Program") return;
-                if (node.params.length === 0
-                  || node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
+                if (node.params.length === 0) { fnCount++; return; }
+                if (node.params[0].type !== "ObjectPattern") return;
+                if (multiParams || node.params.length === 1) fnCount++;
             },
             onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;
