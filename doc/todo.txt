@@ -1,3 +1,6 @@
+Allow no-{} arrow functions in sys_ux*
+Allow () (no-param) arrow functions in sys_ux*
+
 Support fields:
 Search for sys_ux*.*script* sys_dictionaries.  Find out how to use sys_ux_client_script_includes.
 user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.
