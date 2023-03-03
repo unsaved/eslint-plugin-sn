@@ -138,9 +138,9 @@ const UNUSEDFNEXPR_1L_TEST_PAT = /^\s*[(]\s*function\s*[(].*[}][ \t\r]*(?:\n|$)/
 const UNUSEDFNEXPR_TEST_PAT = /^\s*[(]\s*function\s*[(]/;
 const UNUSEDFNEXPR_SUB_PAT = /[(]\s*function\s*[(].*/;
 const UNUSEDAREXPR_1L_TEST_PAT =
-  /^\s*[(].*?=>[ \t\r]*[{].*[}][ \t\r]*(?:\n|$)|^\s*[(].*?=>[ \t\r]*[^\s{]/;
+  /^\s*[(][^)]*[)][ \t]*=>[ \t]*[{].*[}][ \t\r]*(?:\n|$)|^\s*[(][^)]*[)][ \t]*=>[ \t]*[^\s{]/;
 const UNUSEDAREXPR_TEST_PAT = /^\s*[(][^)]*[)]\s*=>/;
-const UNUSEDAREXPR_SUB_PAT = /[(].*=>.*/;
+const UNUSEDAREXPR_SUB_PAT = /[(][^)]*[)][ \t]*=>.*/;
 const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
 /**
@@ -171,6 +171,7 @@ function lintFile(file, table, alt, readStdin=false) {
     console.debug(`pseudoPath: ${pseudoPath}`);
     const justCode = strip(content.replace(/\r/g, "").trim().replace(RM_WHITESPACE_RE, ""));
     lineCount += justCode.split("\n").length;
+console.warn(`PRE For (${table})`);
     /* eslint-disable prefer-template */
     if (table === "sp_widget.client_script") {
         // For widget client scripts, allow non-invoked anonymous function definition, if
@@ -190,38 +191,8 @@ function lintFile(file, table, alt, readStdin=false) {
               return "<DUMMY>";  // Our goal is not to replace anything but to extract
           });
         content = jsCodeBlocks.join("\n");
-    } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
-        if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
-            content = content.replace(
-              new RegExp("\\b" + objName + "(\\s*=[^~=<>])"), `${objName} ${ALLOW_DEFINE_CMT}$1`);
-            console.warn("Inserted comment directives within SI object assignment");
-        } else if (new RegExp("\\bfunction\\s+" + objName + "\\s*[(]").test(content)) {
-            content = content.replace(
-              new RegExp("\\bfunction(\\s+)" + objName + "(\\s*)[(]"),
-                `function$1${objName} ${ALLOW_DEFINE_CMT}$2(`);
-            console.warn("Inserted comment directives within SI function definition");
-        } else if (new RegExp("\\bclass\\s+" + objName + "\\s*[{]").test(content)) {
-            content = content.replace(new RegExp("\\bclass(\\s+)" + objName + "(\\s*)[{]"),
-                `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
-            console.warn("Inserted comment directives within SI function definition");
-        } else if (new RegExp("\\bclass\\s+" + objName
-          + "\\s+extends\\s+\\S+\\s*[{]").test(content)) {
-            content = content.replace(new RegExp("\\bclass(\\s+)" + objName
-              + "(\\s+extends\\s+\\S+\\s*)[{]"), `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
-            console.warn("Inserted comment directives within SI function definition");
-        }
-    } else if (["catalog_script_client", "sys_script_client"].includes(table)
-      && /\bfunction\s+on[A-Z]\w+\s*[(]/.test(content)) {
-        content = content.replace(  // eslint-disable-next-line prefer-arrow-callback
-          /\bfunction\s+on[A-Z]\w+\s*[(]/, function(m) { return m + ALLOW_DEFINE_CMT; });
-        console.warn("Inserted arrow comment directives within client function definition");
-    } else if (table.startsWith("sys_ui_action.") && !["global", "scoped-es5"].includes(alt)) {
-        const ex = /^function\s*(\w+)/.exec(justCode);
-        if (ex) {
-            content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife\n`;
-            console.warn("Appended dummy client function invocation");
-        }
-    } else if (table === "sys_ux_client_script") {
+    // Following case must be before the other *_script_include case:
+    } else if (["sys_ux_client_script", "sys_ux_client_script_include"].includes(table)) {
         // For widget client scripts, allow incomplete traditional anonymous function definition,
         // if it's the first thing in the scriptlet.
         if (ENTIREFN_TEST_PAT.test(justCode)) {
@@ -253,6 +224,37 @@ function lintFile(file, table, alt, readStdin=false) {
             content = "/* eslint-disable semi */ " + content.replace(
               UNUSEDAREXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len");
             console.warn("Inserted ML unused-expr comment directive within anony arrow fn def.");
+        }
+    } else if (objName && /^[a-z_]\w*/i.test(objName) && table.endsWith("_script_include")) {
+        if (new RegExp("\\b" + objName + "\\s*=[^~=<>]").test(content)) {
+            content = content.replace(
+              new RegExp("\\b" + objName + "(\\s*=[^~=<>])"), `${objName} ${ALLOW_DEFINE_CMT}$1`);
+            console.warn("Inserted comment directives within SI object assignment");
+        } else if (new RegExp("\\bfunction\\s+" + objName + "\\s*[(]").test(content)) {
+            content = content.replace(
+              new RegExp("\\bfunction(\\s+)" + objName + "(\\s*)[(]"),
+                `function$1${objName} ${ALLOW_DEFINE_CMT}$2(`);
+            console.warn("Inserted comment directives within SI function definition");
+        } else if (new RegExp("\\bclass\\s+" + objName + "\\s*[{]").test(content)) {
+            content = content.replace(new RegExp("\\bclass(\\s+)" + objName + "(\\s*)[{]"),
+                `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
+            console.warn("Inserted comment directives within SI function definition");
+        } else if (new RegExp("\\bclass\\s+" + objName
+          + "\\s+extends\\s+\\S+\\s*[{]").test(content)) {
+            content = content.replace(new RegExp("\\bclass(\\s+)" + objName
+              + "(\\s+extends\\s+\\S+\\s*)[{]"), `class$1${objName} ${ALLOW_DEFINE_CMT}$2{`);
+            console.warn("Inserted comment directives within SI function definition");
+        }
+    } else if (["catalog_script_client", "sys_script_client"].includes(table)
+      && /\bfunction\s+on[A-Z]\w+\s*[(]/.test(content)) {
+        content = content.replace(  // eslint-disable-next-line prefer-arrow-callback
+          /\bfunction\s+on[A-Z]\w+\s*[(]/, function(m) { return m + ALLOW_DEFINE_CMT; });
+        console.warn("Inserted arrow comment directives within client function definition");
+    } else if (table.startsWith("sys_ui_action.") && !["global", "scoped-es5"].includes(alt)) {
+        const ex = /^function\s*(\w+)/.exec(justCode);
+        if (ex) {
+            content += `\n${ex[1]}();  // eslint-disable-line @admc.com/sn/immediate-iife\n`;
+            console.warn("Appended dummy client function invocation");
         }
     }
     /* eslint-enable prefer-template */

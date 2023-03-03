@@ -110,7 +110,7 @@ const overrides = [
         // Regular SN client scripts, both iso and non-iso
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script)/all/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include)/all/*.js",  // eslint-disable-line max-len,
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
@@ -172,6 +172,7 @@ const overrides = [
             "**/sys_ui_action.client_script_v2/all/*.js",
             "**/sys_ui_client_script/all/*.js",
             "**/sys_ux_client_script/all/*.js",
+            "**/sys_ux_client_script_include/all/*.js",
         ],
         env: {"@admc.com/sn/sn_client_iso": true },
     }, {
@@ -265,6 +266,15 @@ const overrides = [
         files: ["**/sys_ux_client_script/all/*.js"],
         rules: {
             "@admc.com/sn/single-fn-obj-param": ["error", { table: "sys_ux_client_script" }],
+            strict: "off",
+        },
+    }, {
+        files: ["**/sys_ux_client_script_include/all/*.js"],
+        rules: {
+            "@admc.com/sn/single-fn-obj-param": ["error", {
+                table: "sys_ux_client_script",
+                allowAdditionalParams: true,
+            }],
             strict: "off",
         },
     }
@@ -411,6 +421,7 @@ module.exports = {
                   "sys_ui_page.processing_script": ["global", "scoped-es5", "scoped-es12"],
                   "sa_pattern": ["all"],
                   "sys_ux_client_script": ["all"],
+                  "sys_ux_client_script_include": ["all"],
                 }
             },
             rules: {
