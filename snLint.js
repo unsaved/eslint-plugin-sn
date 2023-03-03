@@ -137,9 +137,10 @@ const ENTIREFN_TEST_PAT = /^\s*function\s*[(][\s\S]+[}]\s*$/;  // We strip comme
 const UNUSEDFNEXPR_1L_TEST_PAT = /^\s*[(]\s*function\s*[(].*[}][ \t\r]*(?:\n|$)/;
 const UNUSEDFNEXPR_TEST_PAT = /^\s*[(]\s*function\s*[(]/;
 const UNUSEDFNEXPR_SUB_PAT = /[(]\s*function\s*[(].*/;
-const UNUSEDAREXPR_1L_TEST_PAT = /^\s*[(]\s*[{].*=>.*[}][ \t\r]*(?:\n|$)/;
-const UNUSEDAREXPR_TEST_PAT = /^\s*[(]\s*[{].*=>/;
-const UNUSEDAREXPR_SUB_PAT = /[(]\s*[{].*=>.*/;
+const UNUSEDAREXPR_1L_TEST_PAT =
+  /^\s*[(].*?=>[ \t\r]*[{].*[}][ \t\r]*(?:\n|$)|^\s*[(].*?=>[ \t\r]*[^\s{]/;
+const UNUSEDAREXPR_TEST_PAT = /^\s*[(][^)]*[)]\s*=>/;
+const UNUSEDAREXPR_SUB_PAT = /[(].*=>.*/;
 const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
 /**
@@ -240,20 +241,18 @@ function lintFile(file, table, alt, readStdin=false) {
             if (segments.length > 0)
                 content = content.slice(0, -segments[segments.length-1].length -1) +
                   "  // eslint-disable-line semi, max-len\n" + segments[segments.length-1];
-            console.warn("Inserted unused-expr comment directive within anony function def.");
+            console.warn("Inserted ML unused-expr comment directive within anony function def.");
             //console.warn(`<${content}>`);
         } else if (UNUSEDAREXPR_1L_TEST_PAT.test(justCode)) {
             content = content.replace(UNUSEDAREXPR_SUB_PAT,
               "$&  // eslint-disable-line no-unused-expressions, max-len, semi");
             console.warn("Inserted 1L unused-expr comment directive within anony arrow fn def.");
         } else if (UNUSEDAREXPR_TEST_PAT.test(justCode)) {
-            content = content.replace(
+            // Impossible to find end of code (before possible end comments) to effectively insert
+            // a more narrow disable-semi directive, so we're forced to disable 'semi' globally:
+            content = "/* eslint-disable semi */ " + content.replace(
               UNUSEDAREXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len");
-            const segments = content.split(/[}]\s*\n/);
-            if (segments.length > 0)
-                content = content.slice(0, -segments[segments.length-1].length -1) +
-                  "  // eslint-disable-line semi, max-len\n" + segments[segments.length-1];
-            console.warn("Inserted unused-expr comment directive within anony arrow fn def.");
+            console.warn("Inserted ML unused-expr comment directive within anony arrow fn def.");
         }
     }
     /* eslint-enable prefer-template */

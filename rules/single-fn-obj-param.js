@@ -34,17 +34,20 @@ const esLintObj = {
         return {
             FunctionDeclaration: node => {
                 if (node.parent.type !== "Program") return;
-                if (node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
+                if (node.params.length === 0
+                  || node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
             },
             FunctionExpression: node => {
                 if (node.parent.type !== "ExpressionStatement") return;
                 if (node.parent.parent.type !== "Program") return;
-                if (node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
+                if (node.params.length === 0
+                  || node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
             },
             ArrowFunctionExpression: node => {
                 if (node.parent.type !== "ExpressionStatement") return;
                 if (node.parent.parent.type !== "Program") return;
-                if (node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
+                if (node.params.length === 0
+                  || node.params.length === 1 && node.params[0].type === "ObjectPattern") fnCount++;
             },
             onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;

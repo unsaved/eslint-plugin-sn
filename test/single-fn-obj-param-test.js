@@ -9,10 +9,22 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             code: '({a, b}) => { gs.info("word"); }',
             options: [{table: "msg_tbl1"}],
         }, {
+            code:'function fn({}) { return "static"; }',
+            options: [{table: "msg_tbl1"}],
+        }, {
+            code:'function fn() { return "static"; }',
+            options: [{table: "msg_tbl1"}],
+        }, {
             code:'function fn({x, y}) { return x + x; }',
             options: [{table: "msg_tbl1"}],
         }, {
             code:'(function({x, y}) { return x + x; })',
+            options: [{table: "msg_tbl1"}],
+        }, {
+            code:'(function({}) { return "static"; })',
+            options: [{table: "msg_tbl1"}],
+        }, {
+            code:'(function() { return "static"; })',
             options: [{table: "msg_tbl1"}],
         }, {
             code: '({a, b}) => { gs.info("word"); }',
@@ -36,6 +48,18 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
         }, {  // eslint-disable-next-line no-useless-concat
             code: '({}) => { gs.info("word"); }\n/' + '* a comment *' + '/',
             options: [{table: "msg_tbl1"}],
+        }, {
+            code: '() => { gs.info("word"); }',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }, {
+            code: '({a}) => gs.info("word")',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
+        }, {
+            code: '() => gs.info("word")',
+            options: [{table: "msg_tbl1"}],
+            errors: [{messageId}],
         },
     ],
     invalid: [
@@ -100,15 +124,6 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             errors: [{messageId}],
         }, {
             code: '(a, b) => { gs.info("word"); }',
-            options: [{table: "msg_tbl1"}],
-            errors: [{messageId}],
-        },
-        {
-            code: '() => { gs.info("word"); }',
-            options: [{table: "msg_tbl1"}],
-            errors: [{messageId}],
-        }, {
-            code:'(function() { return x + x; })',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
         }, {
