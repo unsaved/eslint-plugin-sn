@@ -7,6 +7,8 @@ function validate(value) {
     switch (g_form.getTableName()) {
         case "sys_ui_action":
         case "sp_widget":
+        case "sys_ux_data_broker_scriptlet":
+        case "sys_ux_data_broker_transform":
             return true;
     }
 

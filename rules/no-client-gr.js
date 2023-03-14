@@ -8,7 +8,7 @@ const esLintObj = {
         type: "suggestion",
         docs: {
             description:
-              'g_scratchpad, AJAX, et. al. are more efficient thant client-side GlideRecord',
+              'g_scratchpad, AJAX, et. al. are more efficient than client-side GlideRecord',
             category: "Suggestions",
         },
         messages: { },

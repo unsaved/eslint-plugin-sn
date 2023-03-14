@@ -186,6 +186,8 @@ Alphabetically
 |sys_ui_script                  |**all**
 |sys_ux_client_script.script[^e]|**all**
 |sys_ux_client_script_include.script[^f]|**all**
+|sys_ux_data_broker_transform[^g]|**scoped-es5**, scoped-es12
+|sys_ux_data_broker_scriptlet[^g]|**all**
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
 
@@ -198,7 +200,8 @@ Alphabetically
       and .client_script_v2 with minor version 3.2.
 [^d]: .condition fields were added with minor version 3.3.
 [^e]: sys_ux_client_script table added with minor version 3.4.
-[^f]: sys_ux_client_script table added with minor version 3.5.
+[^f]: sys_ux_client_script_include table added with minor version 3.5.
+[^g]: sys_ux_broker_* tables added with minor version 3.7.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
@@ -236,6 +239,8 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |legacy-use-this             |error  |all              |Same as OOTB ESLint rule [class-methods-use-this](https://eslint.org/docs/latest/rules/class-methods-use-this) but for pre-ES6
 |log-global-2-args           |error  |server global    |ServiceNow global logging statements should specify source with 2nd parameter
 |log-scoped-varargs          |error  |server scoped*   |ServiceNow scoped logging statements should only have more than one param if using varargs
+|no-arrow-fn                 |error  |sys_ux_data_broker* | Arrow functons not supported in NE data broker scripts regardless of ES level
+|no-backticks                |error  |sys_ux_data_broker_scriptlet | Backticks not supported in these scripts (SN defect IMO)
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
 |no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord
@@ -255,3 +260,4 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 [^1]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for client-side scriptlets
 [^2]: The sn-workaround-iife rule is applied to some specific server tables'
 [^3]: Rule 'single-fn-obj-param' introduced with minor version 3.3.
+[^4]: Rules 'no-arrow-fn' and 'no-backticks' added with minor version 3.7.
