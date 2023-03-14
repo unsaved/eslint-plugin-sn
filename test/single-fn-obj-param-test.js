@@ -136,10 +136,6 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             code: '(a, b) => { gs.info("word"); }',
             options: [{table: "msg_tbl1"}],
             errors: [{messageId}],
-        }, {
-            code: '(a) => { gs.info("word"); }',
-            options: [{table: "msg_tbl1"}],
-            errors: [{messageId}],
         }, {  // just a trailing ;
             code:'function fn({x, y}) { return x + x; };',
             options: [{table: "msg_tbl1"}],

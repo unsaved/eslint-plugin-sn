@@ -90,6 +90,7 @@ const overrides = [
         files: [
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition)/@(global|scoped-es5|scoped-es12)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
+            "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12)/*.js",
         ],
         rules: ruleConfigs("error", ["no-sysid", "validate-gliderecord-calls", "no-gs-now"]),
     }, {
@@ -110,7 +111,7 @@ const overrides = [
         // Regular SN client scripts, both iso and non-iso
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include)/all/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet)/all/*.js",  // eslint-disable-line max-len,
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
@@ -163,6 +164,16 @@ const overrides = [
         ],
         rules: { "strict": ["warn", "function"] }  // Overriding for ES12 IIFE scriptlets
     }, {
+        files: ["**/sys_ux_data_broker_transform/*/*.js"],
+        rules: {
+            "@admc.com/sn/single-fn-obj-param": ["error", {
+                table: "sys_ux_data_broker_transform",
+                allowAdditionalParams: true,
+            }],
+            "@admc.com/sn/no-arrow-fn": "error",
+            strict: "off",
+        },
+    }, {
         files: ["**/sys_ui_script/*/*.js"],
         rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
     }, {
@@ -173,6 +184,7 @@ const overrides = [
             "**/sys_ui_client_script/all/*.js",
             "**/sys_ux_client_script/all/*.js",
             "**/sys_ux_client_script_include/all/*.js",
+            "**/sys_ux_data_broker_scriptlet/all/*.js",
         ],
         env: {"@admc.com/sn/sn_client_iso": true },
     }, {
@@ -272,9 +284,20 @@ const overrides = [
         files: ["**/sys_ux_client_script_include/all/*.js"],
         rules: {
             "@admc.com/sn/single-fn-obj-param": ["error", {
-                table: "sys_ux_client_script",
+                table: "sys_ux_client_script_include",
                 allowAdditionalParams: true,
             }],
+            strict: "off",
+        },
+    }, {
+        files: ["**/sys_ux_data_broker_scriptlet/all/*.js"],
+        rules: {
+            "@admc.com/sn/single-fn-obj-param": ["error", {
+                table: "sys_ux_data_broker_scriptlet",
+                allowAdditionalParams: true,
+            }],
+            "@admc.com/sn/no-arrow-fn": "error",
+            "@admc.com/sn/no-backticks": "error",
             strict: "off",
         },
     }
@@ -422,6 +445,8 @@ module.exports = {
                   "sa_pattern": ["all"],
                   "sys_ux_client_script": ["all"],
                   "sys_ux_client_script_include": ["all"],
+                  "sys_ux_data_broker_transform": ["scoped-es5", "scoped-es12"],
+                  "sys_ux_data_broker_scriptlet": ["all"],
                 }
             },
             rules: {

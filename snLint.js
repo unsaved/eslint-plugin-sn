@@ -192,7 +192,7 @@ console.warn(`PRE For (${table})`);
           });
         content = jsCodeBlocks.join("\n");
     // Following case must be before the other *_script_include case:
-    } else if (["sys_ux_client_script", "sys_ux_client_script_include"].includes(table)) {
+    } else if (table.startsWith("sys_ux_")) {
         // For widget client scripts, allow incomplete traditional anonymous function definition,
         // if it's the first thing in the scriptlet.
         if (ENTIREFN_TEST_PAT.test(justCode)) {

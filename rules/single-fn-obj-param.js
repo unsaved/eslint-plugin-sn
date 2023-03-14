@@ -5,9 +5,10 @@
  */
 
 const message =  // eslint-disable-next-line max-len
-  `Scriptlet contains at top level {{fnCount}} single obj-parameter functions + {{otherCount}} other expressions.
+  `Scriptlet contains at top level {{fnCount}} functions + {{otherCount}} other expressions.
 {{table}} scripts require 1 + 0.
-Function def should not have a terminating ; (this will count as a spurious extra expression).`;
+Function def should not have a terminating ; (this will count as a spurious extra expression).
+Some of the script types don't support more than one param for the functin.`;
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -16,7 +17,7 @@ const esLintObj = {
         type: "problem",
         docs: {
             description:
-              "ServiceNow NE client scriptlets require a single obj-param function at top level",
+              "ServiceNow NE scriptlets require a single function at top level (+ some <= 1 param)",
             category: "Possible Problems",
         },
         schema: [{
@@ -33,33 +34,31 @@ const esLintObj = {
     create: context => {
         let fnCount = 0;
         const multiParams = !!context.options[0].allowAdditionalParams;
+        let overParams = false;
         return {
             FunctionDeclaration: node => {
                 if (node.parent.type !== "Program") return;
-                if (node.params.length === 0) { fnCount++; return; }
-                if (node.params[0].type !== "ObjectPattern") return;
-                if (multiParams || node.params.length === 1) fnCount++;
+                if (node.params.length < 2 || multiParams) { fnCount++; return; }
+                overParams = true;
             },
             FunctionExpression: node => {
                 if (node.parent.type !== "ExpressionStatement") return;
                 if (node.parent.parent.type !== "Program") return;
-                if (node.params.length === 0) { fnCount++; return; }
-                if (node.params[0].type !== "ObjectPattern") return;
-                if (multiParams || node.params.length === 1) fnCount++;
+                if (node.params.length < 2 || multiParams) { fnCount++; return; }
+                overParams = true;
             },
             ArrowFunctionExpression: node => {
                 if (node.parent.type !== "ExpressionStatement") return;
                 if (node.parent.parent.type !== "Program") return;
-                if (node.params.length === 0) { fnCount++; return; }
-                if (node.params[0].type !== "ObjectPattern") return;
-                if (multiParams || node.params.length === 1) fnCount++;
+                if (node.params.length < 2 || multiParams) { fnCount++; return; }
+                overParams = true;
             },
             onCodePathEnd: (codePath, node) => {
                 if (node.type !== "Program") return;
                 let otherCount = node.body.length - fnCount;
                 if (fnCount === 1 && context.getSourceCode().getLastToken(node).value === ";")
                     otherCount++;
-                if (fnCount !== 1 || otherCount !== 0)
+                if (fnCount !== 1 || otherCount !== 0 || overParams)
                     context.report({node, messageId, data: {
                         fnCount,
                         otherCount,
