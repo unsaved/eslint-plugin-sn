@@ -171,7 +171,6 @@ function lintFile(file, table, alt, readStdin=false) {
     console.debug(`pseudoPath: ${pseudoPath}`);
     const justCode = strip(content.replace(/\r/g, "").trim().replace(RM_WHITESPACE_RE, ""));
     lineCount += justCode.split("\n").length;
-console.warn(`PRE For (${table})`);
     /* eslint-disable prefer-template */
     if (table === "sp_widget.client_script") {
         // For widget client scripts, allow non-invoked anonymous function definition, if
