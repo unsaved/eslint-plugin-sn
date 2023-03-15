@@ -445,7 +445,7 @@ module.exports = {
                   "sa_pattern": ["all"],
                   "sys_ux_client_script": ["all"],
                   "sys_ux_client_script_include": ["all"],
-                  "sys_ux_data_broker_transform": ["scoped-es5", "scoped-es12"],
+                  "sys_ux_data_broker_transform": ["global", "scoped-es5", "scoped-es12"],
                   "sys_ux_data_broker_scriptlet": ["all"],
                 }
             },

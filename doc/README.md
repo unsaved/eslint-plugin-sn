@@ -186,7 +186,7 @@ Alphabetically
 |sys_ui_script                  |**all**
 |sys_ux_client_script.script[^e]|**all**
 |sys_ux_client_script_include.script[^f]|**all**
-|sys_ux_data_broker_transform[^g]|**scoped-es5**, scoped-es12
+|sys_ux_data_broker_transform[^g]|**global**, scoped-es5, scoped-es12
 |sys_ux_data_broker_scriptlet[^g]|**all**
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
