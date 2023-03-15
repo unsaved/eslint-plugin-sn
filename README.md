@@ -200,7 +200,7 @@ Alphabetically
 |sys_ui_script                  |**all**
 |sys_ux_client_script.script[^e]|**all**
 |sys_ux_client_script_include.script[^f]|**all**
-|sys_ux_data_broker_transform[^g]|**scoped-es5**, scoped-es12
+|sys_ux_data_broker_transform[^g]|**global**, scoped-es5, scoped-es12
 |sys_ux_data_broker_scriptlet[^g]|**all**
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
@@ -267,12 +267,12 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |no-uiscript-curlref         |warn   |sys_ui_scripts   |References like ${this} get clobbered by the platform, at least if you load the UI script via \*.jsdbx file.
 |no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
-|single-fn-obj-param[^3]     |error  |client (NE)      |Next Experience client scriptlets must implement only a single function declaration (at top level)
+|single-fn[^3]               |error  |client (NE)      |Next Experience client scriptlets must implement only a single function declaration (at top level)
 |sn-workaround-iife          |error  |some server[^2]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
 |validate-gliderecord-calls  |error, warn[^1]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
 
 [^1]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for client-side scriptlets
 [^2]: The sn-workaround-iife rule is applied to some specific server tables'
-[^3]: Rule 'single-fn-obj-param' introduced with minor version 3.3.
+[^3]: Rule 'single-fn' introduced with minor version 3.3.
 [^4]: Rules 'no-arrow-fn' and 'no-backticks' added with minor version 3.7.
 

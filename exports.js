@@ -166,9 +166,8 @@ const overrides = [
     }, {
         files: ["**/sys_ux_data_broker_transform/*/*.js"],
         rules: {
-            "@admc.com/sn/single-fn-obj-param": ["error", {
+            "@admc.com/sn/single-fn": ["error", {
                 table: "sys_ux_data_broker_transform",
-                allowAdditionalParams: true,
             }],
             "@admc.com/sn/no-arrow-fn": "error",
             strict: "off",
@@ -277,13 +276,13 @@ const overrides = [
     }, {
         files: ["**/sys_ux_client_script/all/*.js"],
         rules: {
-            "@admc.com/sn/single-fn-obj-param": ["error", { table: "sys_ux_client_script" }],
+            "@admc.com/sn/single-fn": ["error", { table: "sys_ux_client_script" }],
             strict: "off",
         },
     }, {
         files: ["**/sys_ux_client_script_include/all/*.js"],
         rules: {
-            "@admc.com/sn/single-fn-obj-param": ["error", {
+            "@admc.com/sn/single-fn": ["error", {
                 table: "sys_ux_client_script_include",
                 allowAdditionalParams: true,
             }],
@@ -292,9 +291,8 @@ const overrides = [
     }, {
         files: ["**/sys_ux_data_broker_scriptlet/all/*.js"],
         rules: {
-            "@admc.com/sn/single-fn-obj-param": ["error", {
+            "@admc.com/sn/single-fn": ["error", {
                 table: "sys_ux_data_broker_scriptlet",
-                allowAdditionalParams: true,
             }],
             "@admc.com/sn/no-arrow-fn": "error",
             "@admc.com/sn/no-backticks": "error",

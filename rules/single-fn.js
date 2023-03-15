@@ -7,8 +7,7 @@
 const message =  // eslint-disable-next-line max-len
   `Scriptlet contains at top level {{fnCount}} functions + {{otherCount}} other expressions.
 {{table}} scripts require 1 + 0.
-Function def should not have a terminating ; (this will count as a spurious extra expression).
-Some of the script types don't support more than one param for the functin.`;
+Function def should not have a terminating ; (this will count as a spurious extra expression).`;
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -25,6 +24,7 @@ const esLintObj = {
             properties: {
                 table: { type: "string", },
                 allowAdditionalParams: { type: "boolean" },
+                appendage: { type: "string", },
             },
             additionalProperties: false
         }],
@@ -63,6 +63,7 @@ const esLintObj = {
                         fnCount,
                         otherCount,
                         table: context.options[0].table,
+                        appendate: overParams ? "\nToo many params in function call" : "",
                     } });
                 //else console.info(`${fnCount} + ${otherCount}`);
             }
