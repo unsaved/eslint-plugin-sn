@@ -9,6 +9,7 @@
 - [Setup](#setup)
 - [Usage](#usage)
   * [Color Output Work-around](#color-output-work-around)
+- [Rule Policies](#rule-policies)
 - [Customization](#customization)
 - [Supported ServiceNow scriptlet types](#supported-servicenow-scriptlet-types)
   * [Supported Now](#supported-now)
@@ -128,6 +129,18 @@ You can check your system with
 ```
     node -p process.stdout.isTTY
 ```
+
+## Rule Policies
+You are encouraged to override the provided policies.  I do.
+Generally the rules are strict but rules that are opinion-driven or which have valid exception cases
+have the level set to warn.
+Be aware that you can't selectively override ESLint rule options.  If you override a rule then you
+must specify all options that will apply for that rule.
+
+Of special note:
+1. Function placeholder param checking for no-unused-vars is strict with level error and args=all,
+but we have an exception for names matching pattern ^\_dummy.
+Use this exception pattern when you need to skip unused sequential parameters.
 
 ## Customization
 See file "snglobals/README.txt" for instructions on how to customize the global JavaScript object

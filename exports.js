@@ -205,55 +205,114 @@ const overrides = [
         files: ["**/@(sys|catalog)_script_client/*/*.js"],
         rules: {
             "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
             }],
         },
     }, {
         files: ["**/sys_ui_action.client_script_v2/all/*.js"],
-        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onClick$", }], },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy",
+                varsIgnorePattern: "^onClick$",
+            }],
+        },
     }, {
         files: ["**/@(sys|catalog)_ui_policy.script_@(true|false)/*/*.js"],
-        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^onCondition$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy",
+                varsIgnorePattern: "^onCondition$",
+            }],
+        },
     }, {
         files: ["**/sys_security_acl/*/*.js"],
-        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^answer$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy",
+                varsIgnorePattern: "^answer$",
+            }],
+        },
     }, {
         files: ["**/sys_transform_entry/*/*.js"],
-        rules: { "no-unused-vars": ["error", {
-            varsIgnorePattern: "^answer$",
-            argsIgnorePattern: "^source$",
-        }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy|^source$",
+                varsIgnorePattern: "^answer$",
+            }],
+        },
     }, {
         files: ["**/sys_script_validator/*/*.js"],
-        rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^validate$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy",
+                varsIgnorePattern: "^validate$",
+            }],
+        },
     }, {
         files: ["**/@(sys_web_service|sys_ws_operation/*/*.js"],
-        rules: { "no-unused-vars": ["error", { argsIgnorePattern: "^(request|response)$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy|^(request|response)$",
+            }],
+        },
     }, {
         files: ["**/sys_script/*/*.js", "**/sys_script.condition/*/*.js"],
-        rules: { "no-unused-vars": ["error", {
-            varsIgnorePattern: "^(g_scratchpad|action)$",
-            argsIgnorePattern: "^(current|previous)$",
-        }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                varsIgnorePattern: "^(g_scratchpad|action)$",
+                argsIgnorePattern: "^_?dummy|^(current|previous)$",
+            }],
+        },
     }, {
         files: ["**/sys_processor/*/*.js"],
         rules: { "no-unused-vars":
-                 ["error", { argsIgnorePattern: "^g_(request|response_processor)$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy|^g_(request|response_processor)$", }] },
+            }],
+        },
     }, {
         files: ["**/sys_script_email/*/*.js"],
-        rules: { "no-unused-vars":
-               ["error", { argsIgnorePattern: "^(current|template|email|email_action|event)$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy|^(current|template|email|email_action|event)$", }] },
+            }],
+        },
     }, {
         files: ["**/sys_transform_map/*/*.js"],
-        rules: { "no-unused-vars":
-               ["error", { argsIgnorePattern: "^(source|target|map|log|isUpdate)$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy|^(source|target|map|log|isUpdate)$", }] },
+            }],
+        },
     }, {
         files: ["**/sys_transform_script/*/*.js"],
-        rules: { "no-unused-vars": ["error", { argsIgnorePattern: "^(source|map|log|target)$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^_?dummy|^(source|map|log|target)$", }] },
+            }],
+        },
     }, {
         files: ["**/sp_widget.script/*/*.js"],
-        rules: { "no-unused-vars":
-               ["error", { argsIgnorePattern: "^(options|input|data|[$]sp)$", }] },
+        rules: {
+            "no-unused-vars": ["error", {
+                args: "all",
+                argsIgnorePattern: "^?dummy|^(options|input|data|[$]sp)$", }] },
+            }],
+        },
     }, {
         // Defined functions may be invoked by Jelly code.
         // Seems that there's intention to replace core functions such as cancel().
