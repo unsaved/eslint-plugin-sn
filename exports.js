@@ -274,11 +274,10 @@ const overrides = [
         },
     }, {
         files: ["**/sys_processor/*/*.js"],
-        rules: { "no-unused-vars":
         rules: {
             "no-unused-vars": ["error", {
                 args: "all",
-                argsIgnorePattern: "^_?dummy|^g_(request|response_processor)$", }] },
+                argsIgnorePattern: "^_?dummy|^g_(request|response_processor)$",
             }],
         },
     }, {
@@ -286,7 +285,7 @@ const overrides = [
         rules: {
             "no-unused-vars": ["error", {
                 args: "all",
-                argsIgnorePattern: "^_?dummy|^(current|template|email|email_action|event)$", }] },
+                argsIgnorePattern: "^_?dummy|^(current|template|email|email_action|event)$",
             }],
         },
     }, {
@@ -294,7 +293,7 @@ const overrides = [
         rules: {
             "no-unused-vars": ["error", {
                 args: "all",
-                argsIgnorePattern: "^_?dummy|^(source|target|map|log|isUpdate)$", }] },
+                argsIgnorePattern: "^_?dummy|^(source|target|map|log|isUpdate)$",
             }],
         },
     }, {
@@ -302,7 +301,7 @@ const overrides = [
         rules: {
             "no-unused-vars": ["error", {
                 args: "all",
-                argsIgnorePattern: "^_?dummy|^(source|map|log|target)$", }] },
+                argsIgnorePattern: "^_?dummy|^(source|map|log|target)$",
             }],
         },
     }, {
@@ -310,7 +309,7 @@ const overrides = [
         rules: {
             "no-unused-vars": ["error", {
                 args: "all",
-                argsIgnorePattern: "^?dummy|^(options|input|data|[$]sp)$", }] },
+                argsIgnorePattern: "^_?dummy|^(options|input|data|[$]sp)$",
             }],
         },
     }, {
@@ -546,6 +545,7 @@ module.exports = {
                 "semi": "warn",
                 //"no-extra-parens": "warn",  In practice, too stringent
                 "no-mixed-spaces-and-tabs": "off",
+                "no-unused-vars": ["error", { args: "all", argsIgnorePattern: "^_?dummy" }],
 
                 ...ruleConfigs("error", [
                     "invalid-table-alt",

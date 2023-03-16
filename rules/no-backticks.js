@@ -1,7 +1,7 @@
 "use strict";
 
 const message =
-  "This type of ServiceNow script doesn't allow backticks even though the ES level does"
+  "This type of ServiceNow script doesn't allow backticks even though the ES level does";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
