@@ -132,6 +132,8 @@ const overrides = [
           "require-atomic-updates": "error",
           "no-unused-private-class-members": "error",
           "no-promise-executor-return": "error",
+          "prefer-rest-params": "warn",
+          "prefer-spread": "warn",
           ...clientRules,
           ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls", "no-client-gr"]),
         },
@@ -155,6 +157,8 @@ const overrides = [
           "require-atomic-updates": "error",
           "no-unused-private-class-members": "error",
           "no-promise-executor-return": "error",
+          "prefer-rest-params": "warn",
+          "prefer-spread": "warn",
         },
     }, {
         // ES12 IIFEs
@@ -208,6 +212,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -217,6 +222,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^onClick$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -226,6 +232,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^onCondition$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -235,6 +242,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^answer$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -244,6 +252,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^source$",
                 varsIgnorePattern: "^answer$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -253,6 +262,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^validate$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -261,6 +271,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(request|response)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -270,6 +281,7 @@ const overrides = [
                 args: "all",
                 varsIgnorePattern: "^(g_scratchpad|action)$",
                 argsIgnorePattern: "^_?dummy|^(current|previous)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -278,6 +290,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^g_(request|response_processor)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -286,6 +299,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(current|template|email|email_action|event)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -294,6 +308,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(source|target|map|log|isUpdate)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -302,6 +317,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(source|map|log|target)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -310,6 +326,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(options|input|data|[$]sp)$",
+                caughtErrors: "all",
             }],
         },
     }, {
@@ -525,7 +542,7 @@ module.exports = {
                 "no-eval": "warn",
                 "no-extra-label": "error",
                 "no-extra-bind": "error",
-                "no-else-return": "error",
+                "no-else-return": ["error" { allowElseIf: false }],
                 "no-array-constructor": "warn",
                 "new-cap": "error",
                 "max-depth": "warn",
@@ -542,10 +559,15 @@ module.exports = {
                 "no-constant-binary-expression": "error",
                 "array-callback-return": ["error", { checkForEach: true }],
                 "eqeqeq": "warn",
+                "no-eq-null": "warn",
                 "semi": "warn",
                 //"no-extra-parens": "warn",  In practice, too stringent
                 "no-mixed-spaces-and-tabs": "off",
-                "no-unused-vars": ["error", { args: "all", argsIgnorePattern: "^_?dummy" }],
+                "no-unused-vars": ["error", {
+                  args: "all",
+                  argsIgnorePattern: "^_?dummy"
+                  caughtErrors: "all",
+                 }],
 
                 ...ruleConfigs("error", [
                     "invalid-table-alt",

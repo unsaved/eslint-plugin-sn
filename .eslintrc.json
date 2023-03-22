@@ -11,6 +11,9 @@
     "no-unreachable-loop": "error",
     "no-use-before-define": ["error", { "functions": false, "classes": false }],
     "no-extra-parens": "warn",
+    "no-unused-vars": ["error", {
+        "args": "all", "argsIgnorePattern": "^_?dummy", "caughtErrors": "all"
+    }],
 
     // Node-like-specific
     "no-duplicate-imports": "error",
@@ -34,7 +37,7 @@
     "no-eval": "warn",
     "no-extra-label": "error",
     "no-extra-bind": "error",
-    "no-else-return": "error",
+    "no-else-return": ["error", {"allowElseIf": false}],
     "no-array-constructor": "warn",
     "new-cap": "error",
     "max-depth": "warn",
