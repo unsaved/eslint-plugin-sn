@@ -1,18 +1,18 @@
 * text=auto
 
-*.bash eol=lf
-*.sh eol=lf
-*.ksh eol=lf
-*.csh eol=lf
-*.pem eol=lf
-*.cmd eol=crlf
-*.bat eol=crlf
-*.BAT eol=crlf
-*.CMD eol=crlf
-*.dsp eol=crlf
-*.sln eol=crlf
-*.vcproj eol=crlf
-*.reg eol=crlf
+*.bash text eol=lf
+*.sh text eol=lf
+*.ksh text eol=lf
+*.csh text eol=lf
+*.pem text eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.BAT text eol=crlf
+*.CMD text eol=crlf
+*.dsp text eol=crlf
+*.sln text eol=crlf
+*.vcproj text eol=crlf
+*.reg text eol=crlf
 
 *.PNG -text
 *.png -text
@@ -52,8 +52,8 @@
 *.list text
 *.text text
 *.tpl text
-*.dsv lf
-*.html lf
+*.dsv text eof=lf
+*.html text eof=lf
 *.ent text
 *.xhtml text
 *.dtd text
@@ -97,8 +97,8 @@ makefile text
 *.csv text
 *.shtml text
 *.htm text
-*.js lf
-*.jsm lf
+*.js text eof=lf
+*.jsm text eof=lf
 *.sql text
 *.isq text
 *.nsq text
@@ -112,6 +112,6 @@ makefile text
 *.xsl text
 *.xslt text
 *.dtd text
-*.json lf
+*.json text eof=lf
 *.md text
 LICENSE text
