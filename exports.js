@@ -9,9 +9,8 @@ if (process.env.DEBUG) console.debug(`Using globalsDir '${globalsDir}'`);
 /**
  * Output are just the 'gName: true' entries,not the "globals" keyword for the plain object
  */
-function globalsFromFiles() {
+function globalsFromFiles(...params) {
     const fName = "globalsFromFiles";
-    const params = Array.prototype.slice.call(arguments);
     const pObj = {};
     params.forEach(baseName => {
         let i, fp;
@@ -213,6 +212,7 @@ const overrides = [
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -223,6 +223,7 @@ const overrides = [
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^onClick$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -233,6 +234,7 @@ const overrides = [
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^onCondition$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -243,6 +245,7 @@ const overrides = [
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^answer$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -253,6 +256,7 @@ const overrides = [
                 argsIgnorePattern: "^_?dummy|^source$",
                 varsIgnorePattern: "^answer$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -263,6 +267,7 @@ const overrides = [
                 argsIgnorePattern: "^_?dummy",
                 varsIgnorePattern: "^validate$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -272,6 +277,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(request|response)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -282,6 +288,7 @@ const overrides = [
                 varsIgnorePattern: "^(g_scratchpad|action)$",
                 argsIgnorePattern: "^_?dummy|^(current|previous)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -291,6 +298,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^g_(request|response_processor)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -300,6 +308,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(current|template|email|email_action|event)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -309,6 +318,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(source|target|map|log|isUpdate)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -318,6 +328,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(source|map|log|target)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -327,6 +338,7 @@ const overrides = [
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(options|input|data|[$]sp)$",
                 caughtErrors: "all",
+                caughtErrorsIgnorePattern: "^_?dummy",
             }],
         },
     }, {
@@ -542,7 +554,7 @@ module.exports = {
                 "no-eval": "warn",
                 "no-extra-label": "error",
                 "no-extra-bind": "error",
-                "no-else-return": ["error" { allowElseIf: false }],
+                "no-else-return": ["error", { allowElseIf: false }],
                 "no-array-constructor": "warn",
                 "new-cap": "error",
                 "max-depth": "warn",
@@ -565,8 +577,9 @@ module.exports = {
                 "no-mixed-spaces-and-tabs": "off",
                 "no-unused-vars": ["error", {
                   args: "all",
-                  argsIgnorePattern: "^_?dummy"
+                  argsIgnorePattern: "^_?dummy",
                   caughtErrors: "all",
+                  caughtErrorsIgnorePattern: "^_?dummy",
                  }],
 
                 ...ruleConfigs("error", [

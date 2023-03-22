@@ -96,7 +96,7 @@ const esLintObj = {
                 if (!hasFnAncestor(context)) assignAndDeclCount++;
             }, FunctionDeclaration: () => {
                 if (!hasFnAncestor(context)) assignAndDeclCount++;
-            }, onCodePathEnd: (codePath, node) => {
+            }, onCodePathEnd: (_dummy, node) => {
                 if (node.type !== "Program") return;
                 console.warn('IIFE check counts.  '
                   + `assg ${assignAndDeclCount}, iife ${iifeCount}, goodPs ${goodParams}`);

@@ -25,7 +25,7 @@ const esLintObj = {
             { ...context.settings.ootbTables, ...context.settings.customTables } :
             context.settings.ootbTables;
         return {
-            onCodePathStart: (codePath, node) => {
+            onCodePathStart: (_dummy, node) => {
                 if (node.type !== "Program") return;
                 let t, a = null;
                 if (context.settings && context.settings.testTable) {

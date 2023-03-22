@@ -1393,7 +1393,7 @@ function onLoad() {  // eslint-disable-line no-unused-vars
         let t;
         try {
             t = eval(`${k} === null ? "<null>" : typeof(${k});`);  // eslint-disable-line no-eval
-        } catch (ef) {
+        } catch (_dummy) {
             console.error(`FAILED on: ${k}`);
             return false;
         }

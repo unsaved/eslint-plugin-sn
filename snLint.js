@@ -148,6 +148,7 @@ const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
  * or number of rule errors and warnings if strict (r) mode set
  */
 function lintFile(file, table, alt, readStdin=false) {
+    // eslint-disable-next-line prefer-rest-params
     validate(arguments, ["string", "string", "string=", "boolean="]);
     let stdout, thisErrorCount = 0, thisWarnCount = 0;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
@@ -183,7 +184,7 @@ function lintFile(file, table, alt, readStdin=false) {
         const jsCodeBlocks = [];
         content.replace(/\t/g, "    ").replace(/\r/g, "").
           replace(/^\s*name = "([^"]+)"[\S\s]+?^\s*eval [{]"javascript: (|[\S\s]+?[^\\])"[}]/gm,
-            (m, g1, g2) => {
+            (_dummy, g1, g2) => {
               jsCodeBlocks.push("function fn" + (jsCodeBlocks.length + 1)
                 + g1.replace(/[^\w]/g, "") + "() { // eslint-disable-line no-unused-vars\n"
                 + g2.replace(/\\"/g, '"').replace(/\\\\/g, "\\") + "\n}\n");
@@ -333,7 +334,7 @@ function lintFile(file, table, alt, readStdin=false) {
  * @returns Array of recursively matching filepaths, may have 0 elements
  */
 function jsFilesInBranch(fsDir) {
-    validate(arguments, ["object"]);
+    validate(arguments, ["object"]);  // eslint-disable-line prefer-rest-params
     let dirent, entPath;
     const outputList = [];
 
@@ -351,8 +352,8 @@ function jsFilesInBranch(fsDir) {
     return outputList;
 }
 
-conciseCatcher(async function() {
-    validate(arguments, []);
+conciseCatcher(async (params) => {
+    validate(params, []);
     if (yargsDict.s) {
         const targRcFile = "sneslintrc.json";
         if (fs.existsSync(targRcFile)) {

@@ -53,7 +53,7 @@ const esLintObj = {
                 if (node.params.length < 2 || multiParams) { fnCount++; return; }
                 overParams = true;
             },
-            onCodePathEnd: (codePath, node) => {
+            onCodePathEnd: (_dummy, node) => {
                 if (node.type !== "Program") return;
                 let otherCount = node.body.length - fnCount;
                 if (fnCount === 1 && context.getSourceCode().getLastToken(node).value === ";")
