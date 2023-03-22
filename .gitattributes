@@ -52,8 +52,8 @@
 *.list text
 *.text text
 *.tpl text
-*.dsv text eof=lf
-*.html text eof=lf
+*.dsv text eol=lf
+*.html text eol=lf
 *.ent text
 *.xhtml text
 *.dtd text
@@ -97,8 +97,8 @@ makefile text
 *.csv text
 *.shtml text
 *.htm text
-*.js text eof=lf
-*.jsm text eof=lf
+*.js text eol=lf
+*.jsm text eol=lf
 *.sql text
 *.isq text
 *.nsq text
@@ -112,6 +112,6 @@ makefile text
 *.xsl text
 *.xslt text
 *.dtd text
-*.json text eof=lf
+*.json text eol=lf
 *.md text
 LICENSE text
