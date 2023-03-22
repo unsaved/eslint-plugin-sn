@@ -352,7 +352,7 @@ function jsFilesInBranch(fsDir) {
     return outputList;
 }
 
-conciseCatcher(async (params) => {
+conciseCatcher(async (...params) => {
     validate(params, []);
     if (yargsDict.s) {
         const targRcFile = "sneslintrc.json";
