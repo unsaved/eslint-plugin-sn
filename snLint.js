@@ -138,9 +138,9 @@ const UNUSEDFNEXPR_1L_TEST_PAT = /^\s*[(]\s*function\s*[(].*[}][ \t\r]*(?:\n|$)/
 const UNUSEDFNEXPR_TEST_PAT = /^\s*[(]\s*function\s*[(]/;
 const UNUSEDFNEXPR_SUB_PAT = /[(]\s*function\s*[(].*/;
 const UNUSEDAREXPR_1L_TEST_PAT =
-  /^\s*[(][^)]*[)][ \t]*=>[ \t]*[{].*[}][ \t\r]*(?:\n|$)|^\s*[(][^)]*[)][ \t]*=>[ \t]*[^\s{]/;
-const UNUSEDAREXPR_TEST_PAT = /^\s*[(][^)]*[)]\s*=>/;
-const UNUSEDAREXPR_SUB_PAT = /[(][^)]*[)][ \t]*=>.*/;
+/^\s*(?:[(][^)]*[)]|\w+)[ \t]*=>[ \t]*[{].*[}][ \t\r]*(?:\n|$)|^\s*[(][^)]*[)][ \t]*=>[ \t]*[^\s{]/;
+const UNUSEDAREXPR_TEST_PAT = /^\s*(?:[(][^)]*[)]|\w+)\s*=>/;
+const UNUSEDAREXPR_SUB_PAT = /(?:[(][^)]*[)]|\w+)[ \t]*=>.*/;
 const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
 /**
