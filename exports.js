@@ -175,7 +175,7 @@ const overrides = [
             "@admc.com/sn/single-fn": ["error", {
                 table: "sys_ux_data_broker_transform",
             }],
-            "@admc.com/sn/no-arrow-fn": "error",
+            "@admc.com/sn/no-toplvl-arrow-fn": "error",
             strict: "off",
         },
     }, {
@@ -384,7 +384,7 @@ const overrides = [
             "@admc.com/sn/single-fn": ["error", {
                 table: "sys_ux_data_broker_scriptlet",
             }],
-            "@admc.com/sn/no-arrow-fn": "error",
+            "@admc.com/sn/no-toplvl-arrow-fn": "error",
             "@admc.com/sn/no-backticks": "error",
             strict: "off",
         },
