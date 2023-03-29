@@ -114,8 +114,11 @@ const overrides = [
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
-        // ServiceNow requires just 2 versions back for Edge and Chrome, so the limiting browser
-        // is Safari 12.0 which is supports ES2018.
+        // ServiceNow requires just 2 versions back for Edge and Chrome (both which release about
+        // every month), so the limiting browser is Safari 12.0 which supports ES2018.
+        // If you don't need to support Safari browser then override this value to match highest ES
+        // version column with all acceptable values for your browsers at
+        // https://kangax.github.io/compat-table/es2016plus/
         env: { es2018: true },
         rules: {
           "strict": ["warn", "function"],
