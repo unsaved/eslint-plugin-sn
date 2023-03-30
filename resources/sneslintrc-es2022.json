@@ -1,0 +1,21 @@
+/* N.b. this file is used by 'snLint'.
+ * It would not be honored by 'eslint' directly unless you use the -c switch.
+ * Override settings must specify source files with path format
+ *  'TABLENAME/BASENAME.js' or 'TABLENAME/ALTSCOPE/BASENAME.js'.
+ * Example: "sys_script/global/sane.js"
+ * Use snLint's -d switch can be used to display the generated pseudo path.
+ */
+{
+  "root": true,
+  "plugins": ["@admc.com/sn"],
+  "extends": ["plugin:@admc.com/sn/servicenow"],
+  "overrides": [
+    {  // Use newer client-side ES if we don't need to support Safari browser
+      "files": [
+        "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",
+        "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet)/all/*.js"
+      ],
+      "env": { "es2018": false, "es2022": true }
+    }
+  ]
+}
