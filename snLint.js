@@ -160,7 +160,9 @@ function lintFile(file, table, alt, readStdin=false) {
           + "Consider using suffix '.txt'");
         baseName = baseName.slice(0, -"txt".length) + "js"; // eslint-disable-line prefer-template
     }
-    const objName = baseName.replace(/[.][^.]+$/, "");
+    // objName is for custom interrogation of scriptlet to support special handling for
+    // class or function definitions:
+    const objName = baseName.replace(/[.][^.]+$/, "").replace(/^.+[.]/, "");
     const eslintArgs = passThruArgs ? passThruArgs.slice() : [];
     if (process.stdout.isTTY) eslintArgs.unshift("--color");
     let content = fs.readFileSync(readStdin ? 0 : file, "utf8");
