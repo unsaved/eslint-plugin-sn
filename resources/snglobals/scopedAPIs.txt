@@ -4,6 +4,7 @@
 GlideChoiceList
 GlideEmailAction
 GlideRecordSecure
+ScopedGlideRecord
 
 CertificateEncryption
 FlowScriptAPI
