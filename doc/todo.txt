@@ -1,5 +1,11 @@
+IMMEDIATE:
++sp_widget.link
+Make sure that wp_widget scripts allow for function signatures and auxilliary (non-primary-function)
+statements.
+
+
 Support fields:
-Search for sys_ux*.*script* sys_dictionaries to see if any other importatnt ones.
+Search for sys_ux*.*script* sys_dictionaries to see if any other important ones.
 user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.
                       Don't use 'current', 'gs.getUser()', gs.getUserID(); so use user_id (a sys_id)
 sys_ui_context_menu .condition, .dynamic_actions_script (server-side), .on_show_script, .action_script
