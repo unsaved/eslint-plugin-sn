@@ -170,8 +170,9 @@ Alphabetically
 |sa_pattern                     |**all**
 |sa_pattern_prepost_script      |**global**, scoped-es5[^a], scoped-es12[^b]
 |sc_cat_item_producer           |**global**, scoped-es5[^a], scoped-es12[^b]
-|sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sp_widget.client_script        |**all**
+|sp_widget.link                 |**all**[^h]
+|sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sysauto_script                 |**global**, scoped-es5[^a], scoped-es12[^b]
 |sysauto_script.condition[^d]   |**global**, scoped-es5, scoped-es12
 |sysevent_script_action         |**global**, scoped-es5[^a], scoped-es12[^b]
@@ -214,6 +215,7 @@ Alphabetically
 [^e]: sys_ux_client_script table added with minor version 3.4.
 [^f]: sys_ux_client_script_include table added with minor version 3.5.
 [^g]: sys_ux_broker_* tables added with minor version 3.7.
+[^h]: sp_widget.link table added with minor version 3.8.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 

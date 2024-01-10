@@ -1,0 +1,16 @@
+Several SN scriptlets require definition of a function, where the function may be anonymous,
+and the system loads the defintion and then executes it.
+Since just the function definition itself alone not a valid JavaScript scriptlet
+(because without the wrapper it could never be invoked and therefore would be useless),
+this module wraps the function in minimal code so make the entire script valid.
+We report when this is done with messages starting with "Inserting".
+
+I fully acknowledge that this is an ugly hack, but the only alternative is not not validate at all.
+Since we are modifying the provided code, this opens up the system to spurious errors when the
+combination of the user code doesn't get along with the wrapping code.
+A primary example of this is where the ServiceNow scriptlet allows for statements at the root level
+after the required function definition.  Since we have to close the definition statement to avoid
+a syntax error, if the provided code has any statement after the function definition, we will
+close at the wrong point.
+(It is possible that by leveraging the AST we can insert the close immediately after the function
+definition, but I don't have time to try that now).
