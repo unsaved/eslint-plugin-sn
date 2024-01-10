@@ -110,7 +110,7 @@ const overrides = [
         // Regular SN client scripts, both iso and non-iso
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet)/all/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet)/all/*.js",  // eslint-disable-line max-len,
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
@@ -179,7 +179,8 @@ const overrides = [
             strict: "off",
         },
     }, {
-        files: ["**/sys_ui_script/*/*.js"],
+        // `${x}` construct doesn't work in these scripts
+        files: [ "**/@(sys_ui_script|p_widget.client_script|sp_widget.link)/*/*.js"],
         rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
     }, {
         // iso SN client scripts
@@ -196,7 +197,7 @@ const overrides = [
         // Non-iso SN client scripts
         files: [
             "**/@(noniso|noniso_global|noniso_scoped-es5|noniso_scoped-es12)/*.js",
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sys_ui_page.client_script)/*/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script)/*/*.js",  // eslint-disable-line max-len,
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
@@ -528,6 +529,7 @@ module.exports = {
                   "sys_ui_policy.script_false": ["iso", "noniso"],
                   "sys_ui_script": ["all"],
                   "sp_widget.client_script": ["all"],
+                  "sp_widget.link": ["all"],
                   "sys_ui_page.client_script": ["all"],
                   "sys_ui_page.processing_script": ["global", "scoped-es5", "scoped-es12"],
                   "sa_pattern": ["all"],
