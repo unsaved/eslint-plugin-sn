@@ -185,7 +185,7 @@ const overrides = [
         rules: {
             "prefer-template": "off",
             "no-template-curly-in-string": "off",
-            ...ruleConfigs("error", ["no-backtic-curlyref"]),
+            ...ruleConfigs("error", ["no-backtick-curlyref"]),
         },
     }, {
         // iso SN client scripts
