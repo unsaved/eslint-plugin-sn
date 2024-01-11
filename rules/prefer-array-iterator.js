@@ -11,9 +11,8 @@
  * order loops because though in many cases Array iterators are still superior for this, we can't
  * confidently recommend this without much more detailed checking.
  */
-const message = "Consider using Array.forEach, .every, or .some operator.  "
-  + "Unlike traditional 'for (i = 0; i < arr.length...', these safely isolate the iteration "
-  + "variables and all other variables.";
+const message =
+  "'for (const x of array)' (for ES12) or Array.x(function) safer than legacy for int loop";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -21,8 +20,8 @@ const esLintObj = {
     meta: {
         type: "suggestion",
         docs: {
-            description:
-              "Encourage to use Array.forEach/.every/.some rather than traditional for loop",
+            description:  // eslint-disable-next-line max-len
+              "Legacy for/int usually inferior to ES12 for...of, and unsafe in ES5 compared to native Array iterators with function params.",
             category: "Suggestions",
         },
         messages: { },

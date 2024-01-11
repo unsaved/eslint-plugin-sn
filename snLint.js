@@ -130,8 +130,8 @@ let allTables;
 // From https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 const escapedCwd = (process.cwd() + path.sep).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const ALLOW_DEFINE_CMT = "/* eslint-disable-line no-redeclare, no-unused-vars, max-len */";
-const RAWFN_TEST_PAT = /^\s*function\s*[(]/;  // We strip comments and ws before this test
-const RAWFN_SUB_PAT = /\bfunction\s*[(]/;  // Allow for comments before substitution
+const RAWFN_TEST_PAT = /^function {0,2}[(]/; // MCE editor allows no whitespace variants or comments
+const RAWFN_SUB_PAT = /function {0,2}[(]/;  // ditto
 const RAWFNCMT_SUB_PAT = /\bfunction\s*[(].*/;  // Allow for comments before substitution
 const ENTIREFN_TEST_PAT = /^\s*function\s*[(][\s\S]+[}]\s*$/;  // We strip comments and ws before
 const UNUSEDFNEXPR_1L_TEST_PAT = /^\s*[(]\s*function\s*[(].*[}][ \t\r]*(?:\n|$)/;
@@ -178,6 +178,10 @@ function lintFile(file, table, alt, readStdin=false) {
     if (table === "sp_widget.client_script") {
         // For widget client scripts, allow non-invoked anonymous function definition, if
         // it's the first thing in the scriptlet.
+        /* TODO:  Attempt to insert ; after the function definition rather that at very end.
+         * Very difficult if not unfeasible to do without an AST library.
+         * Without this, this hack gives false positive if there are root-level statements
+         * between the function definition and bottom of script. */
         if (RAWFN_TEST_PAT.test(justCode)) {
             content = content.replace(RAWFN_SUB_PAT, "api._dummy=function(") + ";";
             console.warn("Inserted dummy assignment before Angular anonymous function");
@@ -195,7 +199,7 @@ function lintFile(file, table, alt, readStdin=false) {
         content = jsCodeBlocks.join("\n");
     // Following case must be before the other *_script_include case:
     } else if (table.startsWith("sys_ux_")) {
-        // For widget client scripts, allow incomplete traditional anonymous function definition,
+        // For UIB client scripts, allow incomplete traditional anonymous function definition,
         // if it's the first thing in the scriptlet.
         if (ENTIREFN_TEST_PAT.test(justCode)) {
             content = content.replace(RAWFNCMT_SUB_PAT,
@@ -216,6 +220,26 @@ function lintFile(file, table, alt, readStdin=false) {
                   "  // eslint-disable-line semi, max-len\n" + segments[segments.length-1];
             console.warn("Inserted ML unused-expr comment directive within anony function def.");
             //console.warn(`<${content}>`);
+        } else if (UNUSEDAREXPR_1L_TEST_PAT.test(justCode)) {
+            content = content.replace(UNUSEDAREXPR_SUB_PAT,
+              "$&  // eslint-disable-line no-unused-expressions, max-len, semi");
+            console.warn("Inserted 1L unused-expr comment directive within anony arrow fn def.");
+        } else if (UNUSEDAREXPR_TEST_PAT.test(justCode)) {
+            // Impossible to find end of code (before possible end comments) to effectively insert
+            // a more narrow disable-semi directive, so we're forced to disable 'semi' globally:
+            content = "/* eslint-disable semi */ " + content.replace(
+              UNUSEDAREXPR_SUB_PAT, "$&  // eslint-disable-line no-unused-expressions, max-len");
+            console.warn("Inserted ML unused-expr comment directive within anony arrow fn def.");
+        }
+    } else if (table === "sp_widget.link") {
+        // For Widget link scripts, allow incomplete anonymous function definition,
+        // if it's the first thing in the scriptlet.
+        // TODO:  Don't need to append semi-colons at end here????
+        if (ENTIREFN_TEST_PAT.test(justCode)) {
+            content = content.replace(RAWFNCMT_SUB_PAT,
+              "($&  // eslint-disable-line no-unused-expressions, max-len") +
+              "\n)  // eslint-disable-line semi\n";
+            console.warn("Wrapped incomplete anonymous function");
         } else if (UNUSEDAREXPR_1L_TEST_PAT.test(justCode)) {
             content = content.replace(UNUSEDAREXPR_SUB_PAT,
               "$&  // eslint-disable-line no-unused-expressions, max-len, semi");

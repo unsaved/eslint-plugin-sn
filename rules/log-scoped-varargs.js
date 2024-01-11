@@ -1,7 +1,7 @@
 "use strict";
 
-const message = "Scoped logging statements require one string param " +
-  "and can only take additional params if the first contains {INT} placeholders";
+const message = "Scoped logging requires one string param " +
+  "(+ additional params if the first contains {INT} placeholders)";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {

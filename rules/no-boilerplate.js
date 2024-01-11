@@ -1,6 +1,6 @@
 "use strict";
 
-const message = "Remove template comments.  Don't promote garbage in your scripts.";
+const message = "Remove boilerplate comments.  Don't promote garbage in your scripts.";
 
 const SN_BOILERPLATE_TEXTS = [
     // I am commenting out comments which may arguably be useful to retain

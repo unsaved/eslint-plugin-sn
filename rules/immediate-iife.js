@@ -8,8 +8,7 @@
  * I think this suffers from not handling same var/fn name at different scope levels.
  */
 
-const message = `Non-immediate IIFE '{{name}}'.  To not pollute namespace, code like:
-  (function(x,y){...}).(a,b);";   OR if platform honors fn names: function x(x,y) {...}).(a,b);`;
+const message = "Non-immediate IIFE '{{name}}'.  code like: (function(x,y){...}).(a,b);";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 

@@ -1,7 +1,7 @@
 "use strict";
 
 const message =
-  "Specify a 2nd parameter, 'source' to clearly identify your source scripting object and function";
+  "Specify a 2nd parameter, 'source' to identify your source scripting object and function";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {

@@ -9,9 +9,12 @@
  * If testing shows that it also fails in global UI scripts and when loaded by jelly form formatter
  * and mobile/portal g_ui_scripts cals, then set rule level to error.
  * Until this is known, probably safer to leave at warn level.
+ *
+ * WARNING:  2024-01-10:  This rule being deprecated and replaced by new rule no-backtic-curlref,
+ *                        due to now understanding the root cause of the problem, and having
+ *                        tested the behavior thoroughly.
 */
 
-const strip = require("strip-comments");
 const message =
   "ServiceNow UI Scripts, at least when loaded as *.jsdbx file clobber ${...} references";
 const messageId =  // eslint-disable-next-line prefer-template
@@ -27,12 +30,7 @@ const esLintObj = {
         messages: { },
     },
 
-    create: context => { return {
-        Program: node => {
-            if (strip(context.getSourceCode().getText()).includes('${'))
-                context.report({node, messageId});
-        },
-    }; }
+    create: _dummy => { return { }; }
 };
 esLintObj.meta.messages[messageId] = message;
 module.exports = esLintObj;

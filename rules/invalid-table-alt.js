@@ -2,8 +2,8 @@
 
 const tableMessage = `Invalid table '{{table}}'.
 Table alternatives are: {{allTables}}`;
-const altMessage = `Invalid table/scopealt combo '{{table}}/{{alt}}'.
-Available alts for table {{table}} are {{alts}}`;
+// eslint-disable-next-line max-len
+const altMessage = `Invalid table/scopealt combo '{{table}}/{{alt}}.  Available alts for table {{table}} are {{alts}}`;
 /* eslint-disable prefer-template */
 const tableMessageId =
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase() + "_table";

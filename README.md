@@ -185,8 +185,9 @@ Alphabetically
 |sa_pattern                     |**all**
 |sa_pattern_prepost_script      |**global**, scoped-es5[^a], scoped-es12[^b]
 |sc_cat_item_producer           |**global**, scoped-es5[^a], scoped-es12[^b]
-|sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sp_widget.client_script        |**all**
+|sp_widget.link                 |**all**[^h]
+|sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sysauto_script                 |**global**, scoped-es5[^a], scoped-es12[^b]
 |sysauto_script.condition[^d]   |**global**, scoped-es5, scoped-es12
 |sysevent_script_action         |**global**, scoped-es5[^a], scoped-es12[^b]
@@ -229,6 +230,7 @@ Alphabetically
 [^e]: sys_ux_client_script table added with minor version 3.4.
 [^f]: sys_ux_client_script_include table added with minor version 3.5.
 [^g]: sys_ux_broker_* tables added with minor version 3.7.
+[^h]: sp_widget.link table added with minor version 3.8.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
@@ -268,6 +270,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |log-scoped-varargs          |error  |server scoped*   |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-arrow-fn                 |error  |sys_ux_data_broker* | Arrow functons not supported in NE data broker scripts regardless of ES level
 |no-backticks                |error  |sys_ux_data_broker_scriptlet | Backticks not supported in these scripts (SN defect IMO)
+|no-backtick-curlyref        |error  |sys_ui_script, sp_widgetscrips | Templating not supported in backtick strings, to support sys_ui_message substitution[^5]
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
 |no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord
@@ -277,7 +280,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |no-log-global               |error  |server scoped*   |Scoped app scripts should use the scoped logging API
 |no-log-scoped               |error  |server global    |Global scope scripts should use the global logging API
 |no-sysid                    |error, warn[^1]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.  This actually matches for all 32 character hex strings, so you will need to disable for valid non-sysid strings such as MD5 checksums.
-|no-uiscript-curlref         |warn   |sys_ui_scripts   |References like ${this} get clobbered by the platform, at least if you load the UI script via \*.jsdbx file.
+|no-uiscript-curlref         |warn   |sys_ui_script    |Deprecated (never fails), replaced by no-backtick-curlref[^5]
 |no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
 |single-fn[^3]               |error  |client (NE)      |Next Experience client scriptlets must implement only a single function declaration (at top level)
@@ -288,4 +291,5 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 [^2]: The sn-workaround-iife rule is applied to some specific server tables'
 [^3]: Rule 'single-fn' introduced with minor version 3.3.
 [^4]: Rules 'no-arrow-fn' and 'no-backticks' added with minor version 3.7.
+[^5]: Rule 'no-uiscript-curlref superseded by 'no-backtick-with minor version 3.7.
 

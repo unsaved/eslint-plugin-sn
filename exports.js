@@ -179,9 +179,14 @@ const overrides = [
             strict: "off",
         },
     }, {
-        // `${x}` construct doesn't work in these scripts
-        files: [ "**/@(sys_ui_script|p_widget.client_script|sp_widget.link)/*/*.js"],
-        rules: { "prefer-template": "off", ...ruleConfigs("warn", ["no-uiscript-curlyref"]) },
+        // Allow for ${x} sys_ui_message substitutions
+        files:
+          ["**/@(sys_ui_script|sp_widget.script|sp_widget.client_script|sp_widget.link)/*/*.js"],
+        rules: {
+            "prefer-template": "off",
+            "no-template-curly-in-string": "off",
+            ...ruleConfigs("error", ["no-backtic-curlyref"]),
+        },
     }, {
         // iso SN client scripts
         files: [

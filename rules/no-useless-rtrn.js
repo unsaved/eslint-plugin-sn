@@ -1,7 +1,6 @@
 "use strict";
 
-const message =
-  "Remove useless assignment to 'rtrn'.  Directly reference the required value: {{directVal}}";
+const message = "Remove useless assignment to 'rtrn'.  Directly ref. required value: {{directVal}}";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {

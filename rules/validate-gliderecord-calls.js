@@ -1,8 +1,7 @@
 "use strict";
 
 const message =
-  "Check return values of GlideRecord insert, update, get, next, deleteRecord calls.  "
-  + "This can detect many common runtime problems.";
+  "Check return values of GlideRecord insert, update, get, next, deleteRecord calls";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -23,7 +22,8 @@ const esLintObj = {
         type: "problem",
         docs: {
             description:
-              "Require checking GlideRecord insert, update, get, next, deleteRecord return values.",
+              `Require checking GlideRecord insert, update, get, next, deleteRecord return values.
+This can detect many common runtime problems.`,
             category: "Possible Problems",
         },
         /*

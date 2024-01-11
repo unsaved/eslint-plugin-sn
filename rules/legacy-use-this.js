@@ -6,8 +6,7 @@
 
 const strip = require("strip-comments");
 
-const message = "Every prototype function should use 'this'.  " +
-  "Otherwise implement as static function like ClassName.functionName";
+const message = "Prototype function should use 'this'.  Otherwise implement ClassName.functionName";
 
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();

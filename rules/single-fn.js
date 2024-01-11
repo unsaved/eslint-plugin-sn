@@ -4,10 +4,8 @@
  * Require that script contain at the top level only a single obj-parameter function
  */
 
-const message =  // eslint-disable-next-line max-len
-  `Scriptlet contains at top level {{fnCount}} functions + {{otherCount}} other expressions.
-{{table}} scripts require 1 + 0.
-Function def should not have a terminating ; (this will count as a spurious extra expression).`;
+const message =
+"Contains at top level {{fnCount}} functions + {{otherCount}} other exprs.  {{table}} needs 1 + 0.";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
@@ -16,7 +14,8 @@ const esLintObj = {
         type: "problem",
         docs: {
             description:
-              "ServiceNow NE scriptlets require a single function at top level (+ some <= 1 param)",
+              `ServiceNow NE scriptlets require a single function at top level (+ some <= 1 param).
+Function def should not have a terminating ; (this will count as a spurious extra expression).`,
             category: "Possible Problems",
         },
         schema: [{
