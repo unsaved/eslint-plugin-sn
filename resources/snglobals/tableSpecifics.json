@@ -35,7 +35,8 @@
   },
   "sys_security_acl": { "writable": ["answer"], "readable": ["previous"] },
   "sp_widget.client_script": ["api"],
-  "sp_widget.script": { "iifeParams": [], "readable": ["options", "input", "data", "$sp"] }
+  "sp_widget.script": { "iifeParams": [], "readable": ["options", "input", "data", "$sp"] },
   /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because the globals
    * are dependent upon altscope not just table name */
+  "sys_script_validator": ["g_validation_script_field_count"]
 }
