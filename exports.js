@@ -207,7 +207,7 @@ const overrides = [
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
         files: ["**/sp_widget.client_script/*/*.js"],
-        rules: { "@admc.com/sn/sn-controller": "error" },
+        rules: { "@admc.com/sn/controller-fn": "error" },
     }, {
         files: ["**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js"],
         rules: clientRules,
