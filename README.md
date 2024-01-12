@@ -270,7 +270,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |log-scoped-varargs          |error  |server scoped*   |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-arrow-fn                 |error  |sys_ux_data_broker* | Arrow functons not supported in NE data broker scripts regardless of ES level
 |no-backticks                |error  |sys_ux_data_broker_scriptlet | Backticks not supported in these scripts (SN defect IMO)
-|no-backtick-curlyref        |error  |sys_ui_script, sp_widgetscrips | Templating not supported in backtick strings, to support sys_ui_message substitution[^5]
+|no-backtick-curlyref        |error  |sys_ui_script, sp_widget scripts | Templating not supported in backtick strings, to support sys_ui_message substitution[^5]
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
 |no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord

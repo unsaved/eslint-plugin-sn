@@ -1,5 +1,6 @@
 IMMEDIATE:
-+sp_widget.link
+Restore controller-fn test, but have it just check for /^api.controller ?= ?function {0,2}\(/
+    Add code comment that snLint translates from ^function( to that.
 Make sure that wp_widget scripts allow for function signatures and auxilliary (non-primary-function)
 statements.
 

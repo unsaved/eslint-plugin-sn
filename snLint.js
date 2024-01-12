@@ -183,7 +183,8 @@ function lintFile(file, table, alt, readStdin=false) {
          * Without this, this hack gives false positive if there are root-level statements
          * between the function definition and bottom of script. */
         if (RAWFN_TEST_PAT.test(justCode)) {
-            content = content.replace(RAWFN_SUB_PAT, "api._dummy=function(") + ";";
+            // 'api.ctoller=function(...' is what you get with OOTB boilerplate.
+            content = content.replace(RAWFN_SUB_PAT, "api.controller=function(") + ";";
             console.warn("Inserted dummy assignment before Angular anonymous function");
         }
     } else if (table === "sa_pattern") {
