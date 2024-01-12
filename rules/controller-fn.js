@@ -3,7 +3,7 @@
 /**
  * Crazy, arbitrary requirements by ServiceNow
  */
-const message = "See rule docs for ServiceNow and MCE's crazy requiements for controller def";
+const message = "See rule docs for ServiceNow and MCE's crazy requirements for controller def";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
