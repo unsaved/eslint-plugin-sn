@@ -185,7 +185,7 @@ const overrides = [
         rules: {
             "prefer-template": "off",
             "no-template-curly-in-string": "off",
-            ...ruleConfigs("error", ["no-backtick-curlyref"]),
+            "@admc.com/sn/no-backtick-curlyref": "error",
         },
     }, {
         // iso SN client scripts
@@ -205,6 +205,9 @@ const overrides = [
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script)/*/*.js",  // eslint-disable-line max-len,
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
+    }, {
+        files: ["**/sp_widget.client_script/*/*.js"],
+        rules: { "@admc.com/sn/sn-controller": "error" },
     }, {
         files: ["**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js"],
         rules: clientRules,

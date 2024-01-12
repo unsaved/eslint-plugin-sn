@@ -248,6 +248,7 @@ The table shows by default what scopes they are applied to and at what level.
 Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
 |---                         |---    |---              |---
+|controller-fn               |error  |all              |ServiceNow and MCE Editor have very idiosyncratic requirements for wp_widget.client_script, including where can use comments and extra whitespace
 |immediate-iife              |error  |all              |IIFEs must execute immediately
 |invalid-table-alt           |error  |Unsupported      |Invalid table/alt combination
 |legacy-use-this             |error  |all              |Same as OOTB ESLint rule [class-methods-use-this](https://eslint.org/docs/latest/rules/class-methods-use-this) but for pre-ES6
@@ -276,4 +277,5 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 [^2]: The sn-workaround-iife rule is applied to some specific server tables'
 [^3]: Rule 'single-fn' introduced with minor version 3.3.
 [^4]: Rules 'no-arrow-fn' and 'no-backticks' added with minor version 3.7.
-[^5]: Rule 'no-uiscript-curlref superseded by 'no-backtick-with minor version 3.7.
+[^5]: Rule 'no-uiscript-curlref superseded by 'no-backtick-with minor version 3.8.
+[^6]: Rule 'controller-fn' added with minor version 3.8.
