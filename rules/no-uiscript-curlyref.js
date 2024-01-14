@@ -10,7 +10,7 @@
  * and mobile/portal g_ui_scripts cals, then set rule level to error.
  * Until this is known, probably safer to leave at warn level.
  *
- * WARNING:  2024-01-10:  This rule being deprecated and replaced by new rule no-backtic-curlref,
+ * WARNING:  2024-01-10:  This rule being deprecated and replaced by new rule no-backtick-curlref,
  *                        due to now understanding the root cause of the problem, and having
  *                        tested the behavior thoroughly.
 */
