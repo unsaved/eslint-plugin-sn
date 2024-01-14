@@ -55,7 +55,10 @@ that file's directory.  If using stdin with -p switch, then you can specify
 just one fake file path.
 
 Directories are searched recursively for *.js files, with exclusions, like
-'eslint', but we don't yet support .eslintignore files or --ext switch.`.replace(/ /g, "\u2009")).
+'eslint', but we don't yet support .eslintignore files or --ext switch.
+
+Setting env variable SN_LINT_DUMPCODE will dump preprocessed code exactly as it
+is passed to eslint.  (Useful for debugging preprocessing issues).`.replace(/ /g, "\u2009")).
   option("v", {
       describe: "Verbose.  N.b. may display passwords!",
       type: "boolean",
@@ -299,6 +302,14 @@ function lintFile(file, table, alt, readStdin=false) {
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
+    /* eslint-disable prefer-template */
+    if (process.env.SN_LINT_DUMPCODE) console.warn("Submitting code (between angle brackes):\n<"
+          + (["noniso", "iso", "scoped-es12"].includes(alt) ||
+          alt.includes("es12") && baseName.endsWith("-condition.js") ||
+          table.includes("client_script") || RETAIN_CONST_FILES.includes(table)
+          ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"))
+          + ">");
+    /* eslint-enable prefer-template */
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
         input:
           ["noniso", "iso", "scoped-es12"].includes(alt) ||

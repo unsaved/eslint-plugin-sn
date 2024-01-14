@@ -222,7 +222,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
-                varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$",
+                varsIgnorePattern: "^on(Load|Change|CellEdit|Submit)$|^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -233,7 +233,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
-                varsIgnorePattern: "^onClick$",
+                varsIgnorePattern: "^onClick$|^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -244,7 +244,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
-                varsIgnorePattern: "^onCondition$",
+                varsIgnorePattern: "^onCondition$|^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -255,7 +255,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
-                varsIgnorePattern: "^answer$",
+                varsIgnorePattern: "^answer$|^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -266,7 +266,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^source$",
-                varsIgnorePattern: "^answer$",
+                varsIgnorePattern: "^answer$|^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -277,7 +277,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy",
-                varsIgnorePattern: "^validate$",
+                varsIgnorePattern: "^validate$|^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -288,6 +288,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(request|response)$",
+                varsIgnorePattern: "^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -298,7 +299,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 varsIgnorePattern: "^(g_scratchpad|action)$",
-                argsIgnorePattern: "^_?dummy|^(current|previous)$",
+                argsIgnorePattern: "^_?dummy|^(current|previous)$|^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -309,6 +310,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^g_(request|response_processor)$",
+                varsIgnorePattern: "^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -319,6 +321,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(current|template|email|email_action|event)$",
+                varsIgnorePattern: "^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -329,6 +332,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(source|target|map|log|isUpdate)$",
+                varsIgnorePattern: "^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -339,6 +343,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(source|map|log|target)$",
+                varsIgnorePattern: "^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -349,6 +354,7 @@ const overrides = [
             "no-unused-vars": ["error", {
                 args: "all",
                 argsIgnorePattern: "^_?dummy|^(options|input|data|[$]sp)$",
+                varsIgnorePattern: "^_unused",
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
@@ -591,6 +597,7 @@ module.exports = {
                 "no-unused-vars": ["error", {
                   args: "all",
                   argsIgnorePattern: "^_?dummy",
+                  varsIgnorePattern: "^_unused",
                   caughtErrors: "all",
                   caughtErrorsIgnorePattern: "^_?dummy",
                  }],

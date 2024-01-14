@@ -1,6 +1,7 @@
 // This is for checking js files in the eslint-plugin-sn implementation itself.
 // Don't use this for checking ServiceNow scriptlets.
 {
+  "ignorePatterns": ["/resources/sys_script_validator/*"],
   "env": { "es2022": true, "node": true },
   "extends": "eslint:recommended",
   "parserOptions": { "ecmaVersion": "latest" },
