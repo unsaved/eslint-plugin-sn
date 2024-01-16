@@ -29,13 +29,13 @@ $0 [-cdHIqrv] [-t sntbl] [-a scopealt] [-L '(-eslint-swit)'] dir/or/file.js...
 $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
   OR
 ... > $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
-  OR     $0 -h|-s|-g
+  OR     $0 -h|-s|-S|-g
 
 The most important differences from invoking 'eslint' directly are:
     1. Internally we use -c and --no-eslintrc, so that only config file
        './sneslintrc.json' is honored.  NOT '.eslintrc.*'!
        You must have this file in place.
-       You can generate it with the -s switch.  No cascading RC files.
+       You can generate it with the -s or -S switch.  No cascading RC files.
     2. Internally we use --stdin and we generate a pseudo input file path,
        so if you use overrides in './sneslintrc.json', you must match against
        pseudo-paths of format 'TABLENAME/BASENAME.js' or
@@ -109,6 +109,10 @@ Quote, parenthesize, and comma-delimite all the Lint args like so:  `
   }).
   option("s", {
       describe: "write template 'sneslintrc.json' Sample file into current directory",
+      type: "boolean",
+  }).
+  option("S", {
+      describe: "same as -s except support ES2022 clients (instead of Safari-compliant ES2018)",
       type: "boolean",
   }).
   option("t", {
@@ -392,13 +396,15 @@ function jsFilesInBranch(fsDir) {
 
 conciseCatcher(async (...params) => {
     validate(params, []);
-    if (yargsDict.s) {
+    if (yargsDict.s || yargsDict.S) {
         const targRcFile = "sneslintrc.json";
         if (fs.existsSync(targRcFile)) {
             console.error(`Refusing to overwrite existing '${targRcFile}'`);
             process.exit(255);
         }
-        fs.copyFileSync(path.join(__dirname, "resources/sneslintrc.json"), targRcFile);
+        fs.copyFileSync(path.join(__dirname,
+          yargsDict.S ? "resources/sneslintrc-es2022.json" : "resources/sneslintrc.json"),
+          targRcFile);
         console.info(`Created file '${targRcFile}'`);
         process.exit(0);
     }
@@ -412,7 +418,7 @@ conciseCatcher(async (...params) => {
         process.exit(0);
     }
     if (yargsDict._.length < 1) {
-        console.error("You must specify a 'filepath.js' param unless using a -g, -h, or -s switch");
+        console.error("You must specify a 'filepath.js' param unless using -g, -h, -s, -S switch");
         yargs.showHelp();
         process.exit(255);
     }
