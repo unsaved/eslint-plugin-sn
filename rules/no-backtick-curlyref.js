@@ -8,7 +8,7 @@
  * Therefore to avoid conflict with ES12 backtick ${...} templating, don't allow the ES12 backtick
  * substitutions.
  */
-const message = "ES12 backtick ${...} templating will not work with this scrip type";
+const message = "ES12 backtick ${...} templating will not work with this script type";
 const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 const esLintObj = {
