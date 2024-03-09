@@ -202,7 +202,7 @@ const overrides = [
         // Non-iso SN client scripts
         files: [
             "**/@(noniso|noniso_global|noniso_scoped-es5|noniso_scoped-es12)/*.js",
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script)/*/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_context_menu)/*/*.js",  // eslint-disable-line max-len,
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
