@@ -9,8 +9,13 @@ const joi = require("joi");
 const strip = require("strip-comments");
 
 const RCFILE = "sneslintrc.json";
-const RETAIN_CONST_FILES =  // In addition to *.client_script
-  ["sys_ui_script", "sys_script_validator", "sys_ui_page.processing_script"];
+const RETAIN_CONST_FILES = [  // In addition to *.client_script
+  "sys_ui_script",
+  "sys_script_validator",
+  "sys_ui_page.processing_script",
+  "sp_widget.link",
+  "sys_ui_context_menu"
+];
 const fs = require("fs");
 const path = require("path");
 const childProcess = require("child_process");

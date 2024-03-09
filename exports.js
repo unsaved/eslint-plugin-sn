@@ -110,7 +110,7 @@ const overrides = [
         // Regular SN client scripts, both iso and non-iso
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet)/all/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet|sys_ui_context_menu)/all/*.js",  // eslint-disable-line max-len,
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
@@ -180,8 +180,8 @@ const overrides = [
         },
     }, {
         // Allow for ${x} sys_ui_message substitutions
-        files:
-          ["**/@(sys_ui_script|sp_widget.script|sp_widget.client_script|sp_widget.link)/*/*.js"],
+        files:  // eslint-disable-next-line max-len
+          ["**/@(sys_ui_script|sp_widget.script|sp_widget.client_script|sp_widget.link|sys_ui_context_menu)/*/*.js"],
         rules: {
             "prefer-template": "off",
             "no-template-curly-in-string": "off",
@@ -544,6 +544,7 @@ module.exports = {
                   "sys_ui_script": ["all"],
                   "sp_widget.client_script": ["all"],
                   "sp_widget.link": ["all"],
+                  "sys_ui_context_menu": ["all"],
                   "sys_ui_page.client_script": ["all"],
                   "sys_ui_page.processing_script": ["global", "scoped-es5", "scoped-es12"],
                   "sa_pattern": ["all"],

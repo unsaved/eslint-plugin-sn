@@ -38,5 +38,6 @@
   "sp_widget.script": { "iifeParams": [], "readable": ["options", "input", "data", "$sp"] },
   /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because the globals
    * are dependent upon altscope not just table name */
-  "sys_script_validator": ["g_validation_script_field_count"]
+  "sys_script_validator": ["g_validation_script_field_count"],
+  "sys_ui_context_menu": ["g_list", "g_fieldName", "g_sysId"]
 }

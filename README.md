@@ -207,6 +207,7 @@ Alphabetically
 |sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12[^b]
 |sys_ui_action.client_script_v2[^c] |**all**
 |sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12
+|sys_ui_context_menu[^i]        |**all**  (this is the action_script)
 |sys_ui_page.client_script      |**all**
 |sys_ui_page.processing_script  |**global**, scoped-es5[^a]
 |sys_ui_policy.script_true      |**iso**, noniso
@@ -231,6 +232,7 @@ Alphabetically
 [^f]: sys_ux_client_script_include table added with minor version 3.5.
 [^g]: sys_ux_broker_* tables added with minor version 3.7.
 [^h]: sp_widget.link table added with minor version 3.8.
+[^i]: sys_ui_context_menu table for action_script field added with minor version 3.9.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
@@ -242,7 +244,6 @@ In very rough order of priority
 |sys_ui_context_menu.condition|TBD
 |sys_ui_context_menu.dynamic_actions_script|TBD
 |sys_ui_context_menu.on_show_script|TBD
-|sys_ui_context_menu.action_script|TBD
 |custom fields                |TBD
 |sys_cb_topic                 |TBD
 |mid_limited_resource_script  |**all**
