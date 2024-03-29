@@ -1,0 +1,6 @@
+OOTB sys_script_validators are very bad and prohibit saving superior code.
+
+Probably makes no difference if you update those validators with ui_type 1 ('Mobile / Service Portal') since nobody is going to be editing scripts on a phone.  I don't know if there's editing with a notebook is feasible.
+
+So realistically you only need to update 2 scripts:
+    ui_type 0 ('Desktop'), internal_type of "script" and "script_plain".
