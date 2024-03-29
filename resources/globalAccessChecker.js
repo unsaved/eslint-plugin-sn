@@ -10,7 +10,7 @@
  * scripting around all object names now-- for future safety allow for longer.  If creating a
  * new field, just set it to 256 and be done with it).  WE DO NOT UPDATE THIS (or any) TABLE.
  *
- * N.b. execution writes a bunch of Evaluator messages and stack traces for the expeced acces
+ * N.b. execution writes a bunch of Evaluator messages and stack traces for the expected acces
  * failures.  Just ignore them and attend to the result report at the end.
  */
 (function() {
