@@ -90,7 +90,8 @@ is passed to eslint.  (Useful for debugging preprocessing issues).`.replace(/ /g
   }).
   option("d", { describe: "Debug logging", type: "boolean", }).
   option("g", {
-      describe: "populate 'snglobals' subdirectory (of current directory)",
+      describe:
+        "populate 'snglobals' subdirectory (of current directory), overwrites non-local files",
       type: "boolean",
   }).
   option("L", {
