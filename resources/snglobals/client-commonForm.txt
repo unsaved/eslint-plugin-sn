@@ -865,7 +865,6 @@ noConditionals
 noOps
 noSort
 notifyFromWrappedScopedObject
-nowapi
 numberOfAttachments
 numericTypes
 objectResizer
@@ -1298,3 +1297,34 @@ writeDynamicTitle
 writeTitle
 x
 xmlView
+
+# Fri Mar 29 03:30:18 PM EDT 2024 for WashingtonDC release.
+# Additions from API ref list on https://developer.servicenow.com
+CustomEvent
+GlideAgentWorkspace
+GlideDocument
+GlideGuid
+GlideListV3
+GlideNavigation
+GlideNotification
+GlideUIScripts
+GlideURLV3
+g_service_catalog
+i18N
+NotifyClient
+NotifyOnTaskClient
+openFrameAPI
+ScopedSessionDomain
+SNAnalytics
+StandaloneClientMethods
+
+# Fri Mar 29 03:30:18 PM EDT 2024 for WashingtonDC release.
+# These are g_objects mentioned in client API ref list on https://developer.servicenow.com
+g_modal
+g_aw
+g_document
+g_guid
+g_menu
+g_item
+g_notification
+g_service

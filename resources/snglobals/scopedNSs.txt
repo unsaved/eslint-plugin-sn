@@ -4,6 +4,8 @@ sn_automation
 # Captured from https://developer.servicenow.com/dev.do#!/reference/api/sandiego/server 2022-06-27
 # Contrary to ServiceNow's API Reference, at least some of these are used by SN-provided scripts.
 # sn_ws.RESTMessageV2, for example, is very useful in global scripts and is used in OOTB global.
+# GOTCHA!  For some reason the API ref lists these namespaces all-caps but all lower-case must be
+# used, so transform them (with vim, from line 1 do  :guG
 sn_agent
 sn_ais
 sn_auth
@@ -46,3 +48,21 @@ sn_ui
 sn_uni_req
 sn_uni_task
 sn_ws
+
+# Fri Mar 29 03:30:18 PM EDT 2024 for WashingtonDC release.
+# Additions from API ref list on https://developer.servicenow.com
+sn_api_notif_mgmt
+sn_atf_tg
+sn_cdm
+sn_chg_score
+sn_cimaf
+sn_i18n
+sn_ind_tmf642
+sn_ind_tsm_sdwan
+sn_invst_pln
+sn_pt
+sn_reacf
+sn_sb_con
+sn_sb_pro-namespace
+sn_schdl_ns
+sn_scoped_cache

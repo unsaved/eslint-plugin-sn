@@ -68,3 +68,13 @@ Workflow
 XMLDocument2
 XMLNode
 XMLNodeIterator
+
+# Fri Mar 29 03:30:18 PM EDT 2024 for WashingtonDC release.
+# Additions from API ref list on https://developer.servicenow.com
+action
+GlideEventManager
+GlideScriptedExtensionPoint
+GSLog
+IPAddress
+JSON
+ProcessMiningForExternalData

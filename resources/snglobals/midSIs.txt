@@ -349,3 +349,9 @@ WindowsDiscoveryUtil
 WindowsInstalledSoftware
 WindowsInstalledSoftwareLegacy
 XMLHelper
+
+# Fri Mar 29 03:30:18 PM EDT 2024 for WashingtonDC release.
+# Additions from gather script.
+Class
+DiscoveryPfilesParser
+VMWarevCenterCloudProbe

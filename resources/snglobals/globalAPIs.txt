@@ -2,10 +2,14 @@
 # Source instance very close to OOTB but has discovery module
 
 # Additions for undocumented APIs
+SNC
 GlideChoiceList
 GlideEmailAction
 XMLDocument2
 GlideRecordSecure
+GlideTransactionManager
+GlideUpdateSetWorker
+GlideClusterSynchronizer
 
 APCHandler
 AbstractDBObject
