@@ -45,7 +45,7 @@ const esLintObj = {
                     checkInstantiator(node.left, node.right);
             },
             onCodePathEnd: (_dummy, node) => {
-                console.warn("nexters and countPoints lengths", nexters.length, countPoints.length);
+              //console.warn("nexters and countPoints lengths", nexters.length, countPoints.length);
                 if (node.type !== "Program" || countPoints.length < 1) return;
                 //console.warn("nexters and countPoints", nexters, countPoints.map(cp=>cp.name));
                 // eslint-disable-next-line array-callback-return
