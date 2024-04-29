@@ -249,7 +249,8 @@ The table shows by default what scopes they are applied to and at what level.
 Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
 |---                         |---    |---              |---
-|controller-fn               |error  |all              |ServiceNow and MCE Editor have very idiosyncratic requirements for wp_widget.client_script, including where can use comments and extra whitespace
+|controller-fn[^6]           |error  |all              |ServiceNow and MCE Editor have very idiosyncratic requirements for wp_widget.client_script, including w
+here can use comments and extra whitespace
 |immediate-iife              |error  |all              |IIFEs must execute immediately
 |invalid-table-alt           |error  |Unsupported      |Invalid table/alt combination
 |legacy-use-this             |error  |all              |Same as OOTB ESLint rule [class-methods-use-this](https://eslint.org/docs/latest/rules/class-methods-use-this) but for pre-ES6
@@ -257,11 +258,14 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |log-scoped-varargs          |error  |server scoped*   |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-arrow-fn                 |error  |sys_ux_data_broker* | Arrow functons not supported in NE data broker scripts regardless of ES level
 |no-backticks                |error  |sys_ux_data_broker_scriptlet | Backticks not supported in these scripts (SN defect IMO)
-|no-backtick-curlyref        |error  |sys_ui_script, sp_widget scripts | Templating not supported in backtick strings, to support sys_ui_message substitution[^5]
+|no-backtick-curlyref[^6]    |error  |sys_ui_script, sp_widget scripts | Templating not supported in backtick strings, to support sys_ui_message substitution[^
+5]
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
 |no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord
 |no-console-info             |error  |client           |Level-specific console logging statements are better because console.info default filtering is inconsistent
+|no-cur-walk-to-sysid[^7]    |error  |server           |Don't dot-walk to non-initial .sys_id
+|no-gr-count-iterate[^7]     |warn   |server           |Prefer GlideRecord for counting unless will iterate on the instance
 |no-gs-now                   |error  |client           |gs.now() function is unsupported since London release
 |no-init-emptystring         |warn   |all              |For rare cases where the value is to really be used as a string (not just tested) this is ok.  Normally the system default of undefined works great.
 |no-log-global               |error  |server scoped*   |Scoped app scripts should use the scoped logging API
@@ -269,9 +273,11 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |no-sysid                    |error, warn[^1]|server, client|In almost all cases it is easy and efficient to use an informative value rather than inscrutible codes that can't be visually reviewed for correctness.  This actually matches for all 32 character hex strings, so you will need to disable for valid non-sysid strings such as MD5 checksums.
 |no-uiscript-curlref         |warn   |sys_ui_script    |Deprecated (never fails), replaced by no-backtick-curlref[^5]
 |no-useless-rtrn             |error  |all              |Assigning to 'rtrn' has no effect other than polluting the namespace, and is misleading
+|onchange-isloading-check[^7]|error  |client on-change |Just return during loading of onChange callbacks
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
 |single-fn[^3]               |error  |client (NE)      |Next Experience client scriptlets must implement only a single function declaration (at top level)
 |sn-workaround-iife          |error  |some server[^2]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
+|use-ang-inj-vars[^7]        |error  |sp_widget client-sides|Use provided $x Angular-injected variables in preference to W3C DOM variables
 |validate-gliderecord-calls  |error, warn[^1]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
 
 [^1]: no-sysid and validate-gliderecord-calls rules default to error level for server-side scriptlets and warn level for client-side scriptlets
@@ -280,3 +286,4 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 [^4]: Rules 'no-arrow-fn' and 'no-backticks' added with minor version 3.7.
 [^5]: Rule 'no-uiscript-curlref superseded by 'no-backtick-with minor version 3.8.
 [^6]: Rule 'controller-fn' added with minor version 3.8.
+[^7]: Rule 'controller-fn' added with patch version 3.9.5

@@ -264,7 +264,8 @@ The table shows by default what scopes they are applied to and at what level.
 Note that scriptlet scope of "server" does not include MID scriptlets.
 |Rule                        |Level  |Sciptlet Scope   |Description/justification
 |---                         |---    |---              |---
-|controller-fn[^6]           |error  |all              |ServiceNow and MCE Editor have very idiosyncratic requirements for wp_widget.client_script, including where can use comments and extra whitespace
+|controller-fn[^6]           |error  |all              |ServiceNow and MCE Editor have very idiosyncratic requirements for wp_widget.client_script, including w
+here can use comments and extra whitespace
 |immediate-iife              |error  |all              |IIFEs must execute immediately
 |invalid-table-alt           |error  |Unsupported      |Invalid table/alt combination
 |legacy-use-this             |error  |all              |Same as OOTB ESLint rule [class-methods-use-this](https://eslint.org/docs/latest/rules/class-methods-use-this) but for pre-ES6
@@ -272,7 +273,8 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |log-scoped-varargs          |error  |server scoped*   |ServiceNow scoped logging statements should only have more than one param if using varargs
 |no-arrow-fn                 |error  |sys_ux_data_broker* | Arrow functons not supported in NE data broker scripts regardless of ES level
 |no-backticks                |error  |sys_ux_data_broker_scriptlet | Backticks not supported in these scripts (SN defect IMO)
-|no-backtick-curlyref[^6]    |error  |sys_ui_script, sp_widget scripts | Templating not supported in backtick strings, to support sys_ui_message substitution[^5]
+|no-backtick-curlyref[^6]    |error  |sys_ui_script, sp_widget scripts | Templating not supported in backtick strings, to support sys_ui_message substitution[^
+5]
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
 |no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord
@@ -300,3 +302,4 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 [^5]: Rule 'no-uiscript-curlref superseded by 'no-backtick-with minor version 3.8.
 [^6]: Rule 'controller-fn' added with minor version 3.8.
 [^7]: Rule 'controller-fn' added with patch version 3.9.5
+
