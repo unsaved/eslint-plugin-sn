@@ -36,8 +36,8 @@
   "sys_security_acl": { "writable": ["answer"], "readable": ["previous"] },
   "sys_script_client": ["nowapi"],
   "catalog_script_client": ["nowapi"],
-  "sp_widget.client_script": ["api"],
-  "sp_widget.link": ["api"],
+  "sp_widget.client_script": ["api", "$injector"],
+  "sp_widget.link": ["api", "$injector"],
   "sp_widget.script": { "iifeParams": [], "readable": ["options", "input", "data", "$sp"] },
   /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because the globals
    * are dependent upon altscope not just table name */
