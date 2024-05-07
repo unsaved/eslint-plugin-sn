@@ -261,6 +261,7 @@ const overrides = [
                 caughtErrors: "all",
                 caughtErrorsIgnorePattern: "^_?dummy",
             }],
+            "no-unused-expressions": "off",
         },
     }, {
         files: ["**/sys_transform_entry/*/*.js"],
