@@ -1,4 +1,8 @@
 Support fields:
+sysevent_in_email_action.script
+sys_atf_step_config.description_generator
+sys_atf_step_config.step_execution_generator
+sys_variable_value.value with document==sys_atf_step + variable.label=='Test script'
 Search for sys_ux*.*script* sys_dictionaries to see if any other important ones.
 user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.
                       Don't use 'current', 'gs.getUser()', gs.getUserID(); so use user_id (a sys_id)
