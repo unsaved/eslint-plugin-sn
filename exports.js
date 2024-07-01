@@ -375,7 +375,7 @@ const overrides = [
         files: ["**/sys_ui_page.processing_script/*/*.js"],
         rules: { "no-undef": "off" },
     }, {
-        files: ["**/sa_pattern/*/*.js"],
+        files: ["**/sa_pattern/*/*.js", "**/sys_atf_step_config.description_generator/*/*.js"],
         rules: { "no-unused-expressions": "off" },
     }, {
         files: ["**/*.condition/*/*.js"],
