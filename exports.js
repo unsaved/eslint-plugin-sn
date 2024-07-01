@@ -102,7 +102,7 @@ const overrides = [
         files: [ "**/sys_script/@(global|scoped-es5|scoped-es12)/*.js" ],
         rules: ruleConfigs("error", ["no-br-current-update"]),
     }, {  // Global scope
-        files: [ "**/@(global|iso_global|noniso_global)/*.js" ],
+        files: [ "**/@(global|iso_global|noniso_global|atf_rss_script-global)/*.js" ],
         env: {"@admc.com/sn/sn_server_global": true },
         rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
     }, {  // Scoped
