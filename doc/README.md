@@ -158,7 +158,8 @@ that you should be accessing.
 
 ## Supported ServiceNow scriptlet types
 ### Supported Now
-Alphabetically
+Alphabetically.
+If .fieldname is not specified for a table, then the field is "script".
 |Table                          |Alts (default bolded)
 |---                            |---
 |catalog_script_client          |**iso**, noniso
@@ -175,11 +176,14 @@ Alphabetically
 |sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sysauto_script                 |**global**, scoped-es5[^a], scoped-es12[^b]
 |sysauto_script.condition[^d]   |**global**, scoped-es5, scoped-es12
+|sysevent_in_email_action[^j]   |**global**, scoped-es5, scoped-es12
 |sysevent_script_action         |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_atf_step_config.description_generator[^j] |**global**
+|sys_atf_step_config.step_execution_generator[^j] |**global**, scoped-es5, scoped-es12
 |sys_processor                  |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script                     |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script.condition[^d]       |**global**, scoped-es5, scoped-es12
-|sys_script_client.script       |**iso**, noniso
+|sys_script_client
 |sys_script_email               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_fix                 |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_include             |**global**, scoped-es5[^a], scoped-es12[^b]
@@ -198,10 +202,11 @@ Alphabetically
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
-|sys_ux_client_script.script[^e]|**all**
-|sys_ux_client_script_include.script[^f]|**all**
+|sys_ux_client_script[^e]       |**all**
+|sys_ux_client_script_include[^f]|**all**
 |sys_ux_data_broker_transform[^g]|**global**, scoped-es5, scoped-es12
 |sys_ux_data_broker_scriptlet[^g]|**all**
+|sys_variable_value.value[^j]   |**global**, scoped-es5, scoped-es12
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
 
@@ -218,6 +223,10 @@ Alphabetically
 [^g]: sys_ux_broker_* tables added with minor version 3.7.
 [^h]: sp_widget.link table added with minor version 3.8.
 [^i]: sys_ui_context_menu table for action_script field added with minor version 3.9.
+[^j]: Minor version 3.12 introduces tables sysevent_in_email_action, sys_atf_step_config, and
+      sys_variable_value only for sys_atf_step run-server-side-script steps.
+      N.b. the design for sys_variable_value is incomplete.  It's difficult because the one table
+      sys_variable_value has values with all sorts of different requirements
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 

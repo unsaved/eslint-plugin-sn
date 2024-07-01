@@ -87,9 +87,11 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [  // Regular server-side
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition)/@(global|scoped-es5|scoped-es12)/*.js",  // eslint-disable-line max-len
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12)/*.js",  // eslint-disable-line max-len
             "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
             "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12)/*.js",
+            // eslint-disable-next-line max-len
+            "**/sys_variable_value/@(atf_rsss_script-global|atf_rsss_script-es12|atf_rsss_script-es5)/*.js",
         ],
         rules: {
           ...ruleConfigs("error",
@@ -104,7 +106,7 @@ const overrides = [
         env: {"@admc.com/sn/sn_server_global": true },
         rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
     }, {  // Scoped
-        files: [ "**/@(scoped-es5|scoped-es12|iso_scoped-es5|iso_scoped-es12|noniso_scoped-es5|noniso_scoped-es12)/*.js" ],  // eslint-disable-line max-len
+        files: [ "**/@(scoped-es5|scoped-es12|iso_scoped-es5|iso_scoped-es12|noniso_scoped-es5|noniso_scoped-es12|atf_rsss_script-es5|atf_rsss_script-es12)/*.js" ],  // eslint-disable-line max-len
         env: {"@admc.com/sn/sn_server_scoped": true },
         rules: ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
     }, {  // MID
@@ -167,8 +169,9 @@ const overrides = [
         },
     }, { // ES12 IIFEs
         files: [
-          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script)/scoped-es12/*.js",  // eslint-disable-line max-len
+          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script|sysevent_in_email_action|sys_atf_step_config.step_execution_generator)/scoped-es12/*.js",  // eslint-disable-line max-len
           "**/sys_ui_action.script/@(iso|noniso)_scoped-es12/*.js",
+          "**/sys_variable_value/atf_rsss_script-es12/*.js",
         ],
         rules: { "strict": ["warn", "function"] }  // Overriding for ES12 IIFE scriptlets
     }, {
@@ -526,6 +529,10 @@ module.exports = {
                   "sys_script_client": ["iso", "noniso"],
                   "sys_script_email": ["global", "scoped-es5", "scoped-es12"],
                   "sys_script_fix": ["global", "scoped-es5", "scoped-es12"],
+                  "sysevent_in_email_action": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_atf_step_config.step_execution_generator":
+                    ["global", "scoped-es5", "scoped-es12"],
+                  "sys_atf_step_config.description_generator": ["global"],
                   "sys_script_include": ["global", "scoped-es5", "scoped-es12"],
                   "sys_script_validator": ["all"],
                   "sys_security_acl": ["global", "scoped-es5", "scoped-es12"],
@@ -555,6 +562,8 @@ module.exports = {
                   "sys_ux_client_script_include": ["all"],
                   "sys_ux_data_broker_transform": ["global", "scoped-es5", "scoped-es12"],
                   "sys_ux_data_broker_scriptlet": ["all"],
+                  "sys_variable_value":
+                    ["atf_rsss_script-global", "atf_rsss_script-es5", "atf_rsss_script-es12"],
                 }
             },
             rules: {

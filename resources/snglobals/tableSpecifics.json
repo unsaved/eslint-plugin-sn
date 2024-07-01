@@ -42,5 +42,10 @@
   /*"sys_ui_action": [ "action" ]  sys_ui_action hard-coded in 'exports.js' because the globals
    * are dependent upon altscope not just table name */
   "sys_script_validator": ["g_validation_script_field_count"],
-  "sys_ui_context_menu": ["g_list", "g_fieldName", "g_sysId"]
+  "sys_ui_context_menu": ["g_list", "g_fieldName", "g_sysId"],
+  "sys_atf_step_config.description_generator": ["step"],
+  "sys_variable_value": [
+    "jasmine", "describe", "xdescribe", "fdescribe", "it", "xit", "fit", "beforeEach", "beforeAll",
+    "afterEach", "afterAll", "expect", "fail", "pending", "spyOn"
+  ]
 }

@@ -22,8 +22,15 @@ const SN_BOILERPLATE_TEXTS = [
     /^[*] On Failure: You can do operations in case a pattern failed/m,   // prepost/onfail
     ///^[*] This script is executed before the Record is generated/,  // sc_cat_item_producer
     /^ Add your code here/,  // Many different types of scripts
+    /^ {4}Add your test script here/,  // ATF run-server-side-script step scripts.  Next ones also:
+    /^[/][/] uncomment the next line to execute this script as a jasmine test/,
+    /^[/][/] You can use this step to execute a variety of server-side javascript tests including/,
     // /^ return the value to be put into the target field/,  // sys_transform_entry
     /^ implement resource here/,  // sys_ws_operation,
+    /^(?:\t| {4})Add your code here/,  // sys_atf_step_config.description_generator
+    // sys_atf_step_config.step_execution_generator:
+    /^[/][/] The inputs are a map of the variables defined in the inputs related list below[.]/,
+    /^(?:\t| {4})[/][/] Implement email action here/,  // sysevent_in_email_action
 ];
 
 const messageId =  // eslint-disable-next-line prefer-template

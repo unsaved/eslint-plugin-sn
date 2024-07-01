@@ -1,8 +1,28 @@
 Support fields:
 sysevent_in_email_action.script
-sys_atf_step_config.description_generator
+sys_atf_step_config.description_generator   'step'
 sys_atf_step_config.step_execution_generator
-sys_variable_value.value with document==sys_atf_step + variable.label=='Test script'
+sys_variable_value.value with document==sys_atf_step + variable.element==script
+  + variable.model.name=='Run Server Side Script'
+    .variable isa sys_atf_variable isa var_dictionary
+      .model isa step-config
+  In 'Show XML' this is a nested <sys_variable_value> with .variable as above.
+  All the nested sys_variable_values are linked by svv.document=sys_atf_step + document_key=step-sid
+  MCE toolbar element:
+    <span id="sys_atf_step.inputs.var__m_atf_input_variable_<SYSID>.script.editor.toolbar"
+      class="script-editor-tolbar btn-group btn-group-sm toolbar-padding-left"/>
+  GLOBALS:
+      [xf]describe, [xf]it, {before|after}{Each|All}, pending, spyOn, createSpy, createSpyObj
+      jasmine=object with $members.length} members
+        jasmine
+        [xf]describe
+        [xf]it
+        {before|after}{Each|All}
+        expect
+        fail
+        pending
+        spyOn
+
 Search for sys_ux*.*script* sys_dictionaries to see if any other important ones.
 user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.
                       Don't use 'current', 'gs.getUser()', gs.getUserID(); so use user_id (a sys_id)
