@@ -30,7 +30,7 @@ const SN_BOILERPLATE_TEXTS = [
     /^(?:\t| {4})Add your code here/,  // sys_atf_step_config.description_generator
     // sys_atf_step_config.step_execution_generator:
     /^ The inputs are a map of the variables defined in the inputs related list below[.]/,
-    /^(?:\t| {4})[/][/] Implement email action here/,  // sysevent_in_email_action
+    /^ Implement email action here/,  // sysevent_in_email_action
 ];
 
 const messageId =  // eslint-disable-next-line prefer-template
