@@ -43,9 +43,18 @@
    * are dependent upon altscope not just table name */
   "sys_script_validator": ["g_validation_script_field_count"],
   "sys_ui_context_menu": ["g_list", "g_fieldName", "g_sysId"],
+  "sysevent_in_email_action": {
+    "iifeParams": ["current", "event", "email", "logger", "classifier"]
+  },
   "sys_atf_step_config.description_generator": ["step"],
-  "sys_variable_value": [
-    "jasmine", "describe", "xdescribe", "fdescribe", "it", "xit", "fit", "beforeEach", "beforeAll",
-    "afterEach", "afterAll", "expect", "fail", "pending", "spyOn"
-  ]
+  "sys_atf_step_config.step_execution_generator": {
+    "iifeParams": ["inputs", "outputs", "stepResult", "timeout"]
+  },
+  "sys_variable_value": {
+    "iifeParams": ["outputs", "steps", "params", "stepResult", "assertEqual"],
+    "readable": [
+      "jasmine", "describe", "xdescribe", "fdescribe", "it", "xit", "fit", "beforeEach",
+      "beforeAll", "afterEach", "afterAll", "expect", "fail", "pending", "spyOn"
+    ]
+  }
 }

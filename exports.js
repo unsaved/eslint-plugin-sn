@@ -146,7 +146,7 @@ const overrides = [
           ...ruleConfigs("error", ["onchange-isloading-check"]),
         },
     }, { // ES12 server-side
-        files: [ "**/scoped-es12/*.js" ],
+        files: [ "**/scoped-es12/*.js", "**/atf_rsss_script-es12/*.js" ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
         env: { es2022: true },
