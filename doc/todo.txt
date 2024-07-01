@@ -1,9 +1,3 @@
-Update linter transform script IIFE params.
-OOTB sys_tranform_map IIFE now uses input params like this:
-(function transformRow(source, target, map, log, isUpdate) {
-...
-)(source, target, map, log, action === "update");
-
 Support fields:
 Search for sys_ux*.*script* sys_dictionaries to see if any other important ones.
 user_criteria.script  if advanced==true then: assign' answer' or eval bool like acl.

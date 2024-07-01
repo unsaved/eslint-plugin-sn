@@ -67,6 +67,11 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
             code: 'gs.log("a msg", "src");\n(()=>//V10\nx = 3)(b, a);',
             options: [{table: "msg_tbl1", paramCallVars: ["a", "b"]}],
         },
+        { // Rule enhancement here.  We now require AT LEAST the paramCallVars, not
+          // exactly the paramCall Vars.
+            code: "gs.log('a msg', 'src');\n(function(){})(p1, p2, p3);",
+            options: [{table: "table_for_msg", paramCallVars: ["p1"]}],
+        },
     ],
     invalid: [
         {
@@ -107,11 +112,6 @@ new (require("eslint").RuleTester)({ parserOptions: {ecmaVersion: 6} }).
         {
             code: "gs.log('a msg', 'src');\n(function(){})(p1, p3);",
             options: [{table: "table_for_msg", paramCallVars: ["p1", "p2"]}],
-            errors: [{messageId}],
-        },
-        {
-            code: "gs.log('a msg', 'src');\n(function(){})(p1, p2, p3);",
-            options: [{table: "table_for_msg", paramCallVars: ["p1"]}],
             errors: [{messageId}],
         },
         {

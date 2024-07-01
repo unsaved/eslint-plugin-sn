@@ -20,7 +20,7 @@
   // Prod. doc page 'Transformation script variables' does not specify which variables should be
   // accessibly by which of the 3 transform script types.  Therefore I'm allowing in all of them.
   "sys_transform_map": {
-    "iifeParams": ["source", "target", "map", "log", "isUpdate"],
+    "iifeParams": ["source", "target", "map", "log"],
     "readable": [""],
     "writable": ["ignore", "error", "error_message", "status_message"]
   },

@@ -92,7 +92,7 @@ const overrides = [
             "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12)/*.js",
         ],
         rules: {
-          ... ruleConfigs("error",
+          ...ruleConfigs("error",
             ["no-sysid", "validate-gliderecord-calls", "no-gs-now", "no-cur-walk-to-sysid"]),
           ...ruleConfigs("warn", ["no-gr-count-iterate"]),
         }
