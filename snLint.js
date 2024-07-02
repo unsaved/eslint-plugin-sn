@@ -14,7 +14,8 @@ const RETAIN_CONST_FILES = [  // In addition to *.client_script
   "sys_script_validator",
   "sys_ui_page.processing_script",
   "sp_widget.link",
-  "sys_ui_context_menu"
+  "sys_ui_context_menu",
+  "sys_variable_value",
 ];
 const fs = require("fs");
 const path = require("path");
