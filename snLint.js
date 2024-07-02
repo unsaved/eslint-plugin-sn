@@ -473,6 +473,7 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
         "eslint-plugin-rc exports.js missing 'configs.servicenow.settings.ootbTables' map"),
       { presence: "required" });
     const ootbTables = snesExports.configs.servicenow.settings.ootbTables;
+console.warn(`${Object.keys(ootbTables).length} ootbTables`, ootbTables);
     allTables = {};
     for (const t in ootbTables)
         if (Array.isArray(ootbTables[t])) {
@@ -487,6 +488,7 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
             throw new AppErr("eslint-plugin-rc 'configs.servicenow.settings.ootbTables' "
               + `has unexpected type: ${typeof ootbTables[t]}`);
         }
+console.warn(`${Object.keys(allTables).length} allTables`, allTables);
     try {
         customRC = require("json-easy-strip")(RCFILE);
     } catch (parseE) {
