@@ -221,7 +221,7 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_ux_client_script_include[^f]|**all**
 |sys_ux_data_broker_transform[^g]|**global**, scoped-es5, scoped-es12
 |sys_ux_data_broker_scriptlet[^g]|**all**
-|sys_variable_value.value[^j]   |**global**, scoped-es5, scoped-es12
+|sys_variable_value.value[^j]   |**atf_rsss_script-global**, atf_rsss_script-es5, atf_rsss_script-es12 
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
 
