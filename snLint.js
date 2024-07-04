@@ -97,7 +97,7 @@ is passed to eslint.  (Useful for debugging preprocessing issues).`.replace(/ /g
   }).
   option("L", {
       describe: `pass-through parameters for esLint.
-Quote, parenthesize, and comma-delimite all the Lint args like so:  `
+Quote, parenthesize, and comma-delimit all the Lint args like so:  `
         + `'(-f,html,--rule,{"prefer-template": "off"})'`,
       type: "string",
   }).

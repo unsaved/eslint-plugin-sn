@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable max-len */
 const { isPlainObject } = require("@admc.com/apputil");
 const path = require("path");
 const fs = require("fs");
@@ -87,11 +88,10 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [  // Regular server-side
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12)/*.js",  // eslint-disable-line max-len
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12)/*.js",
             "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
             "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12)/*.js",
-            // eslint-disable-next-line max-len
-            "**/sys_variable_value/@(atf_rsss_script-global|atf_rsss_script-es12|atf_rsss_script-es5)/*.js",
+            "**/sys_variable_value/s*/*.js",  // s* for server-side
         ],
         rules: {
           ...ruleConfigs("error",
@@ -106,13 +106,19 @@ const overrides = [
         // sys_scope record NOT by the sys_scope.scope scalar string value!
         // I think we need user work-around for thse script types with non-global sys_scopes with
         // sys_scope.scope=="global".  In this case, eslint directive comments will need to be used
-        // to defeat the sn_server_gobals and rules here; and apply the sn_server_scoped globals and
-        // rules.
-        files: [ "**/@(global|iso_global|noniso_global|atf_rsss_script-global)/*.js" ],
+        // to defeat the sn_server_globals and rules here; and apply the sn_server_scoped globals
+        // and rules.
+        files: [
+          "**/@(global|iso_global|noniso_global)/*.js",
+          "**/sys_variable_value/s*_global/*.js",
+        ],
         env: {"@admc.com/sn/sn_server_global": true },
         rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
     }, {  // Scoped
-        files: [ "**/@(scoped-es5|scoped-es12|iso_scoped-es5|iso_scoped-es12|noniso_scoped-es5|noniso_scoped-es12|atf_rsss_script-es5|atf_rsss_script-es12)/*.js" ],  // eslint-disable-line max-len
+        files: [
+          "**/@(scoped-es5|scoped-es12|iso_scoped-es5|iso_scoped-es12|noniso_scoped-es5|noniso_scoped-es12)/*.js",
+          "**/sys_variable_value/s*_scoped*/*.js",
+        ],
         env: {"@admc.com/sn/sn_server_scoped": true },
         rules: ruleConfigs("error", ["no-log-global", "log-scoped-varargs"]),
     }, {  // MID
@@ -120,8 +126,8 @@ const overrides = [
         env: {"@admc.com/sn/sn_mid": true },
     }, { // Regular SN client scripts, both iso and non-iso
         files: [
-            "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",  // eslint-disable-line max-len
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet|sys_ui_context_menu)/all/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet|sys_ui_context_menu)/all/*.js",
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.
@@ -152,7 +158,7 @@ const overrides = [
           ...ruleConfigs("error", ["onchange-isloading-check"]),
         },
     }, { // ES12 server-side
-        files: [ "**/scoped-es12/*.js", "**/atf_rsss_script-es12/*.js" ],
+        files: [ "**/scoped-es12/*.js", "**/sys_variable_value/s*_scoped-es12/*.js" ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.  SN platform does not, of course.
         env: { es2022: true },
@@ -173,15 +179,15 @@ const overrides = [
           "prefer-rest-params": "warn",
           "prefer-spread": "warn",
         },
-    }, { // ES12 IIFEs
+    }, { // ES5+ IIFEs
         files: [
-          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script|sysevent_in_email_action|sys_atf_step_config.step_execution_generator)/scoped-es12/*.js",  // eslint-disable-line max-len
-          "**/sys_ui_action.script/@(iso|noniso)_scoped-es12/*.js",
-          "**/sys_variable_value/atf_rsss_script-es12/*.js",
+          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script|sysevent_in_email_action|sys_atf_step_config.step_execution_generator)/scoped-es*/*.js",
+          "**/sys_ui_action.script/@(iso|noniso)_scoped-es*/*.js",
+          "**/sys_variable_value/sss_scoped-es*/*.js",
         ],
-        // Since here all our code is inside the function, we can be less invasive and requiere
+        // Since here all our code is inside the function, we can be less invasive and require
         // stricting just our additions:
-        rules: { "strict": ["warn", "function"] }  // Overriding for ES12 IIFE scriptlets
+        rules: { "strict": ["warn", "function"] }  // Overriding for ES5+ IIFE scriptlets
     }, {
         files: ["**/sys_ux_data_broker_transform/*/*.js"],
         rules: {
@@ -193,7 +199,7 @@ const overrides = [
         },
     }, {
         // Allow for ${x} sys_ui_message substitutions
-        files:  // eslint-disable-next-line max-len
+        files:
           ["**/@(sys_ui_script|sp_widget.script|sp_widget.client_script|sp_widget.link|sys_ui_context_menu)/*/*.js"],
         rules: {
             "prefer-template": "off",
@@ -213,7 +219,7 @@ const overrides = [
     }, { // Non-iso SN client scripts
         files: [
             "**/@(noniso|noniso_global|noniso_scoped-es5|noniso_scoped-es12)/*.js",
-            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_context_menu)/*/*.js",  // eslint-disable-line max-len,
+            "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_context_menu)/*/*.js",
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
     }, {
@@ -226,7 +232,7 @@ const overrides = [
         files: ["**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js"],
         rules: clientRules,
     }, { // All ui_actions EXCEPT client-only iso and noniso:
-        files: ["**/sys_ui_action.script/@(global|scoped-es5|scoped-es12|iso_global|iso_scoped-es5|iso_scoped-es12|noniso_global|noniso_scoped-es5)/*.js",  // eslint-disable-line max-len
+        files: ["**/sys_ui_action.script/@(global|scoped-es5|scoped-es12|iso_global|iso_scoped-es5|iso_scoped-es12|noniso_global|noniso_scoped-es5)/*.js",
           "**/sys_ui_action.condition/*/*.js"],
         globals: { action: "readonly", RP: "readonly" },
     }, {
@@ -385,6 +391,9 @@ const overrides = [
     }, {
         files: ["**/sa_pattern/*/*.js", "**/sys_atf_step_config.description_generator/*/*.js"],
         rules: { "no-unused-expressions": "off" },
+    }, {
+        files: ["**/sys_variable_value/s*/*.js"],
+        rules: { "no-sysid": "off" },
     }, {
         files: ["**/*.condition/*/*.js"],
         rules: {
@@ -575,7 +584,8 @@ module.exports = {
                   "sys_ux_data_broker_transform": ["global", "scoped-es5", "scoped-es12"],
                   "sys_ux_data_broker_scriptlet": ["all"],
                   "sys_variable_value":
-                    ["atf_rsss_script-global", "atf_rsss_script-es5", "atf_rsss_script-es12"],
+                    ["sss_global", "sss_scoped-es5", "sss_scoped-es12",
+                     "sin_global", "sin_scoped-es5", "sin_scoped-es12"]
                 }
             },
             rules: {

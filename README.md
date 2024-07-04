@@ -221,7 +221,7 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_ux_client_script_include[^f]|**all**
 |sys_ux_data_broker_transform[^g]|**global**, scoped-es5, scoped-es12
 |sys_ux_data_broker_scriptlet[^g]|**all**
-|sys_variable_value.value[^j]   |**atf_rsss_script-global**, atf_rsss_script-es5, atf_rsss_script-es12 
+|sys_variable_value.value[^k]   |**sin_global**, sss_global, sss_scoped-es5, sss_scoped-es12, sin_scoped-es5, sin_scoped-es12
 |sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
 
@@ -239,9 +239,9 @@ If .fieldname is not specified for a table, then the field is "script".
 [^h]: sp_widget.link table added with minor version 3.8.
 [^i]: sys_ui_context_menu table for action_script field added with minor version 3.9.
 [^j]: Minor version 3.12 introduces tables sysevent_in_email_action, sys_atf_step_config, and
-      sys_variable_value only for sys_atf_step run-server-side-script steps.
-      N.b. the design for sys_variable_value is incomplete.  It's difficult because the one table
-      sys_variable_value has values with all sorts of different requirements
+      sys_variable_value alts partialy implemented only until version 3.15 with
+      sys_variable_value.value atf_rsss_script-global, atf_rsss_script-es5, atf_rsss_script-es12 
+[^k]: sys_variable_value alts refactored.  Variants now shorter, consistent, general and extensible.  N.b. s* means server-side script, segment "sin" means server-side ATF input field, sss means run-server-side-script ATF input field.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
@@ -300,7 +300,7 @@ here can use comments and extra whitespace
 |onchange-isloading-check[^7]|error  |client on-change |Just return during loading of onChange callbacks
 |prefer-array-iterator       |warn   |all              |Native JavaScript iterators avoid tricky pre-ES6 variable scoping issues
 |single-fn[^3]               |error  |client (NE)      |Next Experience client scriptlets must implement only a single function declaration (at top level)
-|sn-workaround-iife          |error  |some server[^2]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function
+|sn-workaround-iife          |error  |some server[^2]|Due to poor ServiceNow design, several script types require IIFE wrapping if the script body assigns to any variables without an intervening function.  N.b. with this rule we do pass scriptlets with no IIFE but no declarations or assignments, since there is no scope-leak risk in this case
 |use-ang-inj-vars[^7]        |error  |sp_widget client-sides|Use provided $x Angular-injected variables in preference to W3C DOM variables
 |validate-gliderecord-calls  |error, warn[^1]|server, client|GlideRecord functions insert, update, get, next, deleteRecord all provide return values that you should check
 
