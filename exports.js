@@ -393,7 +393,7 @@ const overrides = [
         rules: { "no-unused-expressions": "off" },
     }, {
         files: ["**/sys_variable_value/s*/*.js"],
-        rules: { "no-sysid": "off" },
+        rules: { "@admc.com/sn/no-sysid": "off" },
     }, {
         files: ["**/*.condition/*/*.js"],
         rules: {
@@ -504,6 +504,15 @@ for (const table in tableSpecificMap) {
     if (writables !== undefined)
         writables.forEach(addGlobal, {toMap: overridesGlobals, access: "writable"});
 }
+
+// The IIFE for sys_variable_values is is sss-specific.
+// IIFEs added from the tableSpecifics file are only table-specific and are done AFTER the
+// main behavior table above,
+// I think I need to override the sys_variable_value override latere here if alt !== sss*:
+overrides.push({
+    files: ["**/sys_variable_value/i*/*.js", "**/sys_variable_value/sin*/*.js"],
+    rules:  {"@admc.com/sn/sn-workaround-iife": "off"},
+});
 
 module.exports = {
     rules: allRules,
