@@ -102,6 +102,12 @@ const overrides = [
         files: [ "**/sys_script/@(global|scoped-es5|scoped-es12)/*.js" ],
         rules: ruleConfigs("error", ["no-br-current-update"]),
     }, {  // Global scope
+        // Bug here in that global scope w.r.t. APIs incl. gs.log are determined by specific
+        // sys_scope record NOT by the sys_scope.scope scalar string value!
+        // I think we need user work-around for thse script types with non-global sys_scopes with
+        // sys_scope.scope=="global".  In this case, eslint directive comments will need to be used
+        // to defeat the sn_server_gobals and rules here; and apply the sn_server_scoped globals and
+        // rules.
         files: [ "**/@(global|iso_global|noniso_global|atf_rsss_script-global)/*.js" ],
         env: {"@admc.com/sn/sn_server_global": true },
         rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
@@ -148,7 +154,7 @@ const overrides = [
     }, { // ES12 server-side
         files: [ "**/scoped-es12/*.js", "**/atf_rsss_script-es12/*.js" ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
-        // really applies strict implicitly.
+        // really applies strict implicitly.  SN platform does not, of course.
         env: { es2022: true },
         rules: {
           "strict": ["warn", "global"],  // For non-IIFE scriptlet.  Overridden for IIFEs below.
@@ -173,6 +179,8 @@ const overrides = [
           "**/sys_ui_action.script/@(iso|noniso)_scoped-es12/*.js",
           "**/sys_variable_value/atf_rsss_script-es12/*.js",
         ],
+        // Since here all our code is inside the function, we can be less invasive and requiere
+        // stricting just our additions:
         rules: { "strict": ["warn", "function"] }  // Overriding for ES12 IIFE scriptlets
     }, {
         files: ["**/sys_ux_data_broker_transform/*/*.js"],
@@ -181,7 +189,7 @@ const overrides = [
                 table: "sys_ux_data_broker_transform",
             }],
             "@admc.com/sn/no-toplvl-arrow-fn": "error",
-            strict: "off",
+            strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
         },
     }, {
         // Allow for ${x} sys_ui_message substitutions
@@ -380,7 +388,7 @@ const overrides = [
     }, {
         files: ["**/*.condition/*/*.js"],
         rules: {
-            strict: "off",
+            strict: "off",  // don't want to bother developer for tiny scriptlets
             "no-unused-expressions": "off",
             semi: "off",
         },
@@ -388,7 +396,7 @@ const overrides = [
         files: ["**/sys_ux_client_script/all/*.js"],
         rules: {
             "@admc.com/sn/single-fn": ["error", { table: "sys_ux_client_script" }],
-            strict: "off",
+            strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
         },
     }, {
         files: ["**/sys_ux_client_script_include/all/*.js"],
@@ -397,7 +405,7 @@ const overrides = [
                 table: "sys_ux_client_script_include",
                 allowAdditionalParams: true,
             }],
-            strict: "off",
+            strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
         },
     }, {
         files: ["**/sys_ux_data_broker_scriptlet/all/*.js"],
@@ -410,6 +418,10 @@ const overrides = [
             strict: "off",
         },
     }
+    /* UIB ux_* scriptlet "use strict" issue.
+     *     If before function then system silently ignores the record;
+     *     Function-level is incompatible with default/rest/restructuring
+     *     params for traditional function def, which is what is required here. */
 ];
 
 let entry, writables, readables, iifeParams, overridesEntry, overridesFiles,
