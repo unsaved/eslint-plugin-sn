@@ -16,7 +16,7 @@ const esLintObj = {
         type: "problem",
         docs: {
             description:  // eslint-disable-next-line
-              "Due to ServiceNow sys_ui_message substitution, ES12 backtick templating won't work with several SN script types",
+              "ES12 backtick templating won't work with several SN script types",
             category: "Possible Problems",
         },
         messages: { },

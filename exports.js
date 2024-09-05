@@ -198,13 +198,29 @@ const overrides = [
             strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
         },
     }, {
-        // Allow for ${x} sys_ui_message substitutions
+        // Prohibit backtick ${x} subsitution and allow for sys_ui_message substitutions
         files:
           ["**/@(sys_ui_script|sp_widget.script|sp_widget.client_script|sp_widget.link|sys_ui_context_menu)/*/*.js"],
         rules: {
             "prefer-template": "off",
             "no-template-curly-in-string": "off",
             "@admc.com/sn/no-backtick-curlyref": "error",
+        },
+    }, {
+        // Backtick ${x} doesn't work here
+        files:
+          ["**/sys_script_validator/*/*.js"],
+        rules: {
+            "prefer-template": "off",
+            "@admc.com/sn/no-backtick-curlyref": "error",
+        },
+    }, {
+        // Discourage backtick ${x} because that makes these incompatible with embedding in VA.
+        files:
+          ["**/catalog_script_client/*/*.js"],
+        rules: {
+            "prefer-template": "off",
+            "@admc.com/sn/no-backtick-curlyref": "warn",
         },
     }, { // iso SN client scripts
         files: [
