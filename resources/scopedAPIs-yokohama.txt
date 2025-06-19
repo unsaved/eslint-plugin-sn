@@ -8,14 +8,10 @@ console
 Console
 fetch
 Fetch
-fetch Headers
-Fetch Headers
-fetch Request
-Fetch Request
-fetch RequestInit
-Fetch RequestInit
-fetch Response
-Fetch Response
+#Fetch Headers    API docs messed up for these 4
+#Fetch Request
+#Fetch RequestInit
+#Fetch Response
 flowScriptAPI
 FlowScriptAPI
 GlideAggregate
