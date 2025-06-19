@@ -1,5 +1,5 @@
-// Captured from https://developer.servicenow.com/dev.do#!/reference/api/yokohama/server
-// modified per "versionUpdates.txt"
+// Captured from https://developer.servicenow.com/dev.do#!/reference/api/yokohama/client
+// modified per "versionUpdates.txt", but not merged into prod files as explained there.
 
 nowapi
 SNC
