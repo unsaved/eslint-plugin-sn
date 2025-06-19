@@ -1,23 +1,5 @@
-// Concatenation of undocumenteds + "scopedAPIs-yokohama.txt"
-
-# Additions for undocumented APIs
-SNC
-GlideChoiceList
-GlideEmailAction
-XMLDocument2
-GlideRecordSecure
-GlideTransactionManager
-GlideUpdateSetWorker
-GlideClusterSynchronizer
-GlideRelationship
-GlideDomainSupport
-GlidePluginManager
-GlideClusterMessage
-
-# These may be script-type-specific, like only for event handlers or transforms or something,
-# because they are not generally accessible from server-side.
-#AbstractTimeLineSchedulePage
-#Logger
+// Captured from https://developer.servicenow.com/dev.do#!/reference/api/yokohama/server_legacy
+// modified per "versionUpdates.txt"
 
 AbstractDBObject
 AbstractReconciler

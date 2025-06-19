@@ -1,0 +1,5 @@
+globalAPIs-yokohama.txt:GlideEncrypter (deprecated)
+globalAPIs-yokohama.txt:JSONParser (deprecated)
+globalAPIs-yokohama.txt:MLPredictor (deprecated)
+globalAPIs-yokohama.txt:MLSolutionResult (deprecated)
+scopedAPIs-yokohama.txt:GlideCalendarDateTime (deprecated)

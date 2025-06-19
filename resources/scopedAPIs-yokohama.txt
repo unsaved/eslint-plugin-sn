@@ -1,12 +1,5 @@
-// Concatenation of undocumenteds + "scopedAPIs-yokohama.txt"
-
-# Additions for undocumented APIs
-GlideChoiceList
-GlideEmailAction
-GlideRecordSecure
-GlideTransactionManager
-GlideUpdateSetWorker
-GlideClusterSynchronizer
+// Captured from https://developer.servicenow.com/dev.do#!/reference/api/yokohama/server
+// modified per "versionUpdates.txt"
 
 action
 certificateEncryption

@@ -1,0 +1,42 @@
+Screen scrape from developer.servicenow.com/dev.do reference LHS panels:
+    Server Global  (to globalAPIs)
+    Server Scoped  (to scopedNSs and scopedAPIs)
+    Client (to clientAPIs)
+Delete blank lines and dups.
+    perl -ni -we 'print unless /^\s*$/;'
+    In vi do:  :%sort u
+Delete the ones marked "Legacy"
+
+For Server Scoped list:
+    Do contents of 'NO NAMESPACE QUALIFIER' separately.
+        Those including -\u2013 are actually both global and scoped so split into the 2 API lists
+         (and omit the " \u2013 Global, Scope" suffixes)
+        There is no consistency with initial capitalization so,
+          If starts with a cap followed by non-cap and is not Glide then
+            try lowercasing 1st letter too ("workspace", "console", "fetch")
+            perl -pi -we 'print(lcfirst) if /^[A-Z][^A-Z]/ && !/^Glide/;' scopedAPIs-yokohama.txt
+    Lower-case the other ones (name spaces)
+        Screen is messed up for the 4 "Fetch X" entries.
+        For the entries with -, just wipe from - to the end
+        perl -pwe 'print(lc);' scopedNSs-washingtondc.txt
+Client list
+     Must edit manually since so fucking inconsistent.
+     Many list a descriptive name when real name is in (parens) after or shown only in
+       the code examples.
+     Many require namespace prefixes not specified in the nav panel.
+     Some NSs:  SNC, nowapi, top
+     StandaloneClientMethos -> reflistOpen
+     SNAnalytics -> snAnalytics
+
+     After making "clientAPIs-yokohama.txt", I see that it would be far more work than
+     I am willing to do to do all of the client-side testing to see which of the 4
+     client* lists the additions should go into.
+     Since these are the only ones missing (from previously), I think that the sp* must
+     need to be passed by param or context, I am just going to leave the remaining 2 to
+     deal with if I ever hear that they become needed:
+g_18N
+snAnalytics
+spAriaUtil
+spContextManager
+spModal
+spUtil

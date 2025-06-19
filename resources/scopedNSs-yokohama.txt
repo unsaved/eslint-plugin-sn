@@ -1,7 +1,5 @@
-// Concatenation of undocumenteds + "scopedNSs-yokohama.txt"
-
-# These found empirically.  Not documented:
-sn_automation
+// Captured from https://developer.servicenow.com/dev.do#!/reference/api/yokohama/server/
+// under 'NO NAMESPACE QUALIFIER" modified per "versionUpdates.txt"
 
 sn_agent
 sn_ais
