@@ -1,3 +1,7 @@
+Reject setAbortAction in on-Before BRS.
+Difficulty of this is, BR-trigger-type is not an input, so would have to do major
+work on invocation, data-typing, and integration with higher-level apps.
+
 Support fields:
 sys_variable_value.value with document==sys_atf_step + variable.element==script
   + variable.model.name=='Run Server Side Script'

@@ -34,7 +34,7 @@ $0 [-cdHIqrv] [-t sntbl] [-a scopealt] [-L '(-eslint-swit)'] dir/or/file.js...
   OR
 $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
   OR
-... > $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
+... | $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
   OR     $0 -h|-s|-S|-g
 
 The most important differences from invoking 'eslint' directly are:
