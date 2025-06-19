@@ -35,7 +35,7 @@
     "mocha": "^10.0.0"
   },
   "dependencies": {
-    "@admc.com/apputil": "^4.1.1",
+    "@admc.com/apputil": "^2.5.0",
     "joi": "^17.6.0",
     "json-easy-strip": "^1.0.6",
     "requireindex": "^1.2.0",
