@@ -115,7 +115,8 @@ const overrides = [
         env: {"@admc.com/sn/sn_server_global": true },
         rules: {
             "vars-on-top": "warn",
-            ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped", "no-log-console"]),
+            ...ruleConfigs("warn", ["no-log-console"]),
+            ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
         },
     }, {  // Scoped
         files: [
