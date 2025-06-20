@@ -13,6 +13,8 @@ GlideRelationship
 GlideDomainSupport
 GlidePluginManager
 GlideClusterMessage
+# This listed only for scoped but it works for global too (though logs source as '*** Script':
+Console
 
 # These may be script-type-specific, like only for event handlers or transforms or something,
 # because they are not generally accessible from server-side.

@@ -104,7 +104,7 @@ const overrides = [
     }, {  // Global scope
         // Bug here in that global scope w.r.t. APIs incl. gs.log are determined by specific
         // sys_scope record NOT by the sys_scope.scope scalar string value!
-        // I think we need user work-around for thse script types with non-global sys_scopes with
+        // I think we need user work-around for these script types with non-global sys_scopes with
         // sys_scope.scope=="global".  In this case, eslint directive comments will need to be used
         // to defeat the sn_server_globals and rules here; and apply the sn_server_scoped globals
         // and rules.
@@ -113,7 +113,10 @@ const overrides = [
           "**/sys_variable_value/s*_global/*.js",
         ],
         env: {"@admc.com/sn/sn_server_global": true },
-        rules: ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
+        rules: {
+            "vars-on-top": "warn",
+            ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped", "no-log-console"]),
+        },
     }, {  // Scoped
         files: [
           "**/@(scoped-es5|scoped-es12|iso_scoped-es5|iso_scoped-es12|noniso_scoped-es5|noniso_scoped-es12)/*.js",
