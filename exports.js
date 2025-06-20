@@ -115,9 +115,11 @@ const overrides = [
         env: {"@admc.com/sn/sn_server_global": true },
         rules: {
             "vars-on-top": "warn",
-            ...ruleConfigs("warn", ["no-log-console"]),
             ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
         },
+    }, {  // strictly server-side global discourage use console logging
+        files: [ "**/global/*.js", "**/sys_variable_value/s*_global/*.js" ],
+        rules: ruleConfigs("warn", ["no-log-console"]),
     }, {  // Scoped
         files: [
           "**/@(scoped-es5|scoped-es12|iso_scoped-es5|iso_scoped-es12|noniso_scoped-es5|noniso_scoped-es12)/*.js",
