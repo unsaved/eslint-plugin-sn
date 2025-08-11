@@ -114,7 +114,7 @@ const overrides = [
         ],
         env: {"@admc.com/sn/sn_server_global": true },
         rules: {
-            "vars-on-top": "warn",
+            //"vars-on-top": "warn",  Would be excellent, but no good way to exclude consts
             ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
         },
     }, {  // strictly server-side global discourage use console logging
