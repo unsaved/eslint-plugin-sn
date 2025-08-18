@@ -165,7 +165,7 @@ If .fieldname is not specified for a table, then the field is "script".
 |catalog_script_client          |**iso**, noniso
 |catalog_ui_policy.script_true  |**iso**, noniso
 |catalog_ui_policy.script_false |**iso**, noniso
-|cert_audit                     |**global**, scoped-es5[^a], scoped-es12[^l]
+|cert_audit[^l]                 |**global**, scoped-es5[^a], scoped-es12
 |ecc_agent_script               |**all**
 |ecc_agent_script_include       |**all**
 |expert_script_client           |**iso**, noniso
