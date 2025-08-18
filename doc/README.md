@@ -165,6 +165,7 @@ If .fieldname is not specified for a table, then the field is "script".
 |catalog_script_client          |**iso**, noniso
 |catalog_ui_policy.script_true  |**iso**, noniso
 |catalog_ui_policy.script_false |**iso**, noniso
+|cert_audit                     |**global**, scoped-es5[^a], scoped-es12[^l]
 |ecc_agent_script               |**all**
 |ecc_agent_script_include       |**all**
 |expert_script_client           |**iso**, noniso
@@ -227,6 +228,7 @@ If .fieldname is not specified for a table, then the field is "script".
       sys_variable_value alts partialy implemented only until version 3.15 with
       sys_variable_value.value atf_rsss_script-global, atf_rsss_script-es5, atf_rsss_script-es12 
 [^k]: sys_variable_value alts refactored.  Variants now shorter, consistent, general and extensible.  N.b. s* means server-side script, segment "sin" means server-side ATF input field, sss means run-server-side-script ATF input field.
+[^l]: cert_audit table added with minor version 3.17.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
