@@ -9,7 +9,7 @@ const joi = require("joi");
 const strip = require("strip-comments");
 
 const RCFILE = "sneslintrc.json";
-const RETAIN_CONST_FILES = [  // In addition to *.client_script
+const NO_PREPROCESS_FILES = [  // In addition to *.client_script
   "sys_ui_script",
   "sys_script_validator",
   "sys_ui_page.processing_script",
@@ -313,20 +313,16 @@ function lintFile(file, table, alt, readStdin=false) {
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
+    const doPreprocess =
+      ["noniso", "iso", "scoped-es12"].includes(alt) ||
+      alt.includes("es12") && baseName.endsWith("-condition.js") ||
+      table.includes("client_script") || NO_PREPROCESS_FILES.includes(table);
     /* eslint-disable prefer-template */
     if (process.env.SN_LINT_DUMPCODE) console.warn("Submitting code (between angle brackes):\n<"
-          + (["noniso", "iso", "scoped-es12"].includes(alt) ||
-          alt.includes("es12") && baseName.endsWith("-condition.js") ||
-          table.includes("client_script") || RETAIN_CONST_FILES.includes(table)
-          ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"))
-          + ">");
+          + (doPreprocess ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2")) + ">");
     /* eslint-enable prefer-template */
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
-        input:
-          ["noniso", "iso", "scoped-es12"].includes(alt) ||
-          alt.includes("es12") && baseName.endsWith("-condition.js") ||
-          table.includes("client_script") || RETAIN_CONST_FILES.includes(table)
-          ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
+        input: doPreprocess ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
     });
     process.stderr.write(pObj.stderr.toString("utf8"));
     if (yargsDict.H) {
