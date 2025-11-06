@@ -313,10 +313,11 @@ function lintFile(file, table, alt, readStdin=false) {
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
-    const doPreprocess =
+    const doPreprocess = !(  // Logic of following block is NO-PREPROCESS:
       ["noniso", "iso", "scoped-es12"].includes(alt) ||
       alt.includes("es12") && baseName.endsWith("-condition.js") ||
-      table.includes("client_script") || NO_PREPROCESS_FILES.includes(table);
+      table.includes("client_script") || NO_PREPROCESS_FILES.includes(table)
+      );
     /* eslint-disable prefer-template */
     if (process.env.SN_LINT_DUMPCODE) console.warn("Submitting code (between angle brackes):\n<"
           + (doPreprocess ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2")) + ">");
