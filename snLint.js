@@ -313,6 +313,11 @@ function lintFile(file, table, alt, readStdin=false) {
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
+    /** Important limitation to the preprocessing here.  The substitutions are done to the
+     * comment-ful code (so that line numbers don't get hopelessly scrambled.
+     * This can cause serious mistakes if a comment contains an unbalanced book-end, for example
+     * a single backtick.
+     */
     const preppedContent =
       ["noniso", "iso", "scoped-es12"].includes(alt) ||
       alt.includes("es12") && baseName.endsWith("-condition.js") ||
