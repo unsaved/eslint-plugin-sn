@@ -446,6 +446,7 @@ const overrides = [
             "@admc.com/sn/single-fn": ["error", {
                 table: "sys_ux_data_broker_scriptlet",
             }],
+            "prefer-template": "off",
             "@admc.com/sn/no-toplvl-arrow-fn": "error",
             "@admc.com/sn/no-backticks": "error",
             strict: "off",
