@@ -313,17 +313,17 @@ function lintFile(file, table, alt, readStdin=false) {
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
-    const doPreprocess = !(  // Logic of following block is NO-PREPROCESS:
+    const preppedContent =
       ["noniso", "iso", "scoped-es12"].includes(alt) ||
       alt.includes("es12") && baseName.endsWith("-condition.js") ||
-      table.includes("client_script") || NO_PREPROCESS_FILES.includes(table)
-      );
+      table.includes("client_script") || NO_PREPROCESS_FILES.includes(table) ?
+        content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2");
     /* eslint-disable prefer-template */
     if (process.env.SN_LINT_DUMPCODE) console.warn("Submitting code (between angle brackes):\n<"
-          + (doPreprocess ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2")) + ">");
+          + preppedContent + ">");
     /* eslint-enable prefer-template */
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
-        input: doPreprocess ? content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2"),
+        input: preppedContent,
     });
     process.stderr.write(pObj.stderr.toString("utf8"));
     if (yargsDict.H) {
