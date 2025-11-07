@@ -16,6 +16,7 @@ const NO_PREPROCESS_FILES = [  // In addition to *.client_script
   "sp_widget.link",
   "sys_ui_context_menu",
   "sys_variable_value",
+  "sys_ux_data_broker_scriptlet",
 ];
 const fs = require("fs");
 const path = require("path");
