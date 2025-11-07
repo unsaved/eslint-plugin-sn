@@ -440,17 +440,6 @@ const overrides = [
             }],
             strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
         },
-    }, {
-        files: ["**/sys_ux_data_broker_scriptlet/all/*.js"],
-        rules: {
-            "@admc.com/sn/single-fn": ["error", {
-                table: "sys_ux_data_broker_scriptlet",
-            }],
-            "prefer-template": "off",
-            "@admc.com/sn/no-toplvl-arrow-fn": "error",
-            "@admc.com/sn/no-backticks": "error",
-            strict: "off",
-        },
     }
     /* UIB ux_* scriptlet "use strict" issue.
      *     If before function then system silently ignores the record;
