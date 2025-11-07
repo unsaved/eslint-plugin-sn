@@ -158,6 +158,36 @@ const UNUSEDAREXPR_SUB_PAT = /(?:[(][^)]*[)]|\w+)[ \t]*=>.*/;
 const RM_WHITESPACE_RE = /^(?=\n)$|^\s*|\s*$|\n\n+/gm;
 
 /**
+ * Important limitation to the preprocessing here.  The substitutions are done to the
+ * comment-full code and does substitions inside of quoted strings (so that line numbers don't
+ * get hopelessly scrambled).
+ * This can cause serious mistakes if a comment or string contains an unbalanced book-end,
+ * for example a single backtick.
+ * Also, we don't have access to an AST processor and are just doing replacements on a simple
+ * string.  We can't handle complex nested expressions without a proper parser.
+ */
+const transformCodeForESLint = str => {
+    let transformed = str;
+
+    if (transformed.indexOf('const ') !== -1)
+        transformed = transformed.replace(/(;|^|\s)const(\s)/g, "$1var$2");
+
+    if (transformed.indexOf('=>') !== -1)
+        transformed = transformed.
+          replace(/([=(\s,])(?:\(([^)]*)\)|(\w+))\s*=>\s*(?!\{)([^;,]+?)(?=[;,)])/g,
+            (_dummyMatch, prefix, params1, params2, body) =>
+              `${prefix}function(${params1 || params2}) { return ${body.trim()}; }`).
+          replace(/([=(\s])\(([^)]*)\)\s*=>\s*\{/g, '$1function($2) {').
+          replace(/([=(\s])(\w+)\s*=>\s*\{/g, '$1function($2) {');
+
+    transformed = transformed.replace(/(?<!\\)`[\s\S]+?(?<!\\)`/g,
+      // eslint-disable-next-line prefer-template
+      match => '"BACKTICK_REPLACEMENT"' + match.replace(/[^\n]/g, ''));
+
+    return transformed;
+};
+
+/**
  * Returns the number of rule errors for specified script,
  * or number of rule errors and warnings if strict (r) mode set
  */
@@ -313,16 +343,11 @@ function lintFile(file, table, alt, readStdin=false) {
     if (yargsDict.H) eslintArgs.splice(1, 0, "-f", "html");
     if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
-    /** Important limitation to the preprocessing here.  The substitutions are done to the
-     * comment-ful code (so that line numbers don't get hopelessly scrambled.
-     * This can cause serious mistakes if a comment contains an unbalanced book-end, for example
-     * a single backtick.
-     */
     const preppedContent =
       ["noniso", "iso", "scoped-es12"].includes(alt) ||
       alt.includes("es12") && baseName.endsWith("-condition.js") ||
       table.includes("client_script") || NO_PREPROCESS_FILES.includes(table) ?
-        content : content.replace(/(;|^|\s)const(\s)/g, "$1var$2");
+        content : transformCodeForESLint(content);
     /* eslint-disable prefer-template */
     if (process.env.SN_LINT_DUMPCODE) console.warn("Submitting code (between angle brackes):\n<"
           + preppedContent + ">");
@@ -449,7 +474,7 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
     }
     if (yargsDict.L) {
         if (!/^[(].+[)]$/.test(yargsDict.L)) {
-            console.error(`The value for -L switch must be OS-isolated (most easily by 
+            console.error(`The value for -L switch must be OS-isolated (most easily by
     using quotes) and then be of format: (first param,second param,third param)`);
             process.exit(255);
         }
