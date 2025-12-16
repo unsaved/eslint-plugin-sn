@@ -173,6 +173,10 @@ const transformCodeForESLint = str => {
     if (transformed.indexOf('const ') !== -1)
         transformed = transformed.replace(/(;|^|\s)const(\s)/g, "$1var$2");
 
+    transformed = transformed.replace(/(?<!\\)`[\s\S]+?(?<!\\)`/g,
+      // eslint-disable-next-line prefer-template
+      match => '"BACKTICK_REPLACEMENT"' + match.replace(/[^\n]/g, ''));
+
     if (transformed.indexOf('=>') !== -1)
         transformed = transformed.
           replace(/([=(\s,])(?:\(([^)]*)\)|(\w+))\s*=>\s*(?!\s*\{)([^;,]+?)(?=[;,)])/g,
@@ -180,10 +184,6 @@ const transformCodeForESLint = str => {
               `${prefix}function(${params1 || params2}) { return ${body.trim()}; }`).
           replace(/([=(\s])\(([^)]*)\)\s*=>\s*\{/g, '$1function($2) {').  // (...) => {
           replace(/([=(\s])(\w+)\s*=>\s*\{/g, '$1function($2) {');  // word => {...
-
-    transformed = transformed.replace(/(?<!\\)`[\s\S]+?(?<!\\)`/g,
-      // eslint-disable-next-line prefer-template
-      match => '"BACKTICK_REPLACEMENT"' + match.replace(/[^\n]/g, ''));
 
     return transformed;
 };
