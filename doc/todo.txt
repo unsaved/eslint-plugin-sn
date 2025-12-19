@@ -1,3 +1,8 @@
+Verify that scope + alt behaviors work as expected for es5-scoped non-global scopes, incl. that
+  global "globals" are not applied.
+Verify that scope + alt behaviors work as expected for es12-scoped global scopes, incl. that
+ global "globals' are applied.  [I doubt it!]
+
 Reject setAbortAction in on-Before BRS.
 Difficulty of this is, BR-trigger-type is not an input, so would have to do major
 work on invocation, data-typing, and integration with higher-level apps.

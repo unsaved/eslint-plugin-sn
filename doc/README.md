@@ -157,6 +157,8 @@ documented in the "snglobals/README.txt" file, to replace the list of all scoped
 that you should be accessing.
 
 ## Supported ServiceNow scriptlet types
+A "default" alt is the one that will be used if no alt is specified to an invocation of snLint (or a programmatic call to snLint.lintFile without specifying an alt).
+(The default is set by virtue of being the first member of the ootbTables and customTables mappings).
 ### Supported Now
 Alphabetically.
 If .fieldname is not specified for a table, then the field is "script".
