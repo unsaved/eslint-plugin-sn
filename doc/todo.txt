@@ -1,7 +1,8 @@
-Verify that scope + alt behaviors work as expected for es5-scoped non-global scopes, incl. that
-  global "globals" are not applied.
-Verify that scope + alt behaviors work as expected for es12-scoped global scopes, incl. that
- global "globals' are applied.  [I doubt it!]
+Prioritizing support for es12-mode switches.
+    FIRST STAB AT PHASE 1 COMPLETED.  Totally untested right now.
+    1. All standard global scripts.  They all list list as global, scoped-es5, scoped-es12 in doc.
+    2. sys_ui_action.script.  server-side + client-side.
+    3. sys_variable_value.value.  Also has sss_* and sしn_*.
 
 Reject setAbortAction in on-Before BRS.
 Difficulty of this is, BR-trigger-type is not an input, so would have to do major

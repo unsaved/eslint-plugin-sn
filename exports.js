@@ -8,7 +8,7 @@ const jsonEasyStrip = require("json-easy-strip");
 if (process.env.DEBUG) console.debug(`Using globalsDir '${globalsDir}'`);
 
 /**
- * Output are just the 'gName: true' entries,not the "globals" keyword for the plain object
+ * Output are just the 'gName: true' entries, not the "globals" keyword for the plain object
  */
 function globalsFromFiles(...params) {
     const fName = "globalsFromFiles";
@@ -88,9 +88,9 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [  // Regular server-side
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|cert_audit|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12)/*.js",
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|cert_audit|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
             "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
-            "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12)/*.js",
+            "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
             "**/sys_variable_value/s*/*.js",  // s* for server-side
         ],
         rules: {
@@ -99,17 +99,11 @@ const overrides = [
           ...ruleConfigs("warn", ["no-gr-count-iterate"]),
         }
     }, {  // BRs
-        files: [ "**/sys_script/@(global|scoped-es5|scoped-es12)/*.js" ],
+        files: [ "**/sys_script/@(global|scoped-es5|scoped-es12|global-es12)/*.js" ],
         rules: ruleConfigs("error", ["no-br-current-update"]),
     }, {  // Global scope
-        // Bug here in that global scope w.r.t. APIs incl. gs.log are determined by specific
-        // sys_scope record NOT by the sys_scope.scope scalar string value!
-        // I think we need user work-around for these script types with non-global sys_scopes with
-        // sys_scope.scope=="global".  In this case, eslint directive comments will need to be used
-        // to defeat the sn_server_globals and rules here; and apply the sn_server_scoped globals
-        // and rules.
         files: [
-          "**/@(global|iso_global|noniso_global)/*.js",
+          "**/@(global|iso_global|noniso_global|global-es12)/*.js",
           "**/sys_variable_value/s*_global/*.js",
         ],
         env: {"@admc.com/sn/sn_server_global": true },
@@ -118,7 +112,7 @@ const overrides = [
             ...ruleConfigs("error", ["log-global-2-args", "no-log-scoped"]),
         },
     }, {  // strictly server-side global discourage use console logging
-        files: [ "**/global/*.js", "**/sys_variable_value/s*_global/*.js" ],
+        files: [ "**/@(global|global-es12)/*.js", "**/sys_variable_value/s*_global/*.js" ],
         rules: ruleConfigs("warn", ["no-log-console"]),
     }, {  // Scoped
         files: [
@@ -164,7 +158,11 @@ const overrides = [
           ...ruleConfigs("error", ["onchange-isloading-check"]),
         },
     }, { // ES12 server-side
-        files: [ "**/scoped-es12/*.js", "**/sys_variable_value/s*_scoped-es12/*.js" ],
+        files: [
+          "**/scoped-es12/*.js",
+          "**/sys_variable_value/s*_scoped-es12/*.js",
+          "**/global-es12/*.js",
+        ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.  SN platform does not, of course.
         env: { es2022: true },
@@ -188,6 +186,7 @@ const overrides = [
     }, { // ES5+ IIFEs
         files: [
           "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script|sysevent_in_email_action|sys_atf_step_config.step_execution_generator)/scoped-es*/*.js",
+          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script|sysevent_in_email_action|sys_atf_step_config.step_execution_generator)/global-es12/*.js",
           "**/sys_ui_action.script/@(iso|noniso)_scoped-es*/*.js",
           "**/sys_variable_value/sss_scoped-es*/*.js",
         ],
@@ -564,39 +563,43 @@ module.exports = {
                   "ecc_agent_script": ["all"],
                   "ecc_agent_script_include": ["all"],
                   "expert_script_client": ["iso", "noniso"],
-                  "sa_pattern_prepost_script": ["global", "scoped-es5", "scoped-es12"],
-                  "sc_cat_item_producer": ["global", "scoped-es5", "scoped-es12"],
-                  "sp_widget.script": ["global", "scoped-es5", "scoped-es12"],
-                  "sysauto_script": ["global", "scoped-es5", "scoped-es12"],
-                  "cert_audit": ["global", "scoped-es5", "scoped-es12"],
-                  "sysauto_script.condition": ["global", "scoped-es5", "scoped-es12"],
-                  "sysevent_script_action": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_processor": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_script": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_script.condition": ["global", "scoped-es5", "scoped-es12"],
+                  "sa_pattern_prepost_script": [
+                    "global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sc_cat_item_producer": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sp_widget.script": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sysauto_script": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "cert_audit": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sysauto_script.condition": [
+                    "global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sysevent_script_action": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_processor": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_script": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_script.condition": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_script_client": ["iso", "noniso"],
-                  "sys_script_email": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_script_fix": ["global", "scoped-es5", "scoped-es12"],
-                  "sysevent_in_email_action": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_script_email": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_script_fix": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sysevent_in_email_action": [
+                    "global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_atf_step_config.step_execution_generator":
-                    ["global", "scoped-es5", "scoped-es12"],
+                    ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_atf_step_config.description_generator": ["global"],
-                  "sys_script_include": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_script_include": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_script_validator": ["all"],
-                  "sys_security_acl": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_security_acl.condition": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_transform_entry": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_transform_map": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_transform_script": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_web_service": ["global", "scoped-es5", "scoped-es12"],
-                  "sys_ws_operation": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_security_acl": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_security_acl.condition": [
+                    "global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_transform_entry": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_transform_map": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_transform_script": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_web_service": ["global", "scoped-es5", "scoped-es12", "global-es12"],
+                  "sys_ws_operation": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_ui_action.script": [
                     "global", "scoped-es5", "scoped-es12", "iso", "noniso", "iso_global",
                     "noniso_global", "iso_scoped-es5", "iso_scoped-es12",
                     "noniso_scoped-es5", "noniso_scoped-es12",
                   ],
                   "sys_ui_action.client_script_v2": ["all"],
-                  "sys_ui_action.condition": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_ui_action.condition": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_ui_policy.script_true": ["iso", "noniso"],
                   "sys_ui_policy.script_false": ["iso", "noniso"],
                   "sys_ui_script": ["all"],
@@ -604,11 +607,13 @@ module.exports = {
                   "sp_widget.link": ["all"],
                   "sys_ui_context_menu": ["all"],
                   "sys_ui_page.client_script": ["all"],
-                  "sys_ui_page.processing_script": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_ui_page.processing_script": [
+                    "global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sa_pattern": ["all"],
                   "sys_ux_client_script": ["all"],
                   "sys_ux_client_script_include": ["all"],
-                  "sys_ux_data_broker_transform": ["global", "scoped-es5", "scoped-es12"],
+                  "sys_ux_data_broker_transform": [
+                    "global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_ux_data_broker_scriptlet": ["all"],
                   "sys_variable_value":
                     ["sss_global", "sss_scoped-es5", "sss_scoped-es12",

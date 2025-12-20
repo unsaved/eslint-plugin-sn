@@ -159,6 +159,13 @@ that you should be accessing.
 ## Supported ServiceNow scriptlet types
 A "default" alt is the one that will be used if no alt is specified to an invocation of snLint (or a programmatic call to snLint.lintFile without specifying an alt).
 (The default is set by virtue of being the first member of the ootbTables and customTables mappings).
+
+Alt **global-es12** is being added with minor version 3.19.
+This supports global scope scripts with the "Turn on ECMAScript 2021 (ES12) mode" toggle on.
+Non-global legacy scopes use the scoped-es12 for the same purpose.
+Integration developers can query table sys_es_latest_script to programmatically determine the current setting of the toggle.
+N.b. as of 2025-12-19 the toggle doesn't work as has no effect on sysauto_scripts due to PRB1971520, so for now you shouldn't use global-es12 for sysauto_scripts.
+
 ### Supported Now
 Alphabetically.
 If .fieldname is not specified for a table, then the field is "script".
@@ -201,7 +208,7 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12
 |sys_ui_context_menu[^i]        |**all**  (this is the action_script)
 |sys_ui_page.client_script      |**all**
-|sys_ui_page.processing_script  |**global**, scoped-es5[^a]
+|sys_ui_page.processing_script  |**global**, scoped-es5[^a] scoped-es12[^a]
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
