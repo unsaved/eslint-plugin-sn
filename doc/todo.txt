@@ -1,5 +1,5 @@
 Prioritizing support for es12-mode switches.
-    FIRST STAB AT PHASE 1 COMPLETED.  Totally untested right now.
+    FIRST STAB AT PHASE 1 COMPLETED.  Tested but not all the way through to a custom integration.
     1. All standard global scripts.  They all list list as global, scoped-es5, scoped-es12 in doc.
     2. sys_ui_action.script.  server-side + client-side.
     3. sys_variable_value.value.  Also has sss_* and sしn_*.
