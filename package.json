@@ -1,6 +1,6 @@
 {
   "name": "@admc.com/eslint-plugin-sn",
-  "version": "3.18.6",
+  "version": "3.19.0",
   "description": "ESLint plugin for ServiceNow scriptlets",
   "main": "exports.js",
   "bin": {
