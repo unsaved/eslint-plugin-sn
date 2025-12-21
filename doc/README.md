@@ -160,6 +160,11 @@ that you should be accessing.
 A "default" alt is the one that will be used if no alt is specified to an invocation of snLint (or a programmatic call to snLint.lintFile without specifying an alt).
 (The default is set by virtue of being the first member of the ootbTables and customTables mappings).
 
+Special simplification when a table supports just one alt.
+These are clearly distinguished by the supported alt value being "all".
+As "all" is the only alt for these tables, it is always the default alt.
+Consequently, when calling snLint for any single-alt/"all" table, calling with no alt (undefined) is the same thing as specifying "all".
+
 Alt **global-es12** is being added with minor version 3.19.
 This supports global scope scripts with the "Turn on ECMAScript 2021 (ES12) mode" toggle on.
 Non-global legacy scopes use the scoped-es12 for the same purpose.
