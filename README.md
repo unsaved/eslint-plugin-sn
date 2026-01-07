@@ -224,7 +224,7 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_script_include             |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_validator           |**all**
 |sys_security_acl               |**global**, scoped-es5[^a], scoped-es12[^b]
-~~|sys_security_acl.condition[^d] |**global**, scoped-es5, scoped-es12~~ This not a script field
+|~~sys_security_acl.condition[^d]~~ |~~**global**, scoped-es5, scoped-es12~~ This not a script field
 |sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b]
