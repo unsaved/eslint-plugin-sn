@@ -218,7 +218,7 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
-|sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12[^b]
+|sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12[^b] [^o]
 |sys_ui_action.client_script_v2[^c] |**all**
 |sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12, globa-es12[^n]
 |sys_ui_context_menu[^i]        |**all**  (this is the action_script)
@@ -257,6 +257,9 @@ If .fieldname is not specified for a table, then the field is "script".
       N.b. this system will allow you to use this alt for checking (so that if you get some fix
       for the PRB), but OOTB now the scripts will not execute on the platform.
 [^n]: Alt global-es12 added with minor version 3.19.
+[^o]: Due to very complicated situation where a sys_ui_action scripts may be run both client-side
+      and server-side, support of global-es12 for this script type is deferred until I have time to
+      test all of the combinations.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
