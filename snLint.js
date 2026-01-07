@@ -345,7 +345,7 @@ function lintFile(file, table, alt, readStdin=false) {
     if (yargsDict.r) eslintArgs.splice(1, 0, "--max-warnings", "0");
     console.debug('eslint invocation args', eslintArgs);
     const preppedContent =
-      ["noniso", "iso", "scoped-es12"].includes(alt) ||
+      ["noniso", "iso", "scoped-es12", "global-es12"].includes(alt) ||
       alt.includes("es12") && baseName.endsWith("-condition.js") ||
       table.includes("client_script") || NO_PREPROCESS_FILES.includes(table) ?
         content : transformCodeForESLint(content);
