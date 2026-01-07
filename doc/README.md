@@ -169,7 +169,12 @@ Alt **global-es12** is being added with minor version 3.19.
 This supports global scope scripts with the "Turn on ECMAScript 2021 (ES12) mode" toggle on.
 Non-global legacy scopes use the scoped-es12 for the same purpose.
 Integration developers can query table sys_es_latest_script to programmatically determine the current setting of the toggle.
-N.b. as of 2025-12-19 the toggle doesn't work as has no effect on sysauto_scripts due to PRB1971520, so for now you shouldn't use global-es12 for sysauto_scripts.
+N.b. as of 2025-12-19 the toggle doesn't work as has no effect on the following tables/fields due to PRB1971520, so for now you shouldn't use global-es12 for these scriptlets.
+* cert_audit
+* sysauto_script.script, but not .condition (PRB may apply to all editable .scripts of sysauto_script descendant tables)
+* sys_atf_step_config.step_execution_generator, .description_generator
+* sys_processor
+* sys_script_fix
 
 ### Supported Now
 Alphabetically.
@@ -198,13 +203,13 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_processor                  |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script                     |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script.condition[^d]       |**global**, scoped-es5, scoped-es12
-|sys_script_client
+|sys_script_client              |**iso**, noniso
 |sys_script_email               |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_fix                 |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_include             |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_script_validator           |**all**
 |sys_security_acl               |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_security_acl.condition[^d] |**global**, scoped-es5, scoped-es12
+~~|sys_security_acl.condition[^d] |**global**, scoped-es5, scoped-es12~~ This not a script field
 |sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b]
 |sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b]
