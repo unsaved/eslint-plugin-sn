@@ -179,56 +179,61 @@ N.b. as of 2025-12-19 the toggle doesn't work as has no effect on the following 
 ### Supported Now
 Alphabetically.
 If .fieldname is not specified for a table, then the field is "script".
+* cert_audit
+* sysauto_script.script, but not .condition (PRB may apply to all editable .scripts of sysauto_script descendant tables)
+* sys_atf_step_config.step_execution_generator, .description_generator
+* sys_processor
+* sys_script_fix
 |Table                          |Alts (default bolded)
 |---                            |---
 |catalog_script_client          |**iso**, noniso
 |catalog_ui_policy.script_true  |**iso**, noniso
 |catalog_ui_policy.script_false |**iso**, noniso
-|cert_audit[^l]                 |**global**, scoped-es5[^a], scoped-es12
+|cert_audit[^l]                 |**global**, scoped-es5[^a], scoped-es12, global-es12[^m][^n]
 |ecc_agent_script               |**all**
 |ecc_agent_script_include       |**all**
 |expert_script_client           |**iso**, noniso
 |sa_pattern                     |**all**
-|sa_pattern_prepost_script      |**global**, scoped-es5[^a], scoped-es12[^b]
-|sc_cat_item_producer           |**global**, scoped-es5[^a], scoped-es12[^b]
+|sa_pattern_prepost_script      |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
+|sc_cat_item_producer           |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sp_widget.client_script        |**all**
 |sp_widget.link                 |**all**[^h]
-|sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b]
-|sysauto_script                 |**global**, scoped-es5[^a], scoped-es12[^b]
-|sysauto_script.condition[^d]   |**global**, scoped-es5, scoped-es12
-|sysevent_in_email_action[^j]   |**global**, scoped-es5, scoped-es12
-|sysevent_script_action         |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_atf_step_config.description_generator[^j] |**global**
-|sys_atf_step_config.step_execution_generator[^j] |**global**, scoped-es5, scoped-es12
-|sys_processor                  |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_script                     |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_script.condition[^d]       |**global**, scoped-es5, scoped-es12
+|sp_widget.script               |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
+|sysauto_script                 |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^m][^n]
+|sysauto_script.condition[^d]   |**global**, scoped-es5, scoped-es12, global-es12[^n]
+|sysevent_in_email_action[^j]   |**global**, scoped-es5, scoped-es12, global-es12[^n]
+|sysevent_script_action         |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n], global-es12[^n]
+|sys_atf_step_config.description_generator[^j] |**global**, global-es12[^m][^n]
+|sys_atf_step_config.step_execution_generator[^j] |**global**, scoped-es5, scoped-es12, global-es12[^m][^n]
+|sys_processor                  |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^m][^n]
+|sys_script                     |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n], global-es12[^n]
+|sys_script.condition[^d]       |**global**, scoped-es5, scoped-es12, global-es12[^n], global-es12[^n]
 |sys_script_client              |**iso**, noniso
-|sys_script_email               |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_script_fix                 |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_script_include             |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_script_email               |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n], global-es12[^n]
+|sys_script_fix                 |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n], global-es12[^m][^n]
+|sys_script_include             |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_script_validator           |**all**
-|sys_security_acl               |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_security_acl               |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |~~sys_security_acl.condition[^d]~~ |~~**global**, scoped-es5, scoped-es12~~ This not a script field
-|sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
+|sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
+|sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12[^b]
 |sys_ui_action.client_script_v2[^c] |**all**
-|sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12
+|sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12, globa-es12[^n]
 |sys_ui_context_menu[^i]        |**all**  (this is the action_script)
 |sys_ui_page.client_script      |**all**
-|sys_ui_page.processing_script  |**global**, scoped-es5[^a] scoped-es12[^a]
+|sys_ui_page.processing_script  |**global**, scoped-es5[^a] scoped-es12[^a], globa-es12[^n]
 |sys_ui_policy.script_true      |**iso**, noniso
 |sys_ui_policy.script_false     |**iso**, noniso
 |sys_ui_script                  |**all**
 |sys_ux_client_script[^e]       |**all**
 |sys_ux_client_script_include[^f]|**all**
-|sys_ux_data_broker_transform[^g]|**global**, scoped-es5, scoped-es12
+|sys_ux_data_broker_transform[^g]|**global**, scoped-es5, scoped-es12, globa-es12[^n]
 |sys_ux_data_broker_scriptlet[^g]|**all**
 |sys_variable_value.value[^k]   |**sin_global**, sss_global, sss_scoped-es5, sss_scoped-es12, sin_scoped-es5, sin_scoped-es12
-|sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b]
-|sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b]
+|sys_web_service                |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
+|sys_ws_operation               |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 
 [^a]: The listed altscope constants are for major version 3.
      For versions 2.*.* use ``scoped`` instead of ``scoped-es5``; and use these variants in place
@@ -248,6 +253,10 @@ If .fieldname is not specified for a table, then the field is "script".
       sys_variable_value.value atf_rsss_script-global, atf_rsss_script-es5, atf_rsss_script-es12 
 [^k]: sys_variable_value alts refactored.  Variants now shorter, consistent, general and extensible.  N.b. s* means server-side script, segment "sin" means server-side ATF input field, sss means run-server-side-script ATF input field.
 [^l]: cert_audit table added with minor version 3.17.
+[^m]: This script type does not work as of 2026-01-07 with ES12 mode due to PRB1971520.
+      N.b. this system will allow you to use this alt for checking (so that if you get some fix
+      for the PRB), but OOTB now the scripts will not execute on the platform.
+[^n]: Alt global-es12 added with minor version 3.19.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
