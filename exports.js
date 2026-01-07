@@ -88,7 +88,7 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [  // Regular server-side
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|cert_audit|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sys_security_acl.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|cert_audit|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
             "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
             "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
             "**/sys_variable_value/s*/*.js",  // s* for server-side
@@ -586,8 +586,6 @@ module.exports = {
                   "sys_script_include": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_script_validator": ["all"],
                   "sys_security_acl": ["global", "scoped-es5", "scoped-es12", "global-es12"],
-                  "sys_security_acl.condition": [
-                    "global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_transform_entry": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_transform_map": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_transform_script": ["global", "scoped-es5", "scoped-es12", "global-es12"],
