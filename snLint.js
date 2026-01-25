@@ -179,7 +179,7 @@ const transformCodeForESLint = str => {
 
     if (transformed.indexOf('=>') !== -1)
         transformed = transformed.
-          replace(/([=(\s,])(?:\(([^()]*)\)|(\w+))\s*=>\s*(?!\s*\{)([^;,()]+?)(?=[;,)])/g,
+          replace(/([=(\s,])(?:\(([^()]*)\)|(\w+))\s*=>\s*(?!\s*\{)([^;,]+?)(?=;|,|\)\s*\()/g,
             (_dummyMatch, prefix, params1, params2, body) =>
               `${prefix}function(${params1 || params2}) { return ${body.trim()}; }`).
           replace(/([=(\s])\(([^()]*)\)\s*=>\s*\{/g, '$1function($2) {').  // (...) => {
