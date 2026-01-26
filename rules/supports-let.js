@@ -6,11 +6,9 @@
  */
 "use strict";
 
-const strip = require("strip-comments");
-
 const message =
   "Execution environment doesn't support let declarations.  (Script-independent)";
-const messageId =
+const messageId =  // eslint-disable-next-line prefer-template
   (require("path").basename(__filename).replace(/[.]js$/, "") + "_msg").toUpperCase();
 
 const esLintObj = {
@@ -34,8 +32,7 @@ const esLintObj = {
     // Read optional option: ["invert"]
     const invert = context.options[0] === "invert";
 
-    const ecmaVersion =
-      (context.parserOptions && context.parserOptions.ecmaVersion) || 5;
+    const ecmaVersion = context.parserOptions && context.parserOptions.ecmaVersion || 5;
     const supportsLet = ecmaVersion >= 6;
 
     // Effective condition: when should this rule report an error?

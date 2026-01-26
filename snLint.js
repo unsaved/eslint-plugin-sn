@@ -178,8 +178,8 @@ const transformCodeForESLint = str => {
       match => '"BACKTICK_REPLACEMENT"' + match.replace(/[^\n]/g, ''));
 
     if (transformed.indexOf('=>') !== -1)
-        transformed = transformed.
-          replace(/([=(\s,])(?:\(([^()]*)\)|(\w+))\s*=>\s*(?!\s*\{)([^;,]+?)(?=;|,|\)\s*\()/g,
+        transformed = transformed.replace(  // eslint-disable-next-line max-len
+            /([=(\s,])(?:\(([^()]*)\)|(\w+))\s*=>\s*(?!\s*\{)((?:[^()[\]]|\([^()]*\)|\[[^[\]]*\])+?)(?=\s*\)|;|,)/g,
             (_dummyMatch, prefix, params1, params2, body) =>
               `${prefix}function(${params1 || params2}) { return ${body.trim()}; }`).
           replace(/([=(\s])\(([^()]*)\)\s*=>\s*\{/g, '$1function($2) {').  // (...) => {
