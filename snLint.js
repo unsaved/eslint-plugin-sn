@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { AppErr, conciseCatcher, conciseErrorHandler, getAppVersion, isPlainObject } =
+const { AppErr, mkAppThrowableHandler, getAppVersion, isPlainObject } =
   require("@admc.com/apputil");
 const { validate } = require("@admc.com/bycontract-plus");
 const joi = require("joi");
@@ -429,7 +429,7 @@ function jsFilesInBranch(fsDir) {
     return outputList;
 }
 
-conciseCatcher(async (...params) => {
+async function main(...params) {
     validate(params, []);
     if (yargsDict.s || yargsDict.S) {
         const targRcFile = "sneslintrc.json";
@@ -580,4 +580,10 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
     if (yargsDict.I) process.stdout.write(`${errorCount}\n${warnCount}\n${lineCount}\n`);
     process.exit(yargsDict.c ?  // eslint-disable-next-line no-extra-parens
       (yargsDict.r ? warnCount + errorCount : errorCount) : fileFailureCount);
-}, 254)().catch(e0=>conciseErrorHandler(e0, 253));
+}
+
+main().catch(err => mkAppThrowableHandler(254).handle(axios.AxiosError, err => {
+    console.error(`Alpaca API error: ${err.code}`);
+    if (err.response)
+        console.error(`HTTP ${err.response.status}: ${err.response.statusText}`, err.response.data);
+}));
