@@ -4,7 +4,7 @@
 
 const { AppErr, mkAppThrowableHandler, getAppVersion, isPlainObject } =
   require("@admc.com/apputil");
-const { validate } = require("@admc.com/bycontract-plus");
+const { z } = require("zod");
 const joi = require("joi");
 const strip = require("strip-comments");
 
@@ -194,7 +194,8 @@ const transformCodeForESLint = str => {
  */
 function lintFile(file, table, alt, readStdin=false) {
     // eslint-disable-next-line prefer-rest-params
-    validate(arguments, ["string", "string", "string=", "boolean="]);
+    z.tuple([z.string(), z.string(), z.string().optional(),
+      z.boolean().optional()]).parse([...arguments]);
     let stdout, thisErrorCount = 0, thisWarnCount = 0;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     let baseName = path.basename(file);
@@ -411,7 +412,7 @@ function lintFile(file, table, alt, readStdin=false) {
  * @returns Array of recursively matching filepaths, may have 0 elements
  */
 function jsFilesInBranch(fsDir) {
-    validate(arguments, ["object"]);  // eslint-disable-line prefer-rest-params
+    z.tuple([z.object({}).passthrough()]).parse([...arguments]);  // eslint-disable-line prefer-rest-params
     let dirent, entPath;
     const outputList = [];
 
@@ -430,7 +431,7 @@ function jsFilesInBranch(fsDir) {
 }
 
 (async function main(...params) {
-    validate(params, []);
+    z.tuple([]).parse(params);
     if (yargsDict.s || yargsDict.S) {
         const targRcFile = "sneslintrc.json";
         if (fs.existsSync(targRcFile)) {
