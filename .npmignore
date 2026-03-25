@@ -1,0 +1,17 @@
+.gradle
+/gradle-app.setting
+.*.sw?
+*~
+*.bak
+~*
+.~*
+local/
+/build
+/node_modules
+/*?jre.?*
+/sneslintrc.json
+/snglobals
+/tmp
+.claude/
+.claudeignore
+CLAUDE.md
