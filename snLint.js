@@ -429,7 +429,7 @@ function jsFilesInBranch(fsDir) {
     return outputList;
 }
 
-async function main(...params) {
+(async function main(...params) {
     validate(params, []);
     if (yargsDict.s || yargsDict.S) {
         const targRcFile = "sneslintrc.json";
@@ -580,10 +580,4 @@ then merge those HTML files with 'mergeEslintHtml.js'.`);
     if (yargsDict.I) process.stdout.write(`${errorCount}\n${warnCount}\n${lineCount}\n`);
     process.exit(yargsDict.c ?  // eslint-disable-next-line no-extra-parens
       (yargsDict.r ? warnCount + errorCount : errorCount) : fileFailureCount);
-}
-
-main().catch(err => mkAppThrowableHandler(254).handle(axios.AxiosError, err => {
-    console.error(`Alpaca API error: ${err.code}`);
-    if (err.response)
-        console.error(`HTTP ${err.response.status}: ${err.response.statusText}`, err.response.data);
-}));
+})().catch(mkAppThrowableHandler(254));
