@@ -184,6 +184,7 @@ If .fieldname is not specified for a table, then the field is "script".
 * sys_atf_step_config.step_execution_generator, .description_generator
 * sys_processor
 * sys_script_fix
+
 |Table                          |Alts (default bolded)
 |---                            |---
 |catalog_script_client          |**iso**, noniso
