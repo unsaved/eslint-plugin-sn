@@ -304,7 +304,7 @@ Note that scriptlet scope of "server" does not include MID scriptlets.
 |no-boilerplate              |error  |all              |ServiceNow-provided boilerplate comments should be removed when scripts are implemented
 |no-br-current-update        |error  |sys_script       |current.update should usually not be executed in BR scripts
 |no-client-gr                |warn   |client           |Other tactics should be favored as more efficient than client-side GlideRecord
-|no-console-info             |error  |client           |Level-specific console logging statements are better because console.info default filtering is inconsistent
+|no-console-info             |error  |client           |Level-specific console logging statements are better because console.info default filtering is inconsistent.  This rule is mis-named.  It actually prohibits console.log calls not console.info calls!
 |no-cur-walk-to-sysid[^7]    |error  |server           |Don't dot-walk to non-initial .sys_id
 |no-gr-count-iterate[^7]     |warn   |server           |Prefer GlideAggregate for counting unless will iterate on the instance
 |no-gs-now                   |error  |client           |gs.now() function is unsupported since London release
