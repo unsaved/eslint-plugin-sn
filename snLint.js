@@ -351,7 +351,7 @@ function lintFile(file, table, alt, readStdin=false) {
       table.includes("client_script") || NO_PREPROCESS_FILES.includes(table) ?
         content : transformCodeForESLint(content);
     /* eslint-disable prefer-template */
-    if (process.env.SN_LINT_DUMPCODE) console.warn("Submitting code (between angle brackes):\n<"
+    if (process.env.SN_LINT_DUMPCODE) console.warn("Submitting code (between angle brackets):\n<"
           + preppedContent + ">");
     /* eslint-enable prefer-template */
     const pObj = childProcess.spawnSync(process.execPath, eslintArgs, {
