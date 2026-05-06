@@ -1,5 +1,4 @@
 UI Action scripts in Yokohama can use all ES12 features, at least for es_latest scoped (TBD others).
-Add 'sn' global to server-side scripts
 Make new conversational alt(s) for catalog client scripts.
   Move the curly rules to this one.
   Give it its own global list and support only es5.
