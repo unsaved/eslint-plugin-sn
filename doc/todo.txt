@@ -6,7 +6,7 @@ Remove use strict for all client scripts
 Make new conversational alt(s) for catalog client scripts.
   Move the curly rules to this one.
   Give it its own global list and support only es5.
-IIFEs are needed for any sys_ui_action.scripts.
+IIFEs are not needed for any sys_ui_action.scripts.
 
 Reject setAbortAction in on-Before BRS.
 Difficulty of this is, BR-trigger-type is not an input, so would have to do major
