@@ -193,9 +193,10 @@ const transformCodeForESLint = str => {
  * or number of rule errors and warnings if strict (r) mode set
  */
 function lintFile(file, table, alt, readStdin=false) {
-    // eslint-disable-next-line prefer-rest-params
+    /* eslint-disable prefer-rest-params */
     z.tuple([z.string(), z.string(), z.string().optional(),
       z.boolean().optional()]).parse([...arguments]);
+    /* eslint-enable prefer-rest-params */
     let stdout, thisErrorCount = 0, thisWarnCount = 0;
     console.debug(`file (${file}) table (${table}) alt (${alt})`);
     let baseName = path.basename(file);
@@ -412,7 +413,8 @@ function lintFile(file, table, alt, readStdin=false) {
  * @returns Array of recursively matching filepaths, may have 0 elements
  */
 function jsFilesInBranch(fsDir) {
-    z.tuple([z.object({}).passthrough()]).parse([...arguments]);  // eslint-disable-line prefer-rest-params
+    // eslint-disable-next-line prefer-rest-params
+    z.tuple([z.object({}).passthrough()]).parse([...arguments]);
     let dirent, entPath;
     const outputList = [];
 

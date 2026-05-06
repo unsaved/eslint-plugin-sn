@@ -88,7 +88,7 @@ const clientGlobalsCommon =
 const overrides = [
     {
         files: [  // Regular server-side
-            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|cert_audit|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator)/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
+            "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|cert_audit|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator|background)/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
             "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
             "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
             "**/sys_variable_value/s*/*.js",  // s* for server-side
@@ -138,7 +138,6 @@ const overrides = [
         // https://kangax.github.io/compat-table/es2016plus/
         env: { es2018: true },
         rules: {
-          "strict": ["warn", "function"],
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
           "prefer-arrow-callback": "warn",
@@ -167,7 +166,6 @@ const overrides = [
         // really applies strict implicitly.  SN platform does not, of course.
         env: { es2022: true },
         rules: {
-          "strict": ["warn", "global"],  // For non-IIFE scriptlet.  Overridden for IIFEs below.
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
           "prefer-arrow-callback": "warn",
@@ -192,7 +190,6 @@ const overrides = [
         ],
         // Since here all our code is inside the function, we can be less invasive and require
         // stricting just our additions:
-        rules: { "strict": ["warn", "function"] }  // Overriding for ES5+ IIFE scriptlets
     }, {
         files: ["**/sys_ux_data_broker_transform/*/*.js"],
         rules: {
@@ -200,7 +197,6 @@ const overrides = [
                 table: "sys_ux_data_broker_transform",
             }],
             "@admc.com/sn/no-toplvl-arrow-fn": "error",
-            strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
         },
     }, {
         // Prohibit backtick ${x} subsitution and allow for sys_ui_message substitutions
@@ -420,16 +416,12 @@ const overrides = [
     }, {
         files: ["**/*.condition/*/*.js"],
         rules: {
-            strict: "off",  // don't want to bother developer for tiny scriptlets
             "no-unused-expressions": "off",
             semi: "off",
         },
     }, {
         files: ["**/sys_ux_client_script/all/*.js"],
-        rules: {
-            "@admc.com/sn/single-fn": ["error", { table: "sys_ux_client_script" }],
-            strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
-        },
+        rules: { "@admc.com/sn/single-fn": ["error", { table: "sys_ux_client_script" }], },
     }, {
         files: ["**/sys_ux_client_script_include/all/*.js"],
         rules: {
@@ -437,13 +429,8 @@ const overrides = [
                 table: "sys_ux_client_script_include",
                 allowAdditionalParams: true,
             }],
-            strict: "off",  // See note about UIB/ux_* scriptlets at end of this overrides list.
         },
     }
-    /* UIB ux_* scriptlet "use strict" issue.
-     *     If before function then system silently ignores the record;
-     *     Function-level is incompatible with default/rest/restructuring
-     *     params for traditional function def, which is what is required here. */
 ];
 
 let entry, writables, readables, iifeParams, overridesEntry, overridesFiles,
@@ -615,10 +602,14 @@ module.exports = {
                   "sys_ux_data_broker_scriptlet": ["all"],
                   "sys_variable_value":
                     ["sss_global", "sss_scoped-es5", "sss_scoped-es12",
-                     "sin_global", "sin_scoped-es5", "sin_scoped-es12"]
+                     "sin_global", "sin_scoped-es5", "sin_scoped-es12"],
+                  // At least up to Zurich, background script runner page has no
+                  // sys_es_lastest_script toggle to allow for global-es12
+                  "background": ["global", "scoped-es5", "scoped-es12"],
                 }
             },
-            rules: {
+            rules: {  // Absolute default rules for all scriptlet types
+                "strict": ["error", "never"],
                 "operator-assignment": "error",
                 "no-useless-return": "error",
                 "prefer-regex-literals": ["error", {disallowRedundantWrapping: true}],
