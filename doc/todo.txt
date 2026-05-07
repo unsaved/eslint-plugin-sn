@@ -1,7 +1,8 @@
 Make new conversational alt(s) for catalog client scripts.
   Move the curly rules to this one.
   Give it its own global list and support only es5.
-IIFEs are not needed for any sys_ui_action.scripts.
+
+OOB sysevent_in_email_actions do not have IIFEs, so IIFEs are probably not needed there.
 
 Reject setAbortAction in on-Before BRS.
 Difficulty of this is, BR-trigger-type is not an input, so would have to do major
