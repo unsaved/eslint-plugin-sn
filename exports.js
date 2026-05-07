@@ -89,7 +89,7 @@ const overrides = [
     {
         files: [  // Regular server-side
             "**/@(sa_pattern_prepost_script|sys_script_fix|sys_script|sys_script_include|sysauto_script|cert_audit|sys_ws_operation|sys_web_service|sys_processor|sys_ui_action.script|sysevent_script_action|sys_security_acl|sc_cat_item_producer|sys_script_email|sys_transform_map|sys_transform_script|sys_transform_entry|sp_widget.script|sys_ui_page.processing_script|sys_script.condition|sysauto_script.condition|sys_ui_action.condition|sysevent_in_email_action|sys_atf_step_config.step_execution_generator|sys_atf_step_config.description_generator|background)/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
-            "**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js",
+            "**/sys_ui_action.script/@(iso|noniso)_@(global|global-es12|scoped-es5|scoped-es12)/*.js",
             "**/sys_ux_data_broker_transform/@(global|scoped-es5|scoped-es12|global-es12)/*.js",
             "**/sys_variable_value/s*/*.js",  // s* for server-side
         ],
@@ -105,6 +105,7 @@ const overrides = [
         files: [
           "**/@(global|iso_global|noniso_global|global-es12)/*.js",
           "**/sys_variable_value/s*_global/*.js",
+          "**/sys_ui_action.script/@(noniso|iso)_@(global|global-es12)/*.js",
         ],
         env: {"@admc.com/sn/sn_server_global": true },
         rules: {
@@ -127,6 +128,7 @@ const overrides = [
     }, { // Regular SN client scripts, both iso and non-iso
         files: [
             "**/@(sys_script_client|catalog_script_client|expert_script_client|sys_ui_action.script|sys_ui_policy.script_true|sys_ui_policy.script_false|catalog_ui_policy.script_true|catalog_ui_policy.script_false)/@(noniso|iso)/*.js",
+            "**/sys_ui_action.script/@(noniso|iso)_global-es12/*.js",
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet|sys_ui_context_menu)/all/*.js",
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
@@ -156,6 +158,24 @@ const overrides = [
           ...ruleConfigs("warn", ["no-sysid", "validate-gliderecord-calls", "no-client-gr"]),
           ...ruleConfigs("error", ["onchange-isloading-check"]),
         },
+    }, {
+        // Combinations where script can be run es5 and es_latest, set modern parser but allow
+        // for the legacy statements.
+        files: ["**/sys_ui_action.script/@(noniso|iso)_@(global|scoped-es5)/*.js"],
+        rules: { "no-var": "off" },
+        parserOptions: { ecmaVersion: 2022 }
+    }, {
+        // Allow multiple forms of logging
+        files: ["**/sys_ui_action.script/@(noniso|iso)_*/*.js"],
+        rules: { "@admc.com/sn/no-log-console": "off"}
+    }, {
+        // Allow multiple forms of logging
+        files: ["**/sys_ui_action.script/@(noniso|iso)_@(global|global-es12)/*.js"],
+        rules: { "@admc.com/sn/no-log-global": "off"}
+    }, {
+        // Allow multiple forms of logging
+        files: ["**/sys_ui_action.script/@(noniso|iso)_scoped_@(es5|es12)/*.js"],
+        rules: { "@admc.com/sn/no-log-scoped": "off"}
     }, { // ES12 server-side
         files: [
           "**/scoped-es12/*.js",
@@ -181,15 +201,6 @@ const overrides = [
           "prefer-rest-params": "warn",
           "prefer-spread": "warn",
         },
-    }, { // ES5+ IIFEs
-        files: [
-          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script|sysevent_in_email_action|sys_atf_step_config.step_execution_generator)/scoped-es*/*.js",
-          "**/@(sys_script|sys_ws_operation|sys_web_service|sys_processor|sys_script_email|sys_transform_map|sys_transform_script|sp_widget.script|sys_ui_page.processing_script|sysevent_in_email_action|sys_atf_step_config.step_execution_generator)/global-es12/*.js",
-          "**/sys_ui_action.script/@(iso|noniso)_scoped-es*/*.js",
-          "**/sys_variable_value/sss_scoped-es*/*.js",
-        ],
-        // Since here all our code is inside the function, we can be less invasive and require
-        // stricting just our additions:
     }, {
         files: ["**/sys_ux_data_broker_transform/*/*.js"],
         rules: {
@@ -225,7 +236,7 @@ const overrides = [
         },
     }, { // iso SN client scripts
         files: [
-            "**/@(iso|iso_global|iso_scoped-es5|iso_scoped-es12)/*.js",
+            "**/@(iso|iso_global|iso_global-es12|iso_scoped-es5|iso_scoped-es12)/*.js",
             "**/sys_ui_action.client_script_v2/all/*.js",
             "**/sys_ui_client_script/all/*.js",
             "**/sys_ux_client_script/all/*.js",
@@ -235,7 +246,7 @@ const overrides = [
         env: {"@admc.com/sn/sn_client_iso": true },
     }, { // Non-iso SN client scripts
         files: [
-            "**/@(noniso|noniso_global|noniso_scoped-es5|noniso_scoped-es12)/*.js",
+            "**/@(noniso|noniso_global|noniso_global-es12|noniso_scoped-es5|noniso_scoped-es12)/*.js",
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_context_menu)/*/*.js",
         ],
         env: {"@admc.com/sn/sn_client_noniso": true, browser: true, },
@@ -246,10 +257,10 @@ const overrides = [
         files: ["**/sp_widget.link/*/*.js"],
         rules: { "@admc.com/sn/use-ang-inj-vars": "error" },
     }, {
-        files: ["**/sys_ui_action.script/@(iso|noniso)_@(global|scoped-es5|scoped-es12)/*.js"],
+        files: ["**/sys_ui_action.script/@(iso|noniso)_@(global|global-es12|scoped-es5|scoped-es12)/*.js"],
         rules: clientRules,
     }, { // All ui_actions EXCEPT client-only iso and noniso:
-        files: ["**/sys_ui_action.script/@(global|scoped-es5|scoped-es12|iso_global|iso_scoped-es5|iso_scoped-es12|noniso_global|noniso_scoped-es5)/*.js",
+        files: ["**/sys_ui_action.script/@(global|scoped-es5|scoped-es12|iso_global|iso_scoped-es5|iso_scoped-es12|noniso_global|noniso_scoped-es5|noniso_scoped-es12|iso_global-es12|noniso_global-es12)/*.js",
           "**/sys_ui_action.condition/*/*.js"],
         globals: { action: "readonly", RP: "readonly" },
     }, {
@@ -580,8 +591,8 @@ module.exports = {
                   "sys_ws_operation": ["global", "scoped-es5", "scoped-es12", "global-es12"],
                   "sys_ui_action.script": [
                     "global", "scoped-es5", "scoped-es12", "iso", "noniso", "iso_global",
-                    "noniso_global", "iso_scoped-es5", "iso_scoped-es12",
-                    "noniso_scoped-es5", "noniso_scoped-es12",
+                    "noniso_global", "iso_scoped-es5", "iso_scoped-es12", "iso_global-es12",
+                    "noniso_scoped-es5", "noniso_scoped-es12", "noniso_global-es12", "global-es12"
                   ],
                   "sys_ui_action.client_script_v2": ["all"],
                   "sys_ui_action.condition": ["global", "scoped-es5", "scoped-es12", "global-es12"],
