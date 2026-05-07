@@ -187,6 +187,7 @@ If .fieldname is not specified for a table, then the field is "script".
 
 |Table                          |Alts (default bolded)
 |---                            |---
+|background (pseudo-table)      |**global**, scoped-es5, scoped-es12 [^q] (no latest-override switch on page so can't run globa-es12)
 |catalog_script_client          |**iso**, noniso
 |catalog_ui_policy.script_true  |**iso**, noniso
 |catalog_ui_policy.script_false |**iso**, noniso
@@ -219,7 +220,8 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_transform_entry            |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
-|sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12[^b] [^o]
+|sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12, iso_global_es12, noniso_global-es12, global-es12 [^b] [^o] [^p]
+
 |sys_ui_action.client_script_v2[^c] |**all**
 |sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12, globa-es12[^n]
 |sys_ui_context_menu[^i]        |**all**  (this is the action_script)
@@ -261,6 +263,8 @@ If .fieldname is not specified for a table, then the field is "script".
 [^o]: Due to very complicated situation where a sys_ui_action scripts may be run both client-side
       and server-side, support of global-es12 for this script type is deferred until I have time to
       test all of the combinations.
+[^p]: Alts iso_global_es12, noniso_global-es12, global-es12 added for sys_ui_action.scripts with release 3.20.  The last 2 are new alt constants.
+[^q]: Support pseudo-table `background` with release 3.20.
 
 The 8 alt variants for the sys_ui_action script are necessary to support the different JavaScript requirements depending on combination of settings:  Action name, Isolate script, Client.
 
