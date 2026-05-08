@@ -236,7 +236,6 @@ If .fieldname is not specified for a table, then the field is "script".
 |sys_transform_map              |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_transform_script           |**global**, scoped-es5[^a], scoped-es12[^b], global-es12[^n]
 |sys_ui_action.script           |[^a] **global**, scoped-es5, iso, noniso, iso_global, noniso_global, iso_scoped-es5, noniso_scoped-es5, iso_scoped-es12[^b], noniso_scoped-es12, iso_global_es12, noniso_global-es12, global-es12 [^b] [^o] [^p]
-
 |sys_ui_action.client_script_v2[^c] |**all**
 |sys_ui_action.condition[^d]    |**global**, scoped-es5, scoped-es12, globa-es12[^n]
 |sys_ui_context_menu[^i]        |**all**  (this is the action_script)
