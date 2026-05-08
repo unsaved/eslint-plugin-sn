@@ -131,14 +131,15 @@ const overrides = [
             "**/sys_ui_action.script/@(noniso|iso)_global-es12/*.js",
             "**/@(sys_ui_script|sys_script_validator|sp_widget.client_script|sp_widget.link|sys_ui_page.client_script|sys_ui_action.client_script_v2|sys_ux_client_script|sys_ux_client_script_include|sys_ux_data_broker_scriptlet|sys_ui_context_menu)/all/*.js",
         ],
-        // Looks like impliedStrict parser option is only useful if the runtime interpreter
-        // really applies strict implicitly.
+        // Looks like impliedStrict parser option is only useful if the runtime interpreter really
+        // applies strict implicitly.
         // ServiceNow requires just 2 versions back for Edge and Chrome (both which release about
-        // every month), so the limiting browser is Safari 12.0 which supports ES2018.
-        // If you don't need to support Safari browser then override this value to match highest ES
-        // version column with all acceptable values for your browsers at
+        // every month).  As of 2026 all current borwsers, incl. Safari, support ES2024.
+        // Version 8.x of ESLint won't support higher than ES2024 so to support higher we will have
+        // to upgrade ESLint.
+        // Check version column with all acceptable values for your browsers at
         // https://kangax.github.io/compat-table/es2016plus/
-        env: { es2018: true },
+        env: { es2024: true },
         rules: {
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
@@ -163,7 +164,7 @@ const overrides = [
         // for the legacy statements.
         files: ["**/sys_ui_action.script/@(noniso|iso)_@(global|scoped-es5)/*.js"],
         rules: { "no-var": "off" },
-        parserOptions: { ecmaVersion: 2022 }
+        parserOptions: { ecmaVersion: 2024 }
     }, {
         // Allow multiple forms of logging
         files: ["**/sys_ui_action.script/@(noniso|iso)_*/*.js"],
@@ -184,7 +185,7 @@ const overrides = [
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.  SN platform does not, of course.
-        env: { es2022: true },
+        env: { es2021: true },  // server-side up to Zurich.  No indication of change for A, B rels.
         rules: {
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",

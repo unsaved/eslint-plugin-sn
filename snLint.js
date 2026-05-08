@@ -36,13 +36,13 @@ $0 [-cdHIqrv] [-t sntbl] [-a scopealt] [-L '(-eslint-swit)'] dir/or/file.js...
 $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js < ...
   OR
 ... | $0 [-cdHIqrv] -p [-t sntbl] [-a scopealt] [-L '(-...)'] label/path.js
-  OR     $0 -h|-s|-S|-g
+  OR     $0 -h|-s|-g
 
 The most important differences from invoking 'eslint' directly are:
     1. Internally we use -c and --no-eslintrc, so that only config file
        './sneslintrc.json' is honored.  NOT '.eslintrc.*'!
        You must have this file in place.
-       You can generate it with the -s or -S switch.  No cascading RC files.
+       You can generate it with the -s switch.  No cascading RC files.
     2. Internally we use --stdin and we generate a pseudo input file path,
        so if you use overrides in './sneslintrc.json', you must match against
        pseudo-paths of format 'TABLENAME/BASENAME.js' or
@@ -119,10 +119,12 @@ Quote, parenthesize, and comma-delimit all the Lint args like so:  `
       describe: "write template 'sneslintrc.json' Sample file into current directory",
       type: "boolean",
   }).
+  /* As of 2026, current browser (incl. Safari) now support ES2024, and our version of ESLint
+   * dead-ends at ES2024.  Will need to upgrade ESLint past 8.x to go beyond this.
   option("S", {
       describe: "same as -s except support ES2022 clients (instead of Safari-compliant ES2018)",
       type: "boolean",
-  }).
+  }). */
   option("t", {
       describe:
         "target Table.  If -t and -T not set then we use the directory name of the specified path",
@@ -434,15 +436,13 @@ function jsFilesInBranch(fsDir) {
 
 (async function main(...params) {
     z.tuple([]).parse(params);
-    if (yargsDict.s || yargsDict.S) {
+    if (yargsDict.s) {
         const targRcFile = "sneslintrc.json";
         if (fs.existsSync(targRcFile)) {
             console.error(`Refusing to overwrite existing '${targRcFile}'`);
             process.exit(255);
         }
-        fs.copyFileSync(path.join(__dirname,
-          yargsDict.S ? "resources/sneslintrc-es2022.json" : "resources/sneslintrc.json"),
-          targRcFile);
+        fs.copyFileSync(path.join(__dirname, "resources/sneslintrc.json"), targRcFile);
         console.info(`Created file '${targRcFile}'`);
         process.exit(0);
     }
@@ -456,7 +456,7 @@ function jsFilesInBranch(fsDir) {
         process.exit(0);
     }
     if (yargsDict._.length < 1) {
-        console.error("You must specify a 'filepath.js' param unless using -g, -h, -s, -S switch");
+        console.error("You must specify a 'filepath.js' param unless using -g, -h, -s switch");
         yargs.showHelp();
         process.exit(255);
     }
