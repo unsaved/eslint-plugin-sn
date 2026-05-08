@@ -185,7 +185,8 @@ const overrides = [
         ],
         // Looks like impliedStrict parser option is only useful if the runtime interpreter
         // really applies strict implicitly.  SN platform does not, of course.
-        env: { es2021: true },  // server-side up to Zurich.  No indication of change for A, B rels.
+        env: { es2022: true },  // server-side up to Zurich.  No indication of change for A, B rels.
+          // N.b. it's not true ES2022 but ServiceNow's mongrel that's ES2021 + some later features.
         rules: {
           "prefer-exponentiation-operator": "error",
           "prefer-const": "error",
